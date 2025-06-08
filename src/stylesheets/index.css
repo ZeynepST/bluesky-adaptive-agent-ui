@@ -9,111 +9,21 @@
 body {
   margin: 0;
   border:0;
-  overflow: hidden;
+  overflow: auto;
 }
+/* Navigation Button */
 
-/* the start of Agent Switchboard Page */
-
-.agent-switchboard-container{
-    border: 2px solid black;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-left:30%;
-    display: inline-block;  
-    padding: 20px;
-}
-
-.toggle-btns-container{
+.nav-btn-container{
     display:flex;
-    flex-direction:row;
-    align-items: center;
-    justify-content: center;
-    gap:2rem;
-    margin-top: 20px;
+    justify-content: flex-end;
+    bottom: 0;
 }
-.label-btn-container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    padding-left:20px;
+.nav-mv-btn:hover{
+    background-color:rgb(77, 191, 219);
 }
-.top-btns.on, .top-btns.off, .top-btns.error{
-    border-radius:40px;
-    padding:5px;
-    text-decoration: none;
-    /* the size of the buttons */
-    width:80px;
-    height:80px;
-}
-.top-btns.on{
-    background-color: lightgreen;
-    color:black;
-}
-.top-btns.off{
-    background-color: darkgray;
-    color:black;
-}
-.top-btns.error{
-    background-color: red;
-    color:black;
-}
-
-/* Generate Report */
-.generate-btns-container{
-    display:flex;
-    flex-direction:row;
-    align-items: center;
-    justify-content: center;
-    padding:5px;
-    gap:2rem;
-    margin-top: 40px;
-}
-.suggestion-btn.idle,.suggestion-btn.loading, .suggestion-btn.error,.report-btn.idle, .report-btn.loading, .report-btn.error{
+.nav-mv-btn{
+    background-color: rgb(24, 103, 123);
+    color:white;
     border-radius: 10px;
     padding: 5px;
-    width:150px;
-    height: 50px;
-}
-.suggestion-btn.idle,.report-btn.idle{
-    background-color: darkgray;
-}
-
-.report-btn.loading, .suggestion-btn.loading{
-    background-color: lightgreen;
-}
-.report-btn.error, .suggestion-btn.error{
-    background-color: red;
-}
-
-/* Agent UID */
-
-.tell-agent-container{
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-top: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-#tell-uid{
-    resize:none;
-    width:500px;
-    height: 100px;
-}
-.submit-uid-btn{
-    background-color: darkgray;
-    border-radius: 10px;
-    padding: 5px;
-}
-.uid-text-area-title{
-    font-weight: bold;
-    
-}
-.uid-text-area-description{
-   font-weight: bold;
-    font-size: 10px;
-    color: darkgray;
 }
