@@ -6,6 +6,8 @@ import { useRef } from "react";
 
 export const ModelContext = createContext();
 
+const agent_address=process.env.REACT_APP_AGENT_ADDRESS;
+const agent_port=process.env.REACT_APP_AGENT_PORT;
 export function ModelProvider({ children }) {
 
     //testing useEffect
@@ -19,7 +21,7 @@ export function ModelProvider({ children }) {
 
     const get_names = async () => {
         try {
-            const response = await axios.get('http://{agent_address}:{agent_port}/api/variables/names');
+            const response = await axios.get(`http://${agent_address}:${agent_port}/api/variables/names`);
             setNames(response.data.names || []);
         }
         catch(error){
@@ -68,7 +70,7 @@ export function ModelProvider({ children }) {
         setButtonStates((prev) => ({ ...prev, [buttonId]: newState }));
         //need to check 
         try {
-            //const response=await axios.get('http://{agent_address}:{agent_port}/api/variable/{buttonId}');
+            //const response=await axios.get(`http://${agent_address}:${agent_port}/api/variable/${buttonId}`);
         }
         catch (error) {
             console.error("Failed to update toggle ", error);
@@ -82,7 +84,7 @@ export function ModelProvider({ children }) {
         try {
             setReportStatus("loading");
             const payload = { "value": [[], {}] }; //is this necessary
-            const response = await axios.get('http://{agent_address}:{agent_port}/api/variable/{variable_name}', { params: payload });
+            //const response = await axios.get(`http://${agent_address}:${agent_port}/api/variable/generate_report`, { params: payload });
             await new Promise((x) => setTimeout(x, 2000)); //This is just to test that it works 
             setReportStatus("idle");
         }
@@ -96,7 +98,7 @@ export function ModelProvider({ children }) {
         try {
             setSuggestionStatus("loading");
             const payload = { "value": [[1], {}] };
-            const response = await axios.get('http://{agent_address}:{agent_port}/api/variable/{variable_name}', { params: payload });
+            const response = await axios.get(`http://${agent_address}:${agent_port}/api/variable/add_suggestions_to_queue`, { params: payload });
             await new Promise((x) => setTimeout(x, 2000)); //This is just to test that it works 
             setSuggestionStatus("idle");
         }
@@ -111,7 +113,7 @@ export function ModelProvider({ children }) {
         try {
             const payload = { "value": [[processedContent], {},] }; //need to check 
             //or does api expect {json:payload}
-            //const response=await axios.post('http://{agent_address}:{agent_port}/api/variable/tell_agent_by_uid', payload);
+            //const response=await axios.post(`http://${agent_address}:${agent_port}/api/variable/tell_agent_by_uid`, payload);
             return "success";
         }
         catch (error) {
@@ -122,7 +124,7 @@ export function ModelProvider({ children }) {
 
     const get_variable = async (variable_name) => {
         try {
-            const response = await axios.get("http://{agent_address}:{agent_port}/api/variable/", { params: variable_name });
+            const response = await axios.get(`http://${agent_address}:${agent_port}/api/variable/`, { params: variable_name });
             return String(response?.data?.[variable_name] ?? "UNKNOWN"); //this is the parsed JSON response, and is the value of the variable 
         }
         catch (error) {
@@ -136,7 +138,7 @@ export function ModelProvider({ children }) {
         console.log("inside of update variable");
         try {
             const payload = { "value": new_value }; //need to check
-            //const response = await axios.post("http://{agent_address}:{agent_port}/api/variable/{variable_name}", payload);
+            //const response = await axios.post(`http://${agent_address}:${agent_port}/api/variable/${variable_name}`, payload);
             return "success";
         }
         catch (error) {
@@ -159,7 +161,7 @@ export function ModelProvider({ children }) {
             const payload = {
                 value: [parsedArgs, parsedKwargs]
             };
-            //const response = await axios.post("http://{agent_address}:{agent_port}/api/variable/{method_name}", payload);
+            //const response = await axios.post(`http://${agent_address}:${agent_port}/api/variable/${method_name}`, payload);
             return "success";
         }
         catch (error) {

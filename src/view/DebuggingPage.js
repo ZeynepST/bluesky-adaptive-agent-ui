@@ -112,8 +112,9 @@ const DebuggingPage = () => {
                     {/* v-row1 refers to where the get variable button is  */}
                     <div className="v-row1">
                         {/* <label className="enter-var-title" htmlFor="enter-var">Enter Variable Name</label> */}
-                        <textarea id="enter-var" placeholder="Enter Variable Name" value={varName1} onChange={(e) => setVarName1(e.target.value)}> </textarea>
+                        {/* <textarea id="enter-var" placeholder="Enter Variable Name" value={varName1} onChange={(e) => setVarName1(e.target.value)}> </textarea> */}
                         <div className="var-name-output-container">
+                             <textarea id="enter-var" placeholder="Enter Variable Name" value={varName1} onChange={(e) => setVarName1(e.target.value)}> </textarea>
                             <button className="submit-var-btn" onClick={requestVariable}>Get Variable</button>
                             <div className="var-name-output">{fetchedVarName}</div>
                         </div>
@@ -165,10 +166,32 @@ const DebuggingPage = () => {
                 <div className="available-dashboard-container">
                     <h1 id="var-dashboard">Available Variables and Methods</h1>
 
-                    <div className="names-table">
+                    {/* <div className="names-table">
 
+                    </div> */}
+
+
+                    {/* now the table */}
+                    <div className="names-table-container">
+                        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+
+                                </tr>
+                            </thead>
+                            <tboday>
+                                {names.map((x, index) => (
+                                    <tr key={index}>
+                                        <td>{index + 1}</td>
+                                        <td>{x}</td>
+                                    </tr>
+                                )
+                                )}
+                            </tboday>
+                        </table>
                     </div>
-
                     <button className="refresh-btn" onClick={manual_refresh}
                         disabled={!canRefresh}
                         style={{
@@ -180,25 +203,6 @@ const DebuggingPage = () => {
 
                     >Refresh Available
                     </button>
-                    {/* now the table */}
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-
-                            </tr>
-                        </thead>
-                        <tboday>
-                            {names.map((x, index) => (
-                                <tr key={index}>
-                                    <td>{index + 1}</td>
-                                    <td>{x}</td>
-                                </tr>
-                            )
-                            )}
-                        </tboday>
-                    </table>
 
 
                     <div className="nav-btn-container">

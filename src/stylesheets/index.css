@@ -18,12 +18,16 @@ body {
     justify-content: flex-end;
     bottom: 0;
 }
-.nav-mv-btn:hover{
-    background-color:rgb(77, 191, 219);
-}
 .nav-mv-btn{
     background-color: rgb(24, 103, 123);
     color:white;
     border-radius: 10px;
     padding: 5px;
+    width: auto;
+    align-self: flex-end;
+    margin-top:auto;
+
+}
+.nav-mv-btn:hover{
+    background-color:rgb(77, 191, 219);
 }
