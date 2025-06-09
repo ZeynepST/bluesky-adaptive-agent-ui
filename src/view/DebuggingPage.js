@@ -111,8 +111,6 @@ const DebuggingPage = () => {
                     <h1 id="var-dashboard">Variable Dashboard</h1>
                     {/* v-row1 refers to where the get variable button is  */}
                     <div className="v-row1">
-                        {/* <label className="enter-var-title" htmlFor="enter-var">Enter Variable Name</label> */}
-                        {/* <textarea id="enter-var" placeholder="Enter Variable Name" value={varName1} onChange={(e) => setVarName1(e.target.value)}> </textarea> */}
                         <div className="var-name-output-container">
                              <textarea id="enter-var" placeholder="Enter Variable Name" value={varName1} onChange={(e) => setVarName1(e.target.value)}> </textarea>
                             <button className="submit-var-btn" onClick={requestVariable}>Get Variable</button>
