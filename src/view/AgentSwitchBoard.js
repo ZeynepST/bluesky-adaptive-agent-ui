@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { ModelContext } from "../view-model/ModelContext";
 import '../stylesheets/SwitchBoardPage.css';
 import '../stylesheets/index.css';
-//should this be ModelContext?
 
 const AgentSwitchBoardPage = () => {
 
@@ -12,12 +11,11 @@ const AgentSwitchBoardPage = () => {
     const description = "Enter list of UIDs to tell the agent about. \n This can be in a comma separated list, or with one UID per line."
 
     const { submit_uids, tellAgent, buttonStates, toggle, generate_report, reportStatus, generate_suggestion, suggestionStatus } = useContext(ModelContext);
-    //in the return, make it so that these buttons have the same class for easy css application
-    const buttons = [
-        { id: "queue_add_position", label: "Add to Front" },
-        { id: "ask_on_tell", label: "Continuous Suggesting" },
-        { id: "report_on_tell", label: "Continuous Reporting" }
 
+    const buttons = [
+        { id: "direct_to_queue", label: "Add to Front" },
+        { id: "suggest_on_ingest", label: "Continuous Suggesting" },
+        { id: "report_on_ingest", label: "Continuous Reporting" }
     ];
 
     const [uidContent, setUIDContent] = useState('');
@@ -35,11 +33,8 @@ const AgentSwitchBoardPage = () => {
             setUIDErrors(errors);
             return;
         }
-        // tellAgent(uidContent);
         const reply = await submit_uids(uidContent);
-        console.log("the reply is ", reply);
         if (reply !== "success") {
-            console.log("shouldnt be here");
             errors.test = "Failure";
         }
         if (errors.test) {
@@ -51,21 +46,43 @@ const AgentSwitchBoardPage = () => {
         setUIDErrors({ test: "" });
     }
 
-    //on click, I would change the color so buttonStates[id]? "green": "black"
+
+    console.log("this should be true ", buttonStates.suggest_on_ingest);
+    console.log("this should be false ", buttonStates.report_on_ingest);
+    console.log(typeof (buttonStates.suggest_on_ingest));
+
     return (
         <div className='agent-switchboard-container'>
             <h1>Agent Switchboard</h1>
+
             <div className="toggle-btns-container">
-                {buttons.map(({ id, label }) => (
-                    <div className="label-btn-container">
-                        <label htmlFor={id}>{label}</label>
-                        <button className={`top-btns ${buttonStates[id] != null ? (buttonStates[id] ? 'on' : 'off') : 'error'}`} key={id} onClick={() => toggle(id)}>
-                            {
-                                buttonStates[id] != null ? (buttonStates[id] ? "ON" : "OFF") : "ERROR"
-                            }
-                        </button>
-                    </div>
-                ))}
+
+                <div className="label-btn-container">
+
+                    <label htmlFor={"direct_to_queue"}>Add to Front</label>
+                    <button className={`top-btns ${buttonStates.direct_to_queue !== null ? ((buttonStates.direct_to_queue === 'true' || buttonStates.direct_to_queue === true) ? 'on' : 'off') : 'error'}`} key={"direct_to_queue"} onClick={() => toggle("direct_to_queue")}>
+                        {
+                            buttonStates.direct_to_queue !== null ? ((buttonStates.direct_to_queue === 'true' || buttonStates.direct_to_queue === true) ? "ON" : "OFF") : "ERROR"
+                        }
+                    </button>
+                </div>
+                <div className="label-btn-container">
+                    <label htmlFor={"suggest_on_ingest"}>Continuous Suggesting</label>
+                    <button className={`top-btns ${buttonStates.suggest_on_ingest !== null ? ((buttonStates.suggest_on_ingest === true || buttonStates.suggest_on_ingest === 'true') ? 'on' : 'off') : 'error'}`} key={"suggest_on_ingest"} onClick={() => toggle("suggest_on_ingest")}>
+                        {
+                            buttonStates.suggest_on_ingest !== null ? ((buttonStates.suggest_on_ingest === true || buttonStates.suggest_on_ingest === 'true') ? "ON" : "OFF") : "ERROR"
+                        }
+                    </button>
+                </div>
+                <div className="label-btn-container">
+                    <label htmlFor={"report_on_ingest"}>Continuous Reporting</label>
+                    <button className={`top-btns ${buttonStates.report_on_ingest !== null ? (buttonStates.report_on_ingest === true || buttonStates.report_on_ingest === 'true' ? 'on' : 'off') : 'error'}`} key={"report_on_ingest"} onClick={() => toggle("report_on_ingest")}>
+                        {
+                            buttonStates.report_on_ingest !== null ? ((buttonStates.report_on_ingest === true || buttonStates.report_on_ingest === 'true') ? "ON" : "OFF") : "ERROR"
+                        }
+                    </button>
+                </div>
+
             </div>
 
             <div className='generate-btns-container'>
@@ -91,10 +108,8 @@ const AgentSwitchBoardPage = () => {
 
             <div className="nav-btn-container">
                 <button className="nav-mv-btn" onClick={() => navigate("/DebuggingPage")}>Methods/Variables</button>
-
             </div>
         </div>
     );
 };
-//value={uid
 export default AgentSwitchBoardPage
