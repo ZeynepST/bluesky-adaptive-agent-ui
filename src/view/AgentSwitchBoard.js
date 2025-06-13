@@ -46,11 +46,6 @@ const AgentSwitchBoardPage = () => {
         setUIDErrors({ test: "" });
     }
 
-
-    console.log("this should be true ", buttonStates.suggest_on_ingest);
-    console.log("this should be false ", buttonStates.report_on_ingest);
-    console.log(typeof (buttonStates.suggest_on_ingest));
-
     return (
         <div className='agent-switchboard-container'>
             <h1>Agent Switchboard</h1>
