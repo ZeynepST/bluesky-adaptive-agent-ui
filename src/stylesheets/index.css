@@ -2,32 +2,68 @@
 * {
   /* font-family: "Times New Roman", Times, serif; */
   font-family: inter;
-  font-size:16px;
-  
+  font-size: 16px;
+
 }
 
 body {
   margin: 0;
-  border:0;
+  border: 0;
   overflow: auto;
 }
+
 /* Navigation Button */
 
-.nav-btn-container{
-    display:flex;
-    justify-content: flex-end;
-    bottom: 0;
+.nav-btn-container {
+  position: relative;
 }
-.nav-mv-btn{
-    background-color: rgb(24, 103, 123);
-    color:white;
-    border-radius: 10px;
-    padding: 5px;
-    width: auto;
-    align-self: flex-end;
-    margin-top:auto;
+
+.nav-mv-btn {
+  background-color: rgb(24, 103, 123);
+  color: white;
+  border-radius: 10px;
+  padding: 10px;
+  width: auto;
+  position: absolute;
+  bottom: 5;
+  right: 5;
+}
+
+.nav-mv-btn:hover, .switchboard-btn:hover {
+  background-color: rgb(77, 191, 219);
 
 }
-.nav-mv-btn:hover{
-    background-color:rgb(77, 191, 219);
+
+.switch-btn-container {
+  position: relative;
+}
+
+/* the position changes depending on the size of the table need to try encapsulating this  */
+.switchboard-btn {
+  background-color: rgb(24, 103, 123);
+  color: white;
+  border-radius: 10px;
+  padding: 10px;
+  width: auto;
+  position: absolute;
+  bottom: 20;
+  right: 20;
+
+}
+
+
+/* text areas */
+#tell-uid {
+  resize: none;
+  width: 500px;
+  height: 100px;
+  border-radius: 5px;
+}
+
+#enter-var,
+#enter-value {
+  resize: none;
+  height: 30px;
+  width: 200px;
+  border-radius: 5px;
 }

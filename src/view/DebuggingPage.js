@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ModelContext } from "../view-model/ModelContext";
 import '../stylesheets/DebuggingPage.css';
 import '../stylesheets/index.css';
+import '../stylesheets/NamesTable.css';
 
 const DebuggingPage = () => {
 
@@ -30,11 +31,10 @@ const DebuggingPage = () => {
 
     const [updateVarErrors, setUpdateVarErrors] = useState({ response: "", name: "", value: "" });
     // need to check if I can use setVarName/varName for both getting variable and updating variable
-
-    //this isget_variable
+    //this is get_variable
     const requestVariable = async () => {
-        console.log("inside of submit var btn function");
         const value = await get_variable(varName1);
+        console.log("the value is ", value);
         if (value !== "UNKNOWN") {
             setFetchedVarName(value);
         }
@@ -64,7 +64,6 @@ const DebuggingPage = () => {
         }
         setVarName2("");
         setNewValue("");
-        //testing
         setUpdateVarErrors({ response: "", name: "", value: "" });
     }
 
@@ -80,6 +79,24 @@ const DebuggingPage = () => {
         }
         if (!kwargsValue.trim()) {
             errors.kwargs = "Must Enter a Value";
+        }
+
+        console.log("args values is ", argsValue);
+        try {
+            if (!Array.isArray(JSON.parse(argsValue))) {
+                throw new Error("Input must be a list of arguments");
+            }
+        }
+        catch (error) {
+            errors.args = "Input must be a list of arguments";
+        }
+        try {
+            if (JSON.parse(kwargsValue).constructor !== Object) {
+                throw new Error("Input must be a dictionary.");
+            }
+        }
+        catch (error) {
+            errors.kwargs = "Input must be a dictionary.";
         }
 
         if (errors.mName || errors.args || errors.kwargs) {
@@ -112,8 +129,8 @@ const DebuggingPage = () => {
                     {/* v-row1 refers to where the get variable button is  */}
                     <div className="v-row1">
                         <div className="var-name-output-container">
-                             <textarea id="enter-var" placeholder="Enter Variable Name" value={varName1} onChange={(e) => setVarName1(e.target.value)}> </textarea>
-                            <button className="submit-var-btn" onClick={requestVariable}>Get Variable</button>
+                            <textarea id="enter-var" placeholder="Enter Variable Name" value={varName1} onChange={(e) => setVarName1(e.target.value)}> </textarea>
+                            <button className="submit-var-btn" onClick={requestVariable}>Get Value</button>
                             <div className="var-name-output">{fetchedVarName}</div>
                         </div>
                     </div>
@@ -159,27 +176,21 @@ const DebuggingPage = () => {
                 </div>
             </div>
 
-
+            {/* end of left side */}
             <div className="right">
                 <div className="available-dashboard-container">
                     <h1 id="var-dashboard">Available Variables and Methods</h1>
 
-                    {/* <div className="names-table">
-
-                    </div> */}
-
-
                     {/* now the table */}
                     <div className="names-table-container">
-                        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                        <table className="names-table-style">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
-
                                 </tr>
                             </thead>
-                            <tboday>
+                            <tbody>
                                 {names.map((x, index) => (
                                     <tr key={index}>
                                         <td>{index + 1}</td>
@@ -187,9 +198,11 @@ const DebuggingPage = () => {
                                     </tr>
                                 )
                                 )}
-                            </tboday>
+                            </tbody>
+
                         </table>
                     </div>
+
                     <button className="refresh-btn" onClick={manual_refresh}
                         disabled={!canRefresh}
                         style={{
@@ -201,13 +214,12 @@ const DebuggingPage = () => {
 
                     >Refresh Available
                     </button>
-
-
-                    <div className="nav-btn-container">
-                        <button className="nav-mv-btn" onClick={() => navigate("/")}>Switchboard</button>
-                    </div>
                 </div>
             </div>
+            <div className="switch-btn-container">
+                <button className="switchboard-btn" onClick={() => navigate("/")}>Switchboard</button>
+            </div>
+
         </div>
     );
 }

@@ -1,0 +1,38 @@
+
+
+.names-table-container{
+    display:flex;
+    flex-direction:column;
+    overflow-y: auto;
+    border: none;
+    width:500px;
+    height: 500px;
+}
+
+.names-table-style{
+    width: 100%; 
+    border-collapse: separate;
+    border-spacing:0;
+    border-radius: 10px;
+    border: 1px solid black;
+    overflow: hidden;
+}
+.names-table-style thead tr{
+    background-color:  rgb(77, 191, 219);
+    color: white;
+    text-align: left;
+  
+}
+
+.names-table-style thead th{
+    font-size: 20px;
+  
+}
+.names-table-style th, .names-table-style td{
+    padding: 10px 12px;
+  
+}
+
+.names-table-style tbody tr:nth-of-type(even){
+    background-color: rgb(236, 232, 232);
+}

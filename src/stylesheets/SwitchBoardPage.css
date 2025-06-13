@@ -39,7 +39,6 @@ h1{
     border-radius:40px;
     padding:5px;
     text-decoration: none;
-    /* the size of the buttons */
     width:80px;
     height:80px;
 }
@@ -50,7 +49,7 @@ h1{
 
 .top-btns.on{
     background-color: rgb(88, 255, 79);
-    color:black;
+    color:white;
 }
 .top-btns.off{
     background-color: darkgray;
@@ -105,11 +104,7 @@ h1{
   gap: 10px;
   margin-bottom: 20px;
 }
-#tell-uid{
-    resize:none;
-    width:500px;
-    height: 100px;
-}
+
 .submit-uid-btn{
     background-color: rgb(45, 174, 38);
     color:white; 

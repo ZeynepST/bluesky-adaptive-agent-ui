@@ -47,19 +47,15 @@
     display: flex;
     flex-direction: column;
 }
-#enter-var, #enter-value{
-    resize:none;
-    height:30px;
-    width:200px;
-}
 
 .submit-var-btn{
   width:auto;
   margin-top: 10px;
    background-color: rgb(45, 174, 38) ;
    color:white;
-   border-radius: 10px;
+   border-radius: 5px;
    padding: 5px;
+   font-size: 15px;
    /* align-self: flex-end; */
 }
 
@@ -110,6 +106,7 @@
     resize:none;
     width:500px;
     height: 100px;
+    border-radius: 10px;
 }
 
 /* right side  */
@@ -129,12 +126,6 @@
     margin-top: 20px;
 }
 
-.names-table-container{
-    display:flex;
-    flex-direction:column;
-    overflow-y: auto;
-    border: 1px solid;
-}
 .refresh-btn{
     /* align-self: flex-end; */
     /* display: flex;
@@ -146,3 +137,4 @@
 .refresh-btn:hover{
     background-color: lightgray;
 }
+
