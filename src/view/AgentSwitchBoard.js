@@ -10,12 +10,13 @@ const AgentSwitchBoardPage = () => {
 
     const description = "Enter list of UIDs to tell the agent about. \n This can be in a comma separated list, or with one UID per line."
 
-    const { submit_uids, tellAgent, buttonStates, toggle, generate_report, reportStatus, generate_suggestion, suggestionStatus } = useContext(ModelContext);
+    const { submit_uids, tellAgent, buttonStates, toggle, toggle_queue_add_position, generate_report, reportStatus, generate_suggestion, suggestionStatus } = useContext(ModelContext);
 
     const buttons = [
         { id: "direct_to_queue", label: "Add to Front" },
         { id: "suggest_on_ingest", label: "Continuous Suggesting" },
-        { id: "report_on_ingest", label: "Continuous Reporting" }
+        { id: "report_on_ingest", label: "Continuous Reporting" },
+        {id: "queue_add_position", label: "Queue Add Position"}
     ];
 
     const [uidContent, setUIDContent] = useState('');
@@ -53,23 +54,22 @@ const AgentSwitchBoardPage = () => {
             <div className="toggle-btns-container">
 
                 <div className="label-btn-container">
-
                     <label htmlFor={"direct_to_queue"}>Add to Front</label>
                     <button className={`top-btns ${buttonStates.direct_to_queue !== null ? ((buttonStates.direct_to_queue === 'true' || buttonStates.direct_to_queue === true) ? 'on' : 'off') : 'error'}`} key={"direct_to_queue"} onClick={() => toggle("direct_to_queue")}>
                         {
-                            buttonStates.direct_to_queue !== null ? ((buttonStates.direct_to_queue === 'true' || buttonStates.direct_to_queue === true) ? "ON" : "OFF") : "ERROR"
+                            buttonStates.direct_to_queue !== null ? ((buttonStates.direct_to_queue === true || buttonStates.direct_to_queue === 'true') ? "ON" : "OFF") : "ERROR"
                         }
                     </button>
                 </div>
-                <div className="label-btn-container">
+                <div id="suggest-on-ingest-btn-container" className="label-btn-container">
                     <label htmlFor={"suggest_on_ingest"}>Continuous Suggesting</label>
-                    <button className={`top-btns ${buttonStates.suggest_on_ingest !== null ? ((buttonStates.suggest_on_ingest === true || buttonStates.suggest_on_ingest === 'true') ? 'on' : 'off') : 'error'}`} key={"suggest_on_ingest"} onClick={() => toggle("suggest_on_ingest")}>
+                    <button id="suggest-on-ingest-btn" className={`top-btns ${buttonStates.suggest_on_ingest !== null ? ((buttonStates.suggest_on_ingest === true || buttonStates.suggest_on_ingest === 'true') ? 'on' : 'off') : 'error'}`} key={"suggest_on_ingest"} onClick={() => toggle("suggest_on_ingest")}>
                         {
                             buttonStates.suggest_on_ingest !== null ? ((buttonStates.suggest_on_ingest === true || buttonStates.suggest_on_ingest === 'true') ? "ON" : "OFF") : "ERROR"
                         }
                     </button>
                 </div>
-                <div className="label-btn-container">
+                <div id="queue-add-position-container" className="label-btn-container">
                     <label htmlFor={"report_on_ingest"}>Continuous Reporting</label>
                     <button className={`top-btns ${buttonStates.report_on_ingest !== null ? (buttonStates.report_on_ingest === true || buttonStates.report_on_ingest === 'true' ? 'on' : 'off') : 'error'}`} key={"report_on_ingest"} onClick={() => toggle("report_on_ingest")}>
                         {
@@ -79,9 +79,16 @@ const AgentSwitchBoardPage = () => {
                 </div>
 
             </div>
+            <div className="label-btn-container">
+                <label htmlFor={"queue_add_position"}>Queue Add Position</label>
+                <button id="queue-add-position-btn" className={`top-btns ${buttonStates.queue_add_position !== null ? (buttonStates.queue_add_position === "front" ? 'on' : 'off') : 'error'}`} key={"queue_add_position"} onClick={() => toggle_queue_add_position("queue_add_position")}>
+                    {
+                        buttonStates.queue_add_position !== null ? ((buttonStates.queue_add_position === "front") ? "FRONT" : "BACK") : "ERROR"
+                    }
+                </button>
+            </div>
 
             <div className='generate-btns-container'>
-
                 <button className={`suggestion-btn ${suggestionStatus === 'loading' ? "loading" : suggestionStatus === "error" ? "error" : "idle"}`} onClick={() => generate_suggestion()}>
                     {suggestionStatus === 'error' ? 'ERROR' : 'Generate Suggestion'}
                 </button>
@@ -90,6 +97,7 @@ const AgentSwitchBoardPage = () => {
                     {reportStatus === 'error' ? 'ERROR' : 'Generate Report'}
                 </button>
             </div>
+
             <div className="tell-agent-container">
                 <label className="uid-text-area-title" htmlFor="tell-uid">Tell Agent by UID</label>
                 <label className="uid-text-area-description" htmlFor="tell-uid">

@@ -6,12 +6,11 @@ import { useRef } from "react";
 
 export const ModelContext = createContext();
 
-const agent_address = process.env.REACT_APP_AGENT_ADDRESS;
-const agent_port = process.env.REACT_APP_AGENT_PORT;
+// const agent_address = process.env.REACT_APP_AGENT_ADDRESS;
+// const agent_port = process.env.REACT_APP_AGENT_PORT;
 
 
 export function ModelProvider({ children }) {
-
     //variables refers to all of the variables 
     //setNames refer to both variable and method names 
     const [names, setNames] = useState([]);
@@ -37,7 +36,8 @@ export function ModelProvider({ children }) {
     const [buttonStates, setButtonStates] = useState({
         direct_to_queue: false,
         suggest_on_ingest: false,
-        report_on_ingest: false
+        report_on_ingest: false,
+        queue_add_position: null
     });
 
 
@@ -72,19 +72,25 @@ export function ModelProvider({ children }) {
     }
 
     useEffect(() => {
-
         const loading = async () => {
             const direct_to_queue_value = await initializeButtonIDState("direct_to_queue");
-            const suggest_value = await initializeButtonIDState("suggest_on_ingest");
-            const report_value = await initializeButtonIDState("report_on_ingest");
+            const suggest_on_ingest_value = await initializeButtonIDState("suggest_on_ingest");
+            const report_on_ingest_value = await initializeButtonIDState("report_on_ingest");
+
+            const queue_add_position_value= await initializeButtonIDState("queue_add_position");
 
             setButtonStates({
                 direct_to_queue: direct_to_queue_value,
-                suggest_on_ingest: suggest_value,
-                report_on_ingest: report_value
-            })
+                suggest_on_ingest: suggest_on_ingest_value,
+                report_on_ingest: report_on_ingest_value,
+                queue_add_position: queue_add_position_value
+            });
         };
         loading();
+
+    }, []);
+
+    useEffect(() => {
         get_names();
         const interval = setInterval(get_names, 600000);
         return () => {
@@ -100,29 +106,39 @@ export function ModelProvider({ children }) {
     const [suggestionStatus, setSuggestionStatus] = useState("idle");
 
     const toggle = async (buttonId) => {
-        const current = buttonStates[buttonId];
+        const convert_to_bool=x=> x==="true" || x===true;
+        const current = convert_to_bool(buttonStates[buttonId]);
         const newState = !current;
+        //This is optimistic UI
+        setButtonStates((prev) => ({ ...prev, [buttonId]: newState }));
         try {
             const response = await axios.get(`/api/variable/${buttonId}`);
-            const response_str = String(response.data[buttonId] ?? "UNKOWN");
-            const new_value = !["True", "true", "on"].includes(response_str);
-            const payload = { "value": new_value };
-
-            try {
-                const new_response = await axios.post(`/api/variable/${buttonId}`, payload);
-                if (new_response) {
-                    setButtonStates((prev) => ({ ...prev, [buttonId]: newState }));
-                }
-                else {
-                    setButtonStates((prev) => ({ ...prev, [buttonId]: null }));
-                }
-            }
-            catch (error) {
-                console.error("trying something ", error);
-            }
+            const responseStr = String(response.data[buttonId] ?? "UNKOWN");
+            const newValue = !["True", "true", "on"].includes(responseStr);
+            const payload = { "value": newValue };
+            const newResponse = await axios.post(`/api/variable/${buttonId}`, payload);
         }
         catch (error) {
             console.error("Failed to update toggle ", error);
+            setButtonStates((prev) => ({ ...prev, [buttonId]: null }));
+        }
+    }
+
+    const toggle_queue_add_position=async(buttonId)=>{
+        const newState= buttonStates[buttonId]==="front"? "back":"front";
+         //This is optimistic UI
+        setButtonStates((prev) => ({ ...prev, [buttonId]: newState }));
+        try{
+            const response= await axios.get(`/api/variable/${buttonId}`);
+            const responseStr = String(response.data[buttonId] ?? "UNKOWN");
+            const newValue= newState; //need to check logic 
+            // "front" if resp_str != "front" else "back"
+            const payload={"value":newValue};
+            const newResponse= await axios.post(`/api/variable/${buttonId}`, payload);
+            setButtonStates((prev) => ({ ...prev, [buttonId]: newValue }));
+        }
+        catch(error){
+            console.error("Failed to update queue add position toggle  ", error);
             setButtonStates((prev) => ({ ...prev, [buttonId]: null }));
         }
     }
@@ -213,7 +229,7 @@ export function ModelProvider({ children }) {
 
 
     return (
-        <ModelContext.Provider value={{ manual_refresh, names, canRefresh, get_names, call_method, update_variable, get_variable, submit_uids, reportStatus, toggle, buttonStates, generate_report, generate_suggestion, suggestionStatus }}>
+        <ModelContext.Provider value={{ manual_refresh, names, setNames, canRefresh, get_names, call_method, update_variable, get_variable, submit_uids, reportStatus, toggle, toggle_queue_add_position, buttonStates, generate_report, generate_suggestion, suggestionStatus }}>
             {children}
         </ModelContext.Provider>
     );
