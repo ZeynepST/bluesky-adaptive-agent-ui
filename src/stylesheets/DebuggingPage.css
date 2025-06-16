@@ -1,140 +1,169 @@
-
 /* colors */
 /* green: rgb(88, 255, 79) 
    light blue: rgb(77, 191, 219)
 
 */
 
-.mv-container{
+.mv-container {
     border: 2px solid black;
-    margin:auto;
+    margin: auto;
     margin-top: 20px;
     margin-bottom: 20px;
-    display:flex;  
-    flex-direction:row;
-    width:fit-content;
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
     overflow: auto;
-    position:relative;
+    position: relative;
 }
 
-.left{
-    display:flex;
-    flex-direction:column;
-    gap:2rem;
+.left {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
     padding-left: 20px;
 
 }
 
-.variable-dashboard-container{
-    display:flex;
-    flex-direction:column;
+.variable-dashboard-container {
+    display: flex;
+    flex-direction: column;
     /* align-items: center; */
     /* need to check, im trying to make this left aligned*/
     /* justify-content: flex-end; */
-    padding:5px;
-    gap:2rem;
+    padding: 5px;
+    gap: 2rem;
     margin-top: 20px;
 }
 
-#var-dashboard{    
-    color:black;
+#var-dashboard {
+    color: black;
     margin-bottom: 0;
     display: flex;
     align-items: flex-end;
 }
 
-.v-row1{
+.v-row1 {
     display: flex;
     flex-direction: column;
 }
 
-.submit-var-btn{
-  width:auto;
-  margin-top: 10px;
-   background-color: rgb(45, 174, 38) ;
-   color:white;
-   border-radius: 5px;
-   padding: 5px;
-   font-size: 15px;
-   /* align-self: flex-end; */
+.submit-var-btn {
+    width: auto;
+    margin-top: 10px;
+    background-color: rgb(45, 174, 38);
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 15px;
+    border: 1px solid black;
 }
 
-.submit-var-btn:hover{
+.submit-var-btn:hover {
     background-color: lightgray;
 }
-.var-name-output-container{
-    display:flex;
+
+.var-name-output-container {
+    display: flex;
     flex-direction: column;
     align-items: baseline;
     gap: 10px;
-    color:rgb(77, 191, 219);
+    color: rgb(77, 191, 219);
     font-weight: bold;
     width: fit-content;
 
 }
 
 /* v row 2 */
-.v-row2{
+.v-row2 {
     display: flex;
     flex-direction: column;
 }
-.v-row2-text-areas{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
+
+.v-row2-text-areas {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 /* Method Dashboard */
-.method-dashboard-container{
-    display:flex;
-    flex-direction:column;
+.method-dashboard-container {
+    display: flex;
+    flex-direction: column;
     /* align-items: center; */
     /* need to check, im trying to make this left aligned*/
     /* justify-content: flex-end; */
-    padding:5px;
-    gap:2rem;
+    padding: 5px;
+    gap: 2rem;
     margin-bottom: 20px;
 }
 
-.method-list-container{
-    display:flex;
-    flex-direction:column;
-    gap:5px;
+.method-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
-#enter-description{
-    resize:none;
-    width:500px;
+#enter-description {
+    resize: none;
+    width: 500px;
     height: 100px;
     border-radius: 10px;
 }
 
 /* right side  */
-.right{
-    display:flex;
-    flex-direction:column;
-    gap:2rem;
+.right {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
     padding-right: 20px;
-    
+
 }
 
-.available-dashboard-container{
-    display:flex;
-    flex-direction:column;
-    padding:5px;
-    gap:2rem;
+.available-dashboard-container {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    gap: 0.5rem;
     margin-top: 20px;
 }
 
-.refresh-btn{
-    /* align-self: flex-end; */
-    /* display: flex;
-    justify-content: flex-end; */
+.refresh-btn {
+
     width: auto;
     margin-right: auto;
+    color: white;
+    padding: 5px;
+    border-radius: 10px;
+    margin-top: 5px;
+    border: 1px solid black;
+
 }
 
-.refresh-btn:hover{
+.refresh-btn:hover {
     background-color: lightgray;
 }
 
+
+/* filter buttons */
+.filter-btns {
+    color: black;
+    background-color: rgb(236, 232, 232);
+    width: auto;
+    margin-top: 10px;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 15px;
+    margin-right: 10px;
+    margin-bottom: 0;
+    border: 1px solid black;
+}
+
+.filter-btns:hover {
+    background-color: rgb(77, 191, 219);
+}
+
+
+/* not working need to look into */
+.fitler-btns.active {
+    background-color: green;
+}

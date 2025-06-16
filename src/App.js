@@ -1,7 +1,7 @@
 import {BrowserRouter as Router, Route,Routes} from 'react-router-dom';
 import {ModelProvider} from './view-model/ModelContext';
 import AgentSwitchBoardPage from './view/AgentSwitchBoard';
-import MVPage from './view/DebuggingPage';
+import DebuggingPage from './view/DebuggingPage';
 import './stylesheets/index.css';
 // import AgentSwitchBoard from './view/AgentSwitchBoard.js';
 
@@ -12,7 +12,7 @@ function App(){
             <ModelProvider>
                 <Routes>
                     <Route path="/" element={<AgentSwitchBoardPage />} />
-                    <Route path="/DebuggingPage" element={<MVPage />}/>
+                    <Route path="/DebuggingPage" element={<DebuggingPage />}/>
                 </Routes>
                 
             </ModelProvider>

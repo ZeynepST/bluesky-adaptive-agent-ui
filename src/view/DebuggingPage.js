@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate } from "react-router-dom";
+import React, { useState, useContext, useCallback ,useEffect} from 'react';
+import { UNSAFE_SingleFetchRedirectSymbol, useNavigate } from "react-router-dom";
 import { ModelContext } from "../view-model/ModelContext";
 import '../stylesheets/DebuggingPage.css';
 import '../stylesheets/index.css';
@@ -8,12 +8,18 @@ import '../stylesheets/NamesTable.css';
 const DebuggingPage = () => {
 
     const navigate = useNavigate();
-    //"Enter list of arguments, e.g., ['det1', 10, 'det2', 15]"
     const description1 = 'Enter list of arguments, e.g., ["det1", 10, "det2", 15]'
     const description2 = 'Enter dictionary of keyword arguments using double-quotes (\"), e.g., \n {"det":"det1","pos":15}';
     const { call_method, get_variable, update_variable } = useContext(ModelContext);
 
-    const { names, canRefresh, manual_refresh } = useContext(ModelContext);
+    const { names, setNames, canRefresh, manual_refresh } = useContext(ModelContext);
+
+    const [listNames, setListNames] = useState([]);
+
+    const filterOptions = ['Default', 'Ascending', 'Descending'];
+    const [selectedFilter, setSelectedFilter] = useState('Default');
+
+
     //varName2 refers to the variable name entered by user for "Get Variable"
     const [varName1, setVarName1] = useState("");
     //varName2 refers to variable name to be updated 
@@ -30,11 +36,16 @@ const DebuggingPage = () => {
     const [callMethodErrors, setCallMethodErrors] = useState({ mName: "", args: "", kwargs: "", response: "" });
 
     const [updateVarErrors, setUpdateVarErrors] = useState({ response: "", name: "", value: "" });
-    // need to check if I can use setVarName/varName for both getting variable and updating variable
-    //this is get_variable
+
+    const [searchText, setSearchText] = useState('');
+
+    useEffect(()=>{
+         setListNames(names);
+        
+    },[names]);
+
     const requestVariable = async () => {
         const value = await get_variable(varName1);
-        console.log("the value is ", value);
         if (value !== "UNKNOWN") {
             setFetchedVarName(value);
         }
@@ -68,8 +79,6 @@ const DebuggingPage = () => {
     }
 
     const submitMethodCall = async () => {
-        console.log("inside of submit method call");
-
         let errors = { mName: "", args: "", kwargs: "", response: "" };
         if (!methodName.trim()) {
             errors.mName = "Must Enter a Value";
@@ -81,7 +90,6 @@ const DebuggingPage = () => {
             errors.kwargs = "Must Enter a Value";
         }
 
-        console.log("args values is ", argsValue);
         try {
             if (!Array.isArray(JSON.parse(argsValue))) {
                 throw new Error("Input must be a list of arguments");
@@ -104,11 +112,7 @@ const DebuggingPage = () => {
             return;
         }
 
-        console.log("here are the following inputs ", methodName, argsValue, kwargsValue);
-
-
         const reply = await call_method(methodName, argsValue, kwargsValue);
-        console.log("the reply is ", reply);
         if (reply !== "success") {
             errors.response = reply;
             setCallMethodErrors(errors);
@@ -120,6 +124,33 @@ const DebuggingPage = () => {
         setKwargs("");
         setCallMethodErrors({ mName: "", args: "", kwargs: "", response: "" });
     }
+
+    const handleSearchInput = (event) => {
+        setSearchText(event.target.value);
+    }
+
+    const handleSearch = (event) => {
+        if (event.key === "Enter" && searchText.trim()) {
+            event.preventDefault();
+            setSearchText('');
+            const filteredSearchNames=listNames.filter(name => name.toLowerCase().includes(searchText.toLowerCase()));
+            setListNames(filteredSearchNames);
+        }
+    }
+
+    const getFilteredNames = useCallback((filterName) => {
+        setSelectedFilter(filterName);
+        if (filterName === 'Ascending') {
+            setListNames([...names].sort((a, b) => a.localeCompare(b)));
+        }
+        else if (filterName === 'Descending') {
+            setListNames([...names].sort((a, b) => b.localeCompare(a)));
+        }
+        else {
+            setListNames(names);
+        }
+    },[names]);
+   
 
     return (
         <div className="mv-container">
@@ -154,7 +185,6 @@ const DebuggingPage = () => {
                 <div className="method-dashboard-container">
                     <h1 id="var-dashboard">Method Dashboard</h1>
                     <div className="v-row2-text-areas">
-                        {/* <label className="enter-var-title" htmlFor="enter-var">Enter Method Name</label> */}
                         <textarea id="enter-var" placeholder="Enter Method Name" value={methodName} onChange={(e) => setMethodName(e.target.value)} > </textarea>
                         {callMethodErrors.mName && <p className="error-text">{callMethodErrors.mName}</p>}
 
@@ -177,12 +207,29 @@ const DebuggingPage = () => {
             </div>
 
             {/* end of left side */}
+            {/* start of right side */}
             <div className="right">
                 <div className="available-dashboard-container">
                     <h1 id="var-dashboard">Available Variables and Methods</h1>
+                    {/* // className={selectedFilter ===filter ? 'active' : ''} */}
+                    <div className="filter-overlay">
+                        {filterOptions.map(filter => (
+                            <button key={filter} onClick={() => getFilteredNames(filter)}
+                                className={`filter-btns ${selectedFilter === filter ? 'active' : ''}`}>
+                                {filter}
+                            </button>
+                        ))}
+                        <input type="text"
+                            className="search-vars-methods"
+                            placeholder="Search Variables and Methods..."
+                            value={searchText}
+                            onChange={handleSearchInput}
+                            onKeyDown={handleSearch}
+                        />
+                    </div>
 
-                    {/* now the table */}
                     <div className="names-table-container">
+                        {/* now the table */}
                         <table className="names-table-style">
                             <thead>
                                 <tr>
@@ -191,7 +238,7 @@ const DebuggingPage = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {names.map((x, index) => (
+                                {listNames.map((x, index) => (
                                     <tr key={index}>
                                         <td>{index + 1}</td>
                                         <td>{x}</td>
@@ -199,20 +246,15 @@ const DebuggingPage = () => {
                                 )
                                 )}
                             </tbody>
-
                         </table>
                     </div>
-
+                    {/* end of table */}
                     <button className="refresh-btn" onClick={manual_refresh}
                         disabled={!canRefresh}
                         style={{
                             backgroundColor: canRefresh ? ' rgb(45, 174, 38)' : 'lightgray',
-                            color: 'white',
-                            borderRadius: '10px',
-                            padding: '5px',
-                        }}
-
-                    >Refresh Available
+                        }}>
+                        Refresh Available
                     </button>
                 </div>
             </div>
