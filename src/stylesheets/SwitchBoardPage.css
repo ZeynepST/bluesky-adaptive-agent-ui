@@ -1,5 +1,4 @@
 /* the start of Agent Switchboard Page */
-
 .agent-switchboard-container {
     border: 2px solid black;
     margin-top: 20px;
@@ -20,21 +19,29 @@ h1 {
     font-weight: 900;
 }
 
-.toggle-btns-container {
+/* 
+    -top3-btns-container refers to the space where the top 3 toggle buttons are.
+    -queue-add-position-container refers to the area where the queue-add-position toggle button is
+ */
+.top3-btns-container, .queue-add-position-container {
     display: flex;
     flex-direction: row;
-    /* align-items: center; */
     justify-content: center;
     gap: 2rem;
     margin-top: 20px;
+    align-items: center;
 }
 
-.label-btn-container {
+/* toggle-btn-container refers to the individual toggle buttons */
+.toggle-btn-container {
+    width:150px;
+    text-align:center;
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     gap: 1rem;
-    padding-left: 20px;
+    
 }
 
 
@@ -69,15 +76,6 @@ h1 {
     color: black;
 }
 
-#queue-add-position-btn{
-    margin-right: 15px;
-}
-#suggest-on-ingest-btn{
-    margin-left: 35px;
-}
-#suggest-on-ingest-btn-container{
-    align-self: center;
-}
 
 /* Generate Report */
 
