@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { createContext } from "react";
@@ -8,7 +7,6 @@ export const ModelContext = createContext();
 
 // const agent_address = process.env.REACT_APP_AGENT_ADDRESS;
 // const agent_port = process.env.REACT_APP_AGENT_PORT;
-
 
 export function ModelProvider({ children }) {
     //variables refers to all of the variables 
@@ -27,12 +25,11 @@ export function ModelProvider({ children }) {
         catch (error) {
             return null;
         }
-
     }
+
     //false means idle (gray)
     //true means on (green)
     //null means error (red)
-
     const [buttonStates, setButtonStates] = useState({
         direct_to_queue: false,
         suggest_on_ingest: false,
@@ -77,7 +74,7 @@ export function ModelProvider({ children }) {
             const suggest_on_ingest_value = await initializeButtonIDState("suggest_on_ingest");
             const report_on_ingest_value = await initializeButtonIDState("report_on_ingest");
 
-            const queue_add_position_value= await initializeButtonIDState("queue_add_position");
+            const queue_add_position_value = await initializeButtonIDState("queue_add_position");
 
             setButtonStates({
                 direct_to_queue: direct_to_queue_value,
@@ -106,7 +103,7 @@ export function ModelProvider({ children }) {
     const [suggestionStatus, setSuggestionStatus] = useState("idle");
 
     const toggle = async (buttonId) => {
-        const convert_to_bool=x=> x==="true" || x===true;
+        const convert_to_bool = x => x === "true" || x === true;
         const current = convert_to_bool(buttonStates[buttonId]);
         const newState = !current;
         //This is optimistic UI
@@ -124,20 +121,20 @@ export function ModelProvider({ children }) {
         }
     }
 
-    const toggle_queue_add_position=async(buttonId)=>{
-        const newState= buttonStates[buttonId]==="front"? "back":"front";
-         //This is optimistic UI
+    const toggle_queue_add_position = async (buttonId) => {
+        const newState = buttonStates[buttonId] === "front" ? "back" : "front";
+        //This is optimistic UI
         setButtonStates((prev) => ({ ...prev, [buttonId]: newState }));
-        try{
-            const response= await axios.get(`/api/variable/${buttonId}`);
+        try {
+            const response = await axios.get(`/api/variable/${buttonId}`);
             const responseStr = String(response.data[buttonId] ?? "UNKOWN");
-            const newValue= newState; //need to check logic 
+            const newValue = newState; //need to check logic 
             // "front" if resp_str != "front" else "back"
-            const payload={"value":newValue};
-            const newResponse= await axios.post(`/api/variable/${buttonId}`, payload);
+            const payload = { "value": newValue };
+            const newResponse = await axios.post(`/api/variable/${buttonId}`, payload);
             setButtonStates((prev) => ({ ...prev, [buttonId]: newValue }));
         }
-        catch(error){
+        catch (error) {
             console.error("Failed to update queue add position toggle  ", error);
             setButtonStates((prev) => ({ ...prev, [buttonId]: null }));
         }
@@ -229,7 +226,11 @@ export function ModelProvider({ children }) {
 
 
     return (
-        <ModelContext.Provider value={{ manual_refresh, names, setNames, canRefresh, get_names, call_method, update_variable, get_variable, submit_uids, reportStatus, toggle, toggle_queue_add_position, buttonStates, generate_report, generate_suggestion, suggestionStatus }}>
+        <ModelContext.Provider value={{
+            manual_refresh, names, setNames, canRefresh, get_names, call_method,
+            update_variable, get_variable, submit_uids, reportStatus, toggle, toggle_queue_add_position, buttonStates,
+            generate_report, generate_suggestion, suggestionStatus
+        }}>
             {children}
         </ModelContext.Provider>
     );

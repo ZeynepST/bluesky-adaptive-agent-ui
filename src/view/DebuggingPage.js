@@ -1,5 +1,5 @@
 import React, { useState, useContext, useCallback ,useEffect} from 'react';
-import { UNSAFE_SingleFetchRedirectSymbol, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import { ModelContext } from "../view-model/ModelContext";
 import '../stylesheets/DebuggingPage.css';
 import '../stylesheets/index.css';
@@ -10,12 +10,12 @@ const DebuggingPage = () => {
     const navigate = useNavigate();
     const description1 = 'Enter list of arguments, e.g., ["det1", 10, "det2", 15]'
     const description2 = 'Enter dictionary of keyword arguments using double-quotes (\"), e.g., \n {"det":"det1","pos":15}';
+
     const { call_method, get_variable, update_variable } = useContext(ModelContext);
 
-    const { names, setNames, canRefresh, manual_refresh } = useContext(ModelContext);
+    const { names, canRefresh, manual_refresh } = useContext(ModelContext);
 
     const [listNames, setListNames] = useState([]);
-
     const filterOptions = ['Default', 'Ascending', 'Descending'];
     const [selectedFilter, setSelectedFilter] = useState('Default');
 
@@ -205,8 +205,8 @@ const DebuggingPage = () => {
                     </div>
                 </div>
             </div>
-
             {/* end of left side */}
+
             {/* start of right side */}
             <div className="right">
                 <div className="available-dashboard-container">
@@ -249,6 +249,7 @@ const DebuggingPage = () => {
                         </table>
                     </div>
                     {/* end of table */}
+                    
                     <button className="refresh-btn" onClick={manual_refresh}
                         disabled={!canRefresh}
                         style={{
