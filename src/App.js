@@ -3,12 +3,12 @@ import {ModelProvider} from './view-model/ModelContext';
 import AgentSwitchBoardPage from './view/AgentSwitchBoard';
 import DebuggingPage from './view/DebuggingPage';
 import './stylesheets/index.css';
-// import AgentSwitchBoard from './view/AgentSwitchBoard.js';
+// import { Tiled } from '@blueskyproject/finch';
+// import '@blueskyproject/finch/style.css';
 
 function App(){
     
     return(
-        <Router>
             <ModelProvider>
                 <Routes>
                     <Route path="/" element={<AgentSwitchBoardPage />} />
@@ -16,7 +16,6 @@ function App(){
                 </Routes>
                 
             </ModelProvider>
-        </Router>
      );
 };
 
