@@ -5,7 +5,6 @@
 */
 
 .mv-container {
-    border: 2px solid black;
     margin: auto;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -14,22 +13,29 @@
     width: fit-content;
     overflow: auto;
     position: relative;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
 }
 
+textarea{
+    font-size: 14px;
+}
 .left {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     padding-left: 20px;
 
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+
 }
 
 .variable-dashboard-container {
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
-    /* need to check, im trying to make this left aligned*/
-    /* justify-content: flex-end; */
     padding: 5px;
     gap: 2rem;
     margin-top: 20px;
@@ -59,9 +65,12 @@
     padding: 5px;
     font-size: 15px;
     border: 1px solid black;
+    cursor: pointer;
+    transition: background 0.3s ease;
 }
 
-.submit-var-btn:hover {
+.submit-var-btn:hover,
+.refresh-btn:hover {
     background-color: lightgray;
 }
 
@@ -92,9 +101,6 @@
 .method-dashboard-container {
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
-    /* need to check, im trying to make this left aligned*/
-    /* justify-content: flex-end; */
     padding: 5px;
     gap: 2rem;
     margin-bottom: 20px;
@@ -120,6 +126,10 @@
     gap: 2rem;
     padding-right: 20px;
 
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    padding: 20px;
 }
 
 .available-dashboard-container {
@@ -142,31 +152,55 @@
 
 }
 
-.refresh-btn:hover {
-    background-color: lightgray;
+/* filter buttons */
+
+.filter-overlay {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
+.filter-btns-container {
+    display: flex;
+}
 
-/* filter buttons */
 .filter-btns {
     color: black;
-    background-color: rgb(236, 232, 232);
+    background-color: white;
     width: auto;
     margin-top: 10px;
-    border-radius: 5px;
-    padding: 5px;
+    padding: 10px;
     font-size: 15px;
-    margin-right: 10px;
     margin-bottom: 0;
     border: 1px solid black;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
 }
 
 .filter-btns:hover {
     background-color: rgb(77, 191, 219);
+    color: white;
+    border-color: rgb(77, 191, 219);
 }
 
+.filter-btns.active {
+    color: white;
+    font-weight: bold;
+    background-color: rgb(77, 191, 219) !important;
+}
 
-/* not working need to look into */
-.fitler-btns.active {
-    background-color: green;
+.search-bar {
+    padding: 10px 14px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border 0.2s ease-in-out;
+    width: 215px;
+}
+
+.search-bar:focus {
+    border-color: #4dbfdb;
+    box-shadow: 0 0 4px rgba(77, 191, 219, 0.4);
 }

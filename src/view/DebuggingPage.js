@@ -213,15 +213,17 @@ const DebuggingPage = () => {
                     <h1 id="var-dashboard">Available Variables and Methods</h1>
                     {/* // className={selectedFilter ===filter ? 'active' : ''} */}
                     <div className="filter-overlay">
-                        {filterOptions.map(filter => (
+                        <div className="filter-btns-container">
+                            {filterOptions.map(filter => (
                             <button key={filter} onClick={() => getFilteredNames(filter)}
                                 className={`filter-btns ${selectedFilter === filter ? 'active' : ''}`}>
                                 {filter}
                             </button>
                         ))}
+                        </div>
                         <input type="text"
-                            className="search-vars-methods"
-                            placeholder="Search Variables and Methods..."
+                            className="search-bar"
+                            placeholder="Search..."
                             value={searchText}
                             onChange={handleSearchInput}
                             onKeyDown={handleSearch}
