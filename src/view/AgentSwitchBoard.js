@@ -1,8 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { ModelContext } from "../view-model/ModelContext";
-import '../stylesheets/SwitchBoardPage.css';
 import '../stylesheets/index.css';
+import '../stylesheets/SwitchBoardPage.css';
+
 
 const AgentSwitchBoardPage = () => {
 
@@ -42,7 +43,7 @@ const AgentSwitchBoardPage = () => {
 
     return (
         <div className='agent-switchboard-container'>
-            <h1>Agent Switchboard</h1>
+            <h1 id='agent-switchboard-title'>Agent Switchboard</h1>
 
             <div className="top3-btns-container">
 
@@ -98,7 +99,7 @@ const AgentSwitchBoardPage = () => {
                 <label className="uid-text-area-description" htmlFor="tell-uid">
                     {description}
                 </label>
-                <textarea id="tell-uid" value={uidContent} onChange={(e) => setUIDContent(e.target.value)} />
+                <textarea className="tell-uid" value={uidContent} onChange={(e) => setUIDContent(e.target.value)} />
                 {/* {uidErrors.uidContent && <p className="error-text">{uidErrors.uidContent}</p>} */}
                 {uidErrors.test && <p className="error-text">{uidErrors.test}</p>}
                 <button className="submit-uid-btn" onClick={submitUIDButton}>Submit</button>
