@@ -1,15 +1,13 @@
 /* the start of Agent Switchboard Page */
 .agent-switchboard-container {
-    border: 2px solid black;
-    margin-top: 20px;
+    margin: 20px auto;
     margin-bottom: 20px;
-    margin-left: 30%;
-    display: inline-block;
-    padding: 20px;
-    max-width: 100vw;
-    max-height: 100vh;
-    /* overflow-y:auto; */
+    display: block;
+    width: fit-content;
+    overflow: auto;
     position: relative;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
 }
 
 h1 {
@@ -23,7 +21,8 @@ h1 {
     -top3-btns-container refers to the space where the top 3 toggle buttons are.
     -queue-add-position-container refers to the area where the queue-add-position toggle button is
  */
-.top3-btns-container, .queue-add-position-container {
+.top3-btns-container,
+.queue-add-position-container {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -34,14 +33,13 @@ h1 {
 
 /* toggle-btn-container refers to the individual toggle buttons */
 .toggle-btn-container {
-    width:150px;
-    text-align:center;
+    width: 150px;
+    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 1rem;
-    
 }
 
 
