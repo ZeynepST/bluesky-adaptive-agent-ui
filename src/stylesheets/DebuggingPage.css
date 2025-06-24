@@ -17,15 +17,15 @@
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
 }
 
-textarea{
+textarea {
     font-size: 14px;
 }
+
 .left {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     padding-left: 20px;
-
     background-color: white;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
@@ -85,6 +85,15 @@ textarea{
 
 }
 
+#enter-var,
+#enter-value {
+    resize: none;
+    height: 30px;
+    width: 200px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
 /* v row 2 */
 .v-row2 {
     display: flex;
@@ -96,6 +105,8 @@ textarea{
     flex-direction: column;
     gap: 10px;
 }
+
+
 
 /* Method Dashboard */
 .method-dashboard-container {
@@ -117,6 +128,7 @@ textarea{
     width: 500px;
     height: 100px;
     border-radius: 10px;
+    border: 1px solid black;
 }
 
 /* right side  */
@@ -141,7 +153,6 @@ textarea{
 }
 
 .refresh-btn {
-
     width: auto;
     margin-right: auto;
     color: white;
@@ -149,7 +160,6 @@ textarea{
     border-radius: 10px;
     margin-top: 5px;
     border: 1px solid black;
-
 }
 
 /* filter buttons */
