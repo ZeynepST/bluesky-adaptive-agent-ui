@@ -1,6 +1,6 @@
 /* temp */
 * {
-  font-family:'Roboto', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 16px;
 }
 
@@ -13,7 +13,11 @@ body {
 /* Navigation Button */
 
 .nav-btn-container {
-  position: relative;
+  position: absolute;
+  bottom: 0;
+  right: 20;
+  gap: 10px;
+  display: flex;
 }
 
 .nav-mv-btn {
@@ -22,17 +26,22 @@ body {
   border-radius: 10px;
   padding: 10px;
   width: auto;
-  position: absolute;
   bottom: 5;
   right: 5;
 }
 
-.nav-mv-btn:hover, .switchboard-btn:hover {
+.nav-mv-btn:hover,
+.switchboard-btn:hover {
   background-color: rgb(77, 191, 219);
 }
 
 .switch-btn-container {
-  position: relative;
+  position: absolute;
+  bottom: 20;
+  right: 20;
+  gap: 10px;
+  display: flex;
+
 }
 
 /* the position changes depending on the size of the table need to try encapsulating this  */
@@ -42,7 +51,6 @@ body {
   border-radius: 10px;
   padding: 10px;
   width: auto;
-  position: absolute;
-  bottom: 20;
-  right: 20;
+  /* position: absolute; */
+
 }
