@@ -107,6 +107,7 @@ const AgentSwitchBoardPage = () => {
 
             <div className="nav-btn-container">
                 <button className="nav-mv-btn" onClick={() => navigate("/DebuggingPage")}>Methods/Variables</button>
+                <button className="switchboard-btn" onClick={() => navigate("/ReportDataPage")}>UID</button>
             </div>
         </div>
     );

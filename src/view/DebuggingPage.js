@@ -263,6 +263,7 @@ const DebuggingPage = () => {
             </div>
             <div className="switch-btn-container">
                 <button className="switchboard-btn" onClick={() => navigate("/")}>Switchboard</button>
+                <button className="switchboard-btn" onClick={() => navigate("/ReportDataPage")}>UID</button>
             </div>
 
         </div>
