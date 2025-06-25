@@ -5,6 +5,7 @@ import DebuggingPage from './view/DebuggingPage';
 import ReportDataPage from './view/ReportDataPage';
 import '@blueskyproject/finch/style.css';
 import './stylesheets/index.css';
+import FinchPage from './view/FinchPage';
 
 function App(){
 
@@ -14,6 +15,7 @@ function App(){
                     <Route path="/" element={<AgentSwitchBoardPage />} />
                     <Route path="/DebuggingPage" element={<DebuggingPage />}/>
                     <Route path="/ReportDataPage" element={<ReportDataPage />}/>
+                    <Route path="/FinchPage" element={<FinchPage />}/>
 
                 </Routes>
                 
