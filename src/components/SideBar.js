@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { UidContext } from '../view-model/UidContext';
 import '../stylesheets/SideBar.css';
+
 
 /**
  * This SideBar component will appear on on the ReportDataPage to display the list of UIDs and the links to their respective 
@@ -7,14 +10,18 @@ import '../stylesheets/SideBar.css';
  */
 
 const SideBar = () => {
+    const { uidsInfo } = useContext(UidContext);
 
     return (
         <aside className="sidebar">
-            <h3>List of UIDs</h3>
+            <h1 className="side-bar-title">List of UIDs</h1>
+            <hr className="side-bar-delimiter"/>
             <ul>
-                <li>
-                    <Link to="/">Temp</Link>
-                </li>
+                {uidsInfo.map((uid) => (
+                    <li key={uid.uidValue}>
+                        <Link>{uid.uidValue}</Link>
+                    </li>
+                ))}
             </ul>
         </aside>
     );
