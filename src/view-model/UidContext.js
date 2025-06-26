@@ -12,6 +12,9 @@ export function UidProvider({ children }) {
 
     // When a UID is clicked on, the object containing metadata is set, not just the UID number itself 
     const[chosenUidObject, setChosenUidObject]=useState(null);
+    
+    //viewMode refers to whether Ingest or Report was selected 
+    const [viewMode, setViewMode] = useState(null);
 
 
     const get_uids = async () => {
@@ -57,7 +60,7 @@ export function UidProvider({ children }) {
 
 
     return (
-        <UidContext.Provider value={{uidsInfo, get_uids, setUidRefresh, setChosenUidObject, chosenUidObject}}>
+        <UidContext.Provider value={{uidsInfo, get_uids, setUidRefresh, setChosenUidObject, chosenUidObject, viewMode, setViewMode}}>
             {children}
         </UidContext.Provider>
     );
