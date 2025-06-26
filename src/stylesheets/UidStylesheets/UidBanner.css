@@ -1,0 +1,38 @@
+.uid-banner-container {
+    display: flex;
+    flex-direction: column;
+    color: rgb(9, 49, 59);
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
+    width: 400px;
+    padding: 1rem;
+    height: 100%;
+}
+
+.side-bar-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(9, 49, 59);
+}
+
+.side-bar-delimiter {
+    margin-bottom: 10px;
+    border-top: 1px solid;
+    border-color: rgb(9, 49, 59);
+}
+
+.uid-banner-labels {
+    font-weight: bold;
+}
+
+.ingest-report-btns {
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 30px;
+    color: rgb(9, 49, 59);
+}
+
+.ingest-report-btns:hover {
+    text-decoration: underline;
+    color: rgb(45, 174, 38);
+    cursor: pointer;
+}
