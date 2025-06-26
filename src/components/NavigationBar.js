@@ -9,7 +9,7 @@ const NavBar = () => {
             <ul className="nav-links">
                 <li><Link to="/">Switchboard</Link></li>
                 <li><Link to="/DebuggingPage">Methods/Variables</Link></li>
-                <li><Link to="/ReportDataPage">UID</Link></li>
+                <li><Link to="/UidPage">UID</Link></li>
                 <li><Link to="/FinchPage">Finch</Link></li>
             </ul>
         </nav>

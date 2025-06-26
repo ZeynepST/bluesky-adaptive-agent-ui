@@ -9,7 +9,7 @@ const TiledDebuggingPage = () => {
         <div className="report-data-page-container">
               <Tiled tiledBaseUrl='/api/v1'></Tiled>
             <div className="switch-btn-container">
-                <button className="switchboard-btn" onClick={() => navigate("/ReportDataPage")}>UID</button>
+                <button className="switchboard-btn" onClick={() => navigate("/UidPage")}>UID</button>
             </div>
 
         </div>
