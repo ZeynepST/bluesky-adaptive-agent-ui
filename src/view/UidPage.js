@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { UidContext } from '../view-model/UidContext';
+import { useParams } from 'react-router-dom';
 import SideBar from '../components/SideBar';
 import UidBanner from '../components/UidBanner';
 import IngestDataPage from '../components/IngestDataPage';
@@ -13,7 +14,12 @@ import '../stylesheets/UidStylesheets/UidPage.css';
  */
 const UidPage = () => {
     const navigate = useNavigate();
-    const { uidsInfo, chosenUidObject, viewMode } = useContext(UidContext);
+    const { uidsInfo } = useContext(UidContext);
+    const { viewMode, uidValue } = useParams();
+
+
+    const chosenUidObject = uidsInfo.find(uid => uid.uidValue === uidValue);
+   // const uidValue = chosenUidObject?.uidValue;
 
     return (
         <div className="report-data-page-container">
@@ -22,17 +28,17 @@ const UidPage = () => {
                 <div className="report-data-main-content">
                     {chosenUidObject !== null && (
                         <>
-                            <UidBanner />
+                            <UidBanner uidObject={chosenUidObject} viewMode={viewMode} />
                             <div className="report-data-main-content-container">
                                 {/* If a UID object is chosen, the render will depend on whether Report or Ingest was selected */}
                                 {
                                     viewMode === "ingest" && (
-                                        <IngestDataPage />
+                                        <IngestDataPage uid={uidValue} />
                                     )
                                 }
                                 {
                                     viewMode === "report" && (
-                                        <ReportDataPage />
+                                        <ReportDataPage uid={uidValue} />
                                     )
                                 }
 

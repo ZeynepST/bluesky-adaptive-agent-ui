@@ -22,6 +22,7 @@ function App() {
                         <Route path="/DebuggingPage" element={<DebuggingPage />} />
                         <Route path="/UidPage" element={<UidPage />} />
                         <Route path="/FinchPage" element={<FinchPage />} />
+                        <Route path="/UidPage/:uidValue?/:viewMode?" element={<UidPage />} />
                     </Routes>
                 </div>
 

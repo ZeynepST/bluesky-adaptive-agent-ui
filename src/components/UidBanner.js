@@ -10,9 +10,10 @@ import '../stylesheets/UidStylesheets/SideBar.css';
  * then it will render buttons which will then render specific pages with data on either one. 
  */
 
-const UidBanner = () => {
+const UidBanner = ({ uidObject, viewMode }) => {
 
-    const { uidsInfo, chosenUidObject, setViewMode, viewMode } = useContext(UidContext);
+    // const { uidsInfo} = useContext(UidContext);
+    if (!uidObject) return null;
 
     return (
 
@@ -20,40 +21,29 @@ const UidBanner = () => {
 
             <h1 className="side-bar-title">Dashboard</h1>
             <hr className="side-bar-delimiter" />
-
-            {/* Below will be a list of the specific UID information*/}
             <ul>
-                {/* uid refers to the different UID objects within uidsInfo */}
-                {uidsInfo.map((uid) => (
-                    <React.Fragment key={uid.uidValue}>
-                        {uid.uidValue === chosenUidObject?.uidValue && (
-                                <li key={uid.uidValue}>
-                                    <div><span className="uid-banner-labels"> Time Stamp: </span>{uid.datetime}</div>
-                                    <div><span className="uid-banner-labels"> Agent Name:</span> {uid.agentName}</div>
-                                    <div><span className="uid-banner-labels"> Model Type: </span>{uid.modelType}</div>
-                                    <div><span className="uid-banner-labels"> Algorithm: </span>{uid.modelAlgorithm}</div>
-                                    <div><span className="uid-banner-labels"> Max Iterations: </span>{uid.maxIter}</div>
-                                    <div><span className="uid-banner-labels"> Number of Clusters: </span>{uid.numberOfClusters}</div>
-                                    <div><span className="uid-banner-labels"> Random State: </span>{uid.randomState}</div>
-                                </li>
-                        )}
-                    </React.Fragment>
-                ))}
+                <li>
+                    <div><span className="uid-banner-labels">Time Stamp:</span> {uidObject.datetime}</div>
+                    <div><span className="uid-banner-labels">Agent Name:</span> {uidObject.agentName}</div>
+                    <div><span className="uid-banner-labels">Model Type:</span> {uidObject.modelType}</div>
+                    <div><span className="uid-banner-labels">Algorithm:</span> {uidObject.modelAlgorithm}</div>
+                    <div><span className="uid-banner-labels">Max Iterations:</span> {uidObject.maxIter}</div>
+                    <div><span className="uid-banner-labels">Number of Clusters:</span> {uidObject.numberOfClusters}</div>
+                    <div><span className="uid-banner-labels">Random State:</span> {uidObject.randomState}</div>
+                </li>
             </ul>
             <div className="ingest-report-btns-container">
-                {/* This is conditional rendering. Only if the selected UID object has "ingest" in its stream_names will this be rendered */}
                 <div className="align-ingest-report-btns">
-                    {
-                        chosenUidObject?.hasIngest && (
-                            <button className={`ingest-report-btns ${viewMode === "ingest" ? "selected" : ""}`} onClick={() => setViewMode("ingest")}>Ingest &gt;</button>
-                        )
-                    }
-                    {/* This is conditional rendering. Only if the selected UID object has "report" in its stream_names will this be rendered */}
-                    {
-                        chosenUidObject?.hasReport && (
-                            <button className={`ingest-report-btns ${viewMode === "report" ? "selected" : ""}`} onClick={() => setViewMode("report")}>Report &gt;</button>
-                        )
-                    }
+                    {uidObject.hasIngest && (
+                        <Link to={`/UidPage/${uidObject.uidValue}/ingest`}>
+                            <button className={`ingest-report-btns ${viewMode === "ingest" ? "selected" : ""}`}>Ingest &gt;</button>
+                        </Link>
+                    )}
+                    {uidObject.hasReport && (
+                        <Link to={`/UidPage/${uidObject.uidValue}/report`}>
+                            <button className={`ingest-report-btns ${viewMode === "report" ? "selected" : ""}`}>Report &gt;</button>
+                        </Link>
+                    )}
                 </div>
             </div>
 
@@ -62,3 +52,7 @@ const UidBanner = () => {
 }
 
 export default UidBanner;
+
+
+
+

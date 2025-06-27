@@ -10,11 +10,6 @@ export function UidProvider({ children }) {
     const [uidsInfo, setUidsInfo] = useState([]);
     const [uidRefresh, setUidRefresh] = useState(false);
 
-    // When a UID is clicked on, the object containing metadata is set, not just the UID number itself 
-    const [chosenUidObject, setChosenUidObject] = useState(null);
-
-    //viewMode refers to whether Ingest or Report was selected 
-    const [viewMode, setViewMode] = useState(null);
 
     // This ensures that whenever setUidRefresh is called, UID information is updated 
     useEffect(() => {
@@ -29,11 +24,9 @@ export function UidProvider({ children }) {
 
         fetchUidData();
     }, [uidRefresh]);
-
-
-
+    
     return (
-        <UidContext.Provider value={{ uidRefresh, uidsInfo, get_uids, setUidRefresh, setChosenUidObject, chosenUidObject, viewMode, setViewMode }}>
+        <UidContext.Provider value={{ uidRefresh, uidsInfo, get_uids, setUidRefresh}}>
             {children}
         </UidContext.Provider>
     );
