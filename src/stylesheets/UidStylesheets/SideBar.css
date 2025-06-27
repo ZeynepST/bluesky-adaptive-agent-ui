@@ -38,8 +38,8 @@
   text-decoration: underline;
 }
 
-/* .main-content {
-  flex-grow: 1;
-  padding: 2rem;
-  overflow-y: auto;
-} */
+.selected-uid a{
+  font-weight: bold;
+  color: rgb(9, 49, 59);
+}
+

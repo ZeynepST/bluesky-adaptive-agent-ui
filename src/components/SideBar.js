@@ -10,7 +10,7 @@ import '../stylesheets/UidStylesheets/SideBar.css';
  */
 
 const SideBar = () => {
-    const { uidsInfo, setChosenUidObject } = useContext(UidContext);
+    const { uidsInfo, setChosenUidObject, chosenUidObject } = useContext(UidContext);
 
     return (
         <aside className="sidebar">
@@ -19,7 +19,7 @@ const SideBar = () => {
             <ul>
                 {/* uid refers to the different UID objects within uidsInfo */}
                 {uidsInfo.map((uid) => (
-                    <li key={uid.uidValue} >
+                    <li key={uid.uidValue} className={uid.uidValue === chosenUidObject?.uidValue ? "selected-uid" : ""} >
                         <Link onClick={()=>setChosenUidObject(uid)}>{uid.uidValue}</Link>
                     </li>
                 ))}
