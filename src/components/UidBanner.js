@@ -45,13 +45,13 @@ const UidBanner = () => {
                 <div className="align-ingest-report-btns">
                     {
                         chosenUidObject?.hasIngest && (
-                            <button className={`ingest-report-btns ${viewMode === "ingest" ? "selected" : ""}`} onClick={() => setViewMode("ingest")}>Ingest</button>
+                            <button className={`ingest-report-btns ${viewMode === "ingest" ? "selected" : ""}`} onClick={() => setViewMode("ingest")}>Ingest &gt;</button>
                         )
                     }
                     {/* This is conditional rendering. Only if the selected UID object has "report" in its stream_names will this be rendered */}
                     {
                         chosenUidObject?.hasReport && (
-                            <button className={`ingest-report-btns ${viewMode === "report" ? "selected" : ""}`} onClick={() => setViewMode("report")}>Report</button>
+                            <button className={`ingest-report-btns ${viewMode === "report" ? "selected" : ""}`} onClick={() => setViewMode("report")}>Report &gt;</button>
                         )
                     }
                 </div>
