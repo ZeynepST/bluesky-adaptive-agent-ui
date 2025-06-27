@@ -36,3 +36,13 @@
     color: rgb(45, 174, 38);
     cursor: pointer;
 }
+
+.ingest-report-btns-container {
+    display: flex;
+}
+
+.align-ingest-report-btns {
+    margin-left: 0px;
+    display: flex;
+    flex-direction: column;
+}
