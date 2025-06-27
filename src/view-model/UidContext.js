@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { createContext } from "react";
-import { useRef } from "react";
+import { get_uids } from "../models/fetchUids";
 
 export const UidContext = createContext();
 export function UidProvider({ children }) {
@@ -16,43 +16,19 @@ export function UidProvider({ children }) {
     //viewMode refers to whether Ingest or Report was selected 
     const [viewMode, setViewMode] = useState(null);
 
+    // This ensures that whenever setUidRefresh is called, UID information is updated 
     useEffect(() => {
-        get_uids();
+        const fetchUidData = async () => {
+            try {
+                const parsedUids = await get_uids();
+                setUidsInfo(parsedUids);
+            } catch (err) {
+                console.error("Failed to fetch UIDs:", err);
+            }
+        };
+
+        fetchUidData();
     }, [uidRefresh]);
-
-    const get_uids = async () => {
-        try {
-            const response = await axios.get('/api/v1/search/');
-            // This is to access the nested data within the response
-            const rawData = response.data.data;
-
-            // This is parsing the nested data 
-            const parsedUids = rawData.map((item) => {
-                const uidValue = item.id;
-                const metadata = item.attributes.metadata;
-                const model_params = item.attributes.metadata.start.model_params;
-                // streamNames refers to ingest and report.
-                const streamNames = metadata?.summary?.stream_names || [];
-
-                return {
-                    uidValue,
-                    datetime: metadata?.summary?.datetime || null,
-                    hasIngest: streamNames.includes("ingest"),
-                    hasReport: streamNames.includes("report"),
-                    agentName: metadata?.start?.agent_name || null,
-                    modelType: metadata?.start?.model_type || null,
-                    modelAlgorithm: model_params?.algorithm || null,
-                    maxIter: model_params?.max_iter || null,
-                    numberOfClusters: model_params?.n_clusters || null,
-                    randomState: model_params?.random_state || null,
-                };
-            });
-            setUidsInfo(parsedUids);
-        }
-        catch (error) {
-            console.error("Failed to get list of uids");
-        }
-    }
 
 
 
