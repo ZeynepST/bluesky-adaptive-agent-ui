@@ -44,7 +44,7 @@ export function ModelProvider({ children }) {
 
     const get_names = async () => {
         try {
-            const response = await axios.get('api/variables/names');
+            const response = await axios.get('/api/variables/names');
             setNames(response.data.names || []);
         }
         catch (error) {
