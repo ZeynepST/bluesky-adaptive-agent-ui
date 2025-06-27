@@ -36,6 +36,11 @@
     color: rgb(45, 174, 38);
     cursor: pointer;
 }
+.ingest-report-btns.selected {
+    text-decoration: underline;
+    color: rgb(45, 174, 38);
+    cursor: pointer;
+}
 
 .ingest-report-btns-container {
     display: flex;
