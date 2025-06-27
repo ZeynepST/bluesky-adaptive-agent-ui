@@ -25,9 +25,8 @@ const UidBanner = () => {
             <ul>
                 {/* uid refers to the different UID objects within uidsInfo */}
                 {uidsInfo.map((uid) => (
-                    <>
+                    <React.Fragment key={uid.uidValue}>
                         {uid.uidValue === chosenUidObject?.uidValue && (
-                            <React.Fragment key={uid.uidValue}>
                                 <li key={uid.uidValue}>
                                     <div><span className="uid-banner-labels"> Time Stamp: </span>{uid.datetime}</div>
                                     <div><span className="uid-banner-labels"> Agent Name:</span> {uid.agentName}</div>
@@ -37,9 +36,8 @@ const UidBanner = () => {
                                     <div><span className="uid-banner-labels"> Number of Clusters: </span>{uid.numberOfClusters}</div>
                                     <div><span className="uid-banner-labels"> Random State: </span>{uid.randomState}</div>
                                 </li>
-                            </React.Fragment>
                         )}
-                    </>
+                    </React.Fragment>
                 ))}
             </ul>
             <div className="ingest-report-btns-container">
