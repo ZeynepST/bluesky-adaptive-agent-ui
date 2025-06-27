@@ -8,14 +8,17 @@ export function UidProvider({ children }) {
 
     //uidsInfo is the list of uids and some respective information which will first be populated in a useEffect
     const [uidsInfo, setUidsInfo] = useState([]);
-    const[uidRefresh, setUidRefresh]=useState(false);
+    const [uidRefresh, setUidRefresh] = useState(false);
 
     // When a UID is clicked on, the object containing metadata is set, not just the UID number itself 
-    const[chosenUidObject, setChosenUidObject]=useState(null);
-    
+    const [chosenUidObject, setChosenUidObject] = useState(null);
+
     //viewMode refers to whether Ingest or Report was selected 
     const [viewMode, setViewMode] = useState(null);
 
+    useEffect(() => {
+        get_uids();
+    }, [uidRefresh]);
 
     const get_uids = async () => {
         try {
@@ -27,10 +30,10 @@ export function UidProvider({ children }) {
             const parsedUids = rawData.map((item) => {
                 const uidValue = item.id;
                 const metadata = item.attributes.metadata;
-                const model_params=item.attributes.metadata.start.model_params;
+                const model_params = item.attributes.metadata.start.model_params;
                 // streamNames refers to ingest and report.
-                const streamNames = metadata?.summary?.stream_names || [];               
-              
+                const streamNames = metadata?.summary?.stream_names || [];
+
                 return {
                     uidValue,
                     datetime: metadata?.summary?.datetime || null,
@@ -38,13 +41,12 @@ export function UidProvider({ children }) {
                     hasReport: streamNames.includes("report"),
                     agentName: metadata?.start?.agent_name || null,
                     modelType: metadata?.start?.model_type || null,
-                    modelAlgorithm: model_params?.algorithm || null, 
+                    modelAlgorithm: model_params?.algorithm || null,
                     maxIter: model_params?.max_iter || null,
                     numberOfClusters: model_params?.n_clusters || null,
                     randomState: model_params?.random_state || null,
                 };
             });
-
             setUidsInfo(parsedUids);
         }
         catch (error) {
@@ -52,15 +54,10 @@ export function UidProvider({ children }) {
         }
     }
 
-    useEffect(() => {
-        get_uids();
-    }, [uidRefresh]);
-
-
 
 
     return (
-        <UidContext.Provider value={{uidsInfo, get_uids, setUidRefresh, setChosenUidObject, chosenUidObject, viewMode, setViewMode}}>
+        <UidContext.Provider value={{ uidRefresh, uidsInfo, get_uids, setUidRefresh, setChosenUidObject, chosenUidObject, viewMode, setViewMode }}>
             {children}
         </UidContext.Provider>
     );

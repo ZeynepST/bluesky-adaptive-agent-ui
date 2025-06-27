@@ -155,15 +155,16 @@ export function ModelProvider({ children }) {
             setReportStatus("loading");
             const payload = { "value": [[], {}] };
             const response = await axios.post(`/api/variable/generate_report`, payload);
+            //Testing
+            setUidRefresh(prev => !prev);
             setReportStatus("idle");
         }
         catch (error) {
             console.error("Failed to generate report ", error);
+            //Testing
+            setUidRefresh(prev => !prev);
             setReportStatus("error");
         }
-        // testing 
-        // get_uids();
-        setUidRefresh(prev => !prev);
     }
 
     const generate_suggestion = async () => {
@@ -186,12 +187,12 @@ export function ModelProvider({ children }) {
             //or does api expect {json:payload}
             const response = await axios.post('/api/variable/ingest_uids', payload);
             // Since uids were submitted, there will be an ingest feature with data, hence the list of uids must be updated 
-            // get_uids();
             setUidRefresh(prev => !prev);
             return "success";
         }
         catch (error) {
             console.error("Error with submitting UID ", error);
+            setUidRefresh(prev => !prev);
             return "The following error was received: ";
         }
 
