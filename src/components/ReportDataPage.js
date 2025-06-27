@@ -10,10 +10,21 @@ import '../stylesheets/UidStylesheets/ReportDataPage.css';
  * ReportDatPage will render the data under the report component of http://localhost:8000/ui/browse
  */
 
-const ReportDataPage=()=>{
+const ReportDataPage = () => {
 
-    return(
-        <h1> This will be the report page</h1>
+    const { uidsInfo, chosenUidObject, viewMode } = useContext(UidContext);
+
+    return (
+        <div className="report-data-page-container">
+            {uidsInfo.map((uid) => (
+                <React.Fragment key={uid.uidValue}>
+                    {/* This ensures that the ReportDataPage doesn't render information for the wrong UID */}
+                    {uid.uidValue === chosenUidObject?.uidValue && chosenUidObject?.hasReport && (
+                        <h1> This is the Report Page</h1>
+                    )}
+                </React.Fragment>
+            ))}
+        </div>
     );
 
 }
