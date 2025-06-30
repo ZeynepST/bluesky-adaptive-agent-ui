@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 import { useRef } from "react";
+import { UidContext } from "./UidContext";
 
 export const ModelContext = createContext();
 
@@ -14,6 +15,9 @@ export function ModelProvider({ children }) {
     const [names, setNames] = useState([]);
     const [canRefresh, setCanRefresh] = useState(true);
     const timeoutRefresh = useRef(null);
+
+    // testing
+    const { get_uids, setUidRefresh } = useContext(UidContext);
 
 
     const initializeButtonIDState = async (buttonId) => {
@@ -51,7 +55,7 @@ export function ModelProvider({ children }) {
                 console.error("no response received, but the request was sent  ", error);
             }
             else {
-                console.error("not sure what this is ", error.response.data);
+                console.error(error.response.data);
             }
         }
     }
@@ -119,6 +123,9 @@ export function ModelProvider({ children }) {
             console.error("Failed to update toggle ", error);
             setButtonStates((prev) => ({ ...prev, [buttonId]: null }));
         }
+        //not sure if this logic is correct
+        setUidRefresh(prev => !prev);
+
     }
 
     const toggle_queue_add_position = async (buttonId) => {
@@ -138,6 +145,8 @@ export function ModelProvider({ children }) {
             console.error("Failed to update queue add position toggle  ", error);
             setButtonStates((prev) => ({ ...prev, [buttonId]: null }));
         }
+        //not sure if this logic is correct
+        setUidRefresh(prev => !prev);
     }
 
 
@@ -146,10 +155,14 @@ export function ModelProvider({ children }) {
             setReportStatus("loading");
             const payload = { "value": [[], {}] };
             const response = await axios.post(`/api/variable/generate_report`, payload);
+            //Testing
+            setUidRefresh(prev => !prev);
             setReportStatus("idle");
         }
         catch (error) {
             console.error("Failed to generate report ", error);
+            //Testing
+            setUidRefresh(prev => !prev);
             setReportStatus("error");
         }
     }
@@ -168,18 +181,21 @@ export function ModelProvider({ children }) {
     }
 
     const submit_uids = async (content) => {
-        const processedContent = content.split(/[\n,]+/);
-
         try {
+            const processedContent = content.split(/[\n,]+/);
             const payload = { "value": [[processedContent], {}] }; //need to check 
             //or does api expect {json:payload}
             const response = await axios.post('/api/variable/ingest_uids', payload);
+            // Since uids were submitted, there will be an ingest feature with data, hence the list of uids must be updated 
+            setUidRefresh(prev => !prev);
             return "success";
         }
         catch (error) {
             console.error("Error with submitting UID ", error);
+            setUidRefresh(prev => !prev);
             return "The following error was received: ";
         }
+
     }
 
     const get_variable = async (variable_name) => {
@@ -197,6 +213,10 @@ export function ModelProvider({ children }) {
         try {
             let payload = { "value": new_value }; //need to check
             const response = await axios.post(`/api/variable/${variable_name}`, payload);
+
+            //not sure if this logic is correct
+            setUidRefresh(prev => !prev);
+
             return "success";
         }
         catch (error) {
@@ -216,6 +236,10 @@ export function ModelProvider({ children }) {
                 value: [parsedArgs, parsedKwargs]
             };
             const response = await axios.post(`/api/variable/${method_name}`, payload);
+
+            //not sure if this logic is correct
+            setUidRefresh(prev => !prev);
+
             return "success";
         }
         catch (error) {

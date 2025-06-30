@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import React, { useContext } from 'react';
 import { UidContext } from '../view-model/UidContext';
-import '../stylesheets/SideBar.css';
+import { useParams } from 'react-router-dom';
+import '../stylesheets/UidStylesheets/SideBar.css';
 
 
 /**
@@ -11,15 +12,17 @@ import '../stylesheets/SideBar.css';
 
 const SideBar = () => {
     const { uidsInfo } = useContext(UidContext);
+     const { viewMode, uidValue } = useParams(); 
 
     return (
         <aside className="sidebar">
             <h1 className="side-bar-title">List of UIDs</h1>
             <hr className="side-bar-delimiter"/>
             <ul>
+                {/* uid refers to the different UID objects within uidsInfo */}
                 {uidsInfo.map((uid) => (
-                    <li key={uid.uidValue}>
-                        <Link>{uid.uidValue}</Link>
+                    <li key={uid.uidValue} className={uid.uidValue === uidValue ? "selected-uid" : ""} >
+                        <Link to={`/UidPage/${uid.uidValue}`}>{uid.uidValue}</Link>
                     </li>
                 ))}
             </ul>
