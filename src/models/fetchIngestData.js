@@ -27,7 +27,6 @@ export const get_observables = async (uidValue) => {
     try {
         const response = await axios.get(`/api/v1/array/full/${uidValue}/ingest/data/observable?format=application/json`);
         const nestedArray = response.data;
-        console.log("the nested array for observables is ",nestedArray);
         return nestedArray;
     }
     catch (error) {
@@ -40,7 +39,6 @@ export const get_independent_variables = async (uidValue) => {
     try {
         const response = await axios.get(`/api/v1/array/full/${uidValue}/ingest/data/independent_variable?format=application/json`);
         const nestedArray = response.data;
-        console.log("the independent variables are ",nestedArray);
         return nestedArray;
     }
     catch (error) {

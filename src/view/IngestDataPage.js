@@ -37,8 +37,6 @@ const IngestDataPage = () => {
                 {/* This ensures that the IngestDataPage doesn't render information for the wrong UID */}
                 {chosenUidObject?.uidValue === uidValue && chosenUidObject?.hasIngest && (
                     <div className="ingest-data-page-container">
-                        <h2>Cache Length: {cacheLen}</h2>
-                        {/* <h2> TimeStamps: {ingestTimeStamps}</h2> */}
                         <div className="ingest-data-page-graphs">
                             <div className="ind-vars-graph">
                                 <ScatterPlot vars={independentVar} />
