@@ -4,8 +4,8 @@ import { UidContext } from '../view-model/UidContext';
 import { useParams } from 'react-router-dom';
 import SideBar from '../components/SideBar';
 import UidBanner from '../components/UidBanner';
-import IngestDataPage from '../components/IngestDataPage';
-import ReportDataPage from '../components/ReportDataPage';
+import IngestDataPage from '../view/IngestDataPage';
+import ReportDataPage from '../view/ReportDataPage';
 import '../stylesheets/UidStylesheets/UidPage.css';
 
 /**
@@ -25,13 +25,13 @@ const UidPage = () => {
         <div className="uid-page-container">
             {uidsInfo && (
                 <div className="report-data-page-container">
-                    <div className="report-data-main-layout">
+                    <div className="uid-page-main-layout">
                         <SideBar />
-                        <div className="report-data-main-content">
+                        <div className="report-ingest-main-content">
                             {chosenUidObject !== null && (
                                 <>
                                     <UidBanner uidObject={chosenUidObject} viewMode={viewMode} />
-                                    <div className="report-data-main-content-container">
+                                    <div className="report-ingest-main-content-container">
                                         {/* If a UID object is chosen, the render will depend on whether Report or Ingest was selected */}
                                         {
                                             viewMode === "ingest" && (
