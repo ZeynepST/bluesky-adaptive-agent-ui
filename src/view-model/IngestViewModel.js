@@ -12,7 +12,6 @@ export const IngestViewModel = (uidValue) => {
 
     useEffect(() => {
 
-        console.log('inside of useeffect in ingest view model');
         if (!uidValue) return;
 
         const loadData = async () => {

@@ -19,10 +19,30 @@ function WaterFallPlot({ observables }) {
     <Plot
       data={singleLine}
       layout={{
-        title: 'Waterfall Plot of Observables',
-        // should the x axis be the timestamps?
-        xaxis: { title: 'Time' },
-        yaxis: { title: 'Offset Value' },
+        title: {
+          text: 'Waterfall Plot of Observables',
+          x: 0.5,
+          xanchor: 'center',
+          font: {
+            size: 15
+          }
+        },
+        xaxis: {
+          title: {
+            text: 'Index',
+            font: {
+              size: 10
+            }
+          }
+        },
+        yaxis: {
+          title: {
+            text: 'Value',
+            font: {
+              size: 10
+            }
+          }
+        },
         height: 400,
         showlegend: false,
       }}

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { UidContext } from '../view-model/UidContext';
 import '../stylesheets/UidStylesheets/UidBanner.css';
 import '../stylesheets/UidStylesheets/SideBar.css';
+import { IngestViewModel } from "../view-model/IngestViewModel";
 
 
 /**
@@ -14,11 +15,11 @@ const UidBanner = ({ uidObject, viewMode }) => {
 
     // const { uidsInfo} = useContext(UidContext);
     if (!uidObject) return null;
+    const cacheLen = uidObject.hasIngest ? IngestViewModel(uidObject.uidValue).cacheLen : 0;
 
     return (
 
         <aside className="uid-banner-container">
-
             <h1 className="side-bar-title">Dashboard</h1>
             <hr className="side-bar-delimiter" />
             <ul>
@@ -30,6 +31,7 @@ const UidBanner = ({ uidObject, viewMode }) => {
                     <div><span className="uid-banner-labels">Max Iterations:</span> {uidObject.maxIter}</div>
                     <div><span className="uid-banner-labels">Number of Clusters:</span> {uidObject.numberOfClusters}</div>
                     <div><span className="uid-banner-labels">Random State:</span> {uidObject.randomState}</div>
+                    <div><span className="uid-banner-labels">Cache Length:</span> {cacheLen}</div>
                 </li>
             </ul>
             <div className="ingest-report-btns-container">
