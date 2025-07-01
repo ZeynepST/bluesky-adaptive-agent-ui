@@ -1,0 +1,12 @@
+.report-data-page-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    overflow-wrap: anywhere;
+}
+
+.report-data-page-graphs {
+    display: flex;
+    flex-direction: column;
+    /* gap: 2rem; */
+}
