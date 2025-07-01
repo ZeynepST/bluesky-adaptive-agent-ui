@@ -1,32 +1,13 @@
 .uid-page-container {
-  width: 100%;
-  height: 100%;
-}
-
-.report-data-page-container {
-  width: 100%;
-  height: 100%;
-}
-
-.report-data-main-layout {
   display: flex;
-  flex-direction: row;
-  height: 100%;
 }
 
-.report-data-main-content {
+.uid-page-main-layout {
   display: flex;
   flex-direction: row;
 }
 
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.report-data-main-section-container {
-  flex: 1;
+.report-ingest-main-content {
   display: flex;
   flex-direction: row;
 }
