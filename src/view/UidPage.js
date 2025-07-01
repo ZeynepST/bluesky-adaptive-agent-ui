@@ -13,7 +13,6 @@ import '../stylesheets/UidStylesheets/UidPage.css';
  * 
  */
 const UidPage = () => {
-    const navigate = useNavigate();
     const { uidsInfo } = useContext(UidContext);
     const { viewMode, uidValue } = useParams();
     const chosenUidObject = uidValue
@@ -23,7 +22,7 @@ const UidPage = () => {
     // /const chosenUidObject = uidsInfo.find(uid => uid.uidValue === uidValue);
 
     return (
-        <>
+        <div className="uid-page-container">
             {uidsInfo && (
                 <div className="report-data-page-container">
                     <div className="report-data-main-layout">
@@ -36,8 +35,8 @@ const UidPage = () => {
                                         {/* If a UID object is chosen, the render will depend on whether Report or Ingest was selected */}
                                         {
                                             viewMode === "ingest" && (
-                                                // <IngestDataPage uid={uidValue} />
-                                                <IngestDataPage />
+                                               //testing the usage of key key={uidValue} 
+                                                <IngestDataPage  />
                                             )
                                         }
                                         {
@@ -52,7 +51,7 @@ const UidPage = () => {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }
 

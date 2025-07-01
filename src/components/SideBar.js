@@ -12,21 +12,23 @@ import '../stylesheets/UidStylesheets/SideBar.css';
 
 const SideBar = () => {
     const { uidsInfo } = useContext(UidContext);
-     const { viewMode, uidValue } = useParams(); 
+    const { viewMode, uidValue } = useParams();
 
     return (
-        <aside className="sidebar">
-            <h1 className="side-bar-title">List of UIDs</h1>
-            <hr className="side-bar-delimiter"/>
-            <ul>
-                {/* uid refers to the different UID objects within uidsInfo */}
-                {uidsInfo.map((uid) => (
-                    <li key={uid.uidValue} className={uid.uidValue === uidValue ? "selected-uid" : ""} >
-                        <Link to={`/UidPage/${uid.uidValue}`}>{uid.uidValue}</Link>
-                    </li>
-                ))}
-            </ul>
-        </aside>
+        <div className="side-bar-container">
+            <aside className="sidebar">
+                <h1 className="side-bar-title">List of UIDs</h1>
+                <hr className="side-bar-delimiter" />
+                <ul>
+                    {/* uid refers to the different UID objects within uidsInfo */}
+                    {uidsInfo.map((uid) => (
+                        <li key={uid.uidValue} className={uid.uidValue === uidValue ? "selected-uid" : ""} >
+                            <Link to={`/UidPage/${uid.uidValue}`}>{uid.uidValue}</Link>
+                        </li>
+                    ))}
+                </ul>
+            </aside>
+        </div>
     );
 }
 
