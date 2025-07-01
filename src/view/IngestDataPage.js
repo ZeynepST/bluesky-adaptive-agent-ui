@@ -3,7 +3,8 @@ import { UidContext } from '../view-model/UidContext';
 import { IngestViewModel } from '../view-model/IngestViewModel';
 import { ReportViewModel } from '../view-model/ReportViewModel';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, } from 'recharts';
-import WaterFallPlot from '../components/WaterFallPlot';
+import WaterFallPlot from '../components/WaterFallPlotComponent';
+import ScatterPlot from '../components/ScatterPlotComponent';
 
 import { useParams } from 'react-router-dom';
 import '../stylesheets/UidStylesheets/UidBanner.css';
@@ -37,12 +38,16 @@ const IngestDataPage = () => {
                 {chosenUidObject?.uidValue === uidValue && chosenUidObject?.hasIngest && (
                     <div className="ingest-data-page-container">
                         <h2>Cache Length: {cacheLen}</h2>
-                        <h2> Independent Variables: {independentVar}</h2>
                         {/* <h2> TimeStamps: {ingestTimeStamps}</h2> */}
-                        <div className="observables-graph">
-                           <WaterFallPlot observables={observables} />
-
+                        <div className="ingest-data-page-graphs">
+                            <div className="ind-vars-graph">
+                                <ScatterPlot vars={independentVar} />
+                            </div>
+                            <div className="observables-graph">
+                                <WaterFallPlot observables={observables} />
+                            </div>
                         </div>
+
                     </div>
                 )}
             </React.Fragment>
