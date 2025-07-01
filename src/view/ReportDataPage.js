@@ -9,6 +9,11 @@ import '../stylesheets/UidStylesheets/SideBar.css';
 import '../stylesheets/UidStylesheets/IngestDataPage.css';
 import '../stylesheets/UidStylesheets/ReportDataPage.css';
 
+
+import PlotlyScatter from '../components/PlotlyScatter';
+
+
+
 /**
  * ReportDatPage will render the data under the report component of http://localhost:8000/ui/browse
  */
@@ -21,25 +26,35 @@ const ReportDataPage = () => {
     const chosenUidObject = uidsInfo.find(uid => uid.uidValue === uidValue);
 
 
-    const { clusterCenters, recentClusterCenters } = ReportViewModel(uidValue);
+    const { clusterCenters, recentClusterCenters, transformRCC } = ReportViewModel(uidValue);
 
     return (
         <div className="report-data-page">
-            {uidsInfo.map((uid) => (
-                <React.Fragment key={uid.uidValue}>
-                    {/* This ensures that the ReportDataPage doesn't render information for the wrong UID */}
-                    {uid.uidValue === uidValue && chosenUidObject?.hasReport && (
-                        <div className="report-data-page-container">
+
+            <React.Fragment key={uidValue}>
+
+                {/* This ensures that the ReportDataPage doesn't render information for the wrong UID */}
+                {chosenUidObject.uidValue === uidValue && chosenUidObject?.hasReport && (
+                        <div className="report-data-pg-container">
                             <div className="report-data-graphs">
                                 <div className="latest-cluster-center-graph">
-                                    <LatestClusterCentersPlot data={recentClusterCenters} />
+                                    {/* <LatestClusterCentersPlot data={recentClusterCenters} /> */}
+                                    <PlotlyScatter
+                                        data={transformRCC}
+                                        title="Latest Cluster Centers"
+                                        xAxisTitle="Feature Index"
+                                        yAxisTitle="Cluster Center Value" />
                                 </div>
+                                {/* <div className="cluster-centers-graph">
 
+                                </div> */}
                             </div>
                         </div>
-                    )}
-                </React.Fragment>
-            ))}
+                    )
+                }
+
+            </React.Fragment>
+
         </div>
     );
 

@@ -9,6 +9,7 @@ export const ReportViewModel = (uidValue) => {
 
     const [clusterCenters, setClusterCenters] = useState([]);
     const [recentClusterCenters, setRecentClusterCenter] = useState([]);
+    const [transformRCC, setTransformRCC] = useState([]);
     const [loadingReport, setLoadingReport] = useState(false);
 
     useEffect(() => {
@@ -33,10 +34,33 @@ export const ReportViewModel = (uidValue) => {
     }, [uidValue]); //need to check [uidValue]
 
 
+
+    useEffect(() => {
+
+        if (!uidValue) return;
+
+        const loadData = async () => {
+            try {
+
+                const data = recentClusterCenters.map((center, idx) => ({
+                    x: center.map((_, i) => i + 1),  
+                    y: center,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: `Cluster ${idx + 1}`,
+                }));
+                console.log("data is ", data);
+                setTransformRCC(data);
+            }
+            catch (error) {
+                console.error(error);
+            }
+
+        }
+        loadData();
+    }, [recentClusterCenters]);
+
     return {
-        clusterCenters, recentClusterCenters
+        clusterCenters, recentClusterCenters, transformRCC
     };
-
-
-
 };

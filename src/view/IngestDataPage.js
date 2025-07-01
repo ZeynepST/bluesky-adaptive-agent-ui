@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { UidContext } from '../view-model/UidContext';
 import { IngestViewModel } from '../view-model/IngestViewModel';
-import { ReportViewModel } from '../view-model/ReportViewModel';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, } from 'recharts';
 import WaterFallPlot from '../components/WaterFallPlotComponent';
 import ScatterPlot from '../components/ScatterPlotComponent';
 
@@ -11,6 +9,7 @@ import '../stylesheets/UidStylesheets/UidBanner.css';
 import '../stylesheets/UidStylesheets/SideBar.css';
 import '../stylesheets/UidStylesheets/IngestDataPage.css';
 
+import PlotlyScatter from '../components/PlotlyScatter';
 
 /**
  * IngestDatPage will render the data under the ingest component of http://localhost:8000/ui/browse
@@ -27,9 +26,7 @@ const IngestDataPage = () => {
 
     const chosenUidObject = uidsInfo.find(uid => uid.uidValue === uidValue);
 
-    const { loadingIngest, cacheLen, independentVar, observables, ingestTimeStamps } = IngestViewModel(uidValue);
-
-
+    const { loadingIngest, independentVar, observables, ingestTimeStamps, transformIndVar } = IngestViewModel(uidValue);
 
     return (
         <div className="ingest-data-page">
@@ -39,11 +36,17 @@ const IngestDataPage = () => {
                     <div className="ingest-data-page-container">
                         <div className="ingest-data-page-graphs">
                             <div className="ind-vars-graph">
-                                <ScatterPlot vars={independentVar} />
+                                {/* <ScatterPlot vars={independentVar} /> */}
+                                <PlotlyScatter
+                                    data={transformIndVar}
+                                    title="Scatter Plot of Independent Variables"
+                                    xAxisTitle="Feature Index"
+                                    yAxisTitle="Independent Variables" />
                             </div>
-                            <div className="observables-graph">
+                            <div className="observables-graph" style={{ width: '100%', height: '100%'}}>
                                 <WaterFallPlot observables={observables} />
                             </div>
+
                         </div>
 
                     </div>
