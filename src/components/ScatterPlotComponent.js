@@ -1,6 +1,7 @@
 import Plot from 'react-plotly.js';
 
-function ScatterPlot({ vars=[] }) {
+// this is for 1D arrays
+function ScatterPlot({ vars = [] }) {
 
     //this converts the nested [value] to value
     const y = vars.map(d => d[0]);
@@ -14,13 +15,35 @@ function ScatterPlot({ vars=[] }) {
                 type: 'scatter',
                 mode: 'markers',
                 marker: { color: 'blue', size: 10 },
-                }]}
+            }]}
             layout={{
-                title: 'Scatter Plot of Independent Values',
-                xaxis: { title: 'Index' },
-                yaxis: { title: 'Value' },
+                title: {
+                    text: 'Scatter Plot of Independent Values',
+                    x: 0.5,
+                    xanchor: 'center',
+                    font: {
+                        size: 15
+                    }
+                },
+                xaxis: {
+                    title: {
+                        text: 'Index',
+                        font: {
+                            size: 10
+                        }
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Independent Variables',
+                        font: {
+                            size: 10
+                        }
+                    }
+                },
                 height: 400
-            }}
+            }
+            }
         />
     );
 }
