@@ -24,7 +24,7 @@ const UidPage = () => {
     return (
         <div className="uid-page-container">
             {uidsInfo && (
-                <div className="report-data-page-container">
+                <div >
                     <div className="uid-page-main-layout">
                         <SideBar />
                         <div className="report-ingest-main-content">

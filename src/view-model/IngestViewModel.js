@@ -6,6 +6,7 @@ export const IngestViewModel = (uidValue) => {
 
     const [cacheLen, setCacheLen] = useState(null);
     const [independentVar, setIndependentVar] = useState([]);
+    const[transformIndVar, setTransformIndVar]=useState([]);
     const [observables, setObservables] = useState([]);
     const [loadingIngest, setLoadingIngest] = useState(false);
     const [ingestTimeStamps, setIngestTimeStamps] = useState([]);
@@ -21,7 +22,7 @@ export const IngestViewModel = (uidValue) => {
                 const cacheResponse = await get_cache_len(uidValue);
                 const independentVarResponse = await get_independent_variables(uidValue);
                 const observablesReponse = await get_observables(uidValue);
-                const timeStampResponse=await get_ingest_timestamps(uidValue);
+                const timeStampResponse = await get_ingest_timestamps(uidValue);
 
                 setCacheLen(cacheResponse);
                 setIndependentVar(independentVarResponse);
@@ -38,9 +39,38 @@ export const IngestViewModel = (uidValue) => {
         loadData();
     }, [uidValue]); //need to check [uidValue]
 
+    useEffect(() => {
+
+        if (!uidValue) return;
+
+        const loadData = async () => {
+            try {
+                //this converts the nested [value] to value
+                const y =  independentVar.map(d => d[0]);
+                const x = y.map((_, i) => i); //index positions
+                const data = [
+                    {
+                        x: x,
+                        y: y,
+                        type: 'scatter',
+                        mode: 'lines+markers',
+                        name: `Independent Variable`,
+                    }
+                ];
+                console.log("data is ", data);
+                setTransformIndVar(data);
+            }
+            catch (error) {
+                console.error(error);
+            }
+
+        }
+        loadData();
+    }, [independentVar]);
+
 
     return {
-        loadingIngest, cacheLen, independentVar, observables, ingestTimeStamps
+        loadingIngest, cacheLen, independentVar, observables, ingestTimeStamps, transformIndVar
     };
 
 

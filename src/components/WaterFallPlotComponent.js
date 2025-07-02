@@ -43,9 +43,15 @@ function WaterFallPlot({ observables }) {
             }
           }
         },
-        height: 400,
-        showlegend: false,
+        // height: 400,
+        // showlegend: false,
+        autosize: true,
+        margin: { l: 40, r: 20, t: 40, b: 40 },
       }}
+
+      config={{ responsive: true }}
+      useResizeHandler={true}
+      style={{ width: '100%', height: '100%' }}
     />
   );
 }
