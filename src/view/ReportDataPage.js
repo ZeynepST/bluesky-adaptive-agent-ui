@@ -4,6 +4,7 @@ import { UidContext } from '../view-model/UidContext';
 import { useParams } from 'react-router-dom';
 import { ReportViewModel } from '../view-model/ReportViewModel';
 import LatestClusterCentersPlot from '../components/LatestClusterCentersPlot';
+import ClusterCentersOT from '../components/ClusterCentersOTPlot';
 import '../stylesheets/UidStylesheets/UidBanner.css';
 import '../stylesheets/UidStylesheets/SideBar.css';
 import '../stylesheets/UidStylesheets/IngestDataPage.css';
@@ -30,9 +31,7 @@ const ReportDataPage = () => {
 
     return (
         <div className="report-data-page">
-
             <React.Fragment key={uidValue}>
-
                 {/* This ensures that the ReportDataPage doesn't render information for the wrong UID */}
                 {chosenUidObject.uidValue === uidValue && chosenUidObject?.hasReport && (
                         <div className="report-data-pg-container">
@@ -45,16 +44,15 @@ const ReportDataPage = () => {
                                         xAxisTitle="Feature Index"
                                         yAxisTitle="Cluster Center Value" />
                                 </div>
-                                {/* <div className="cluster-centers-graph">
+                                <div className="cluster-centers-graph">
+                                    <ClusterCentersOT clusterCenters={clusterCenters}/>
 
-                                </div> */}
+                                </div>
                             </div>
                         </div>
                     )
                 }
-
             </React.Fragment>
-
         </div>
     );
 
