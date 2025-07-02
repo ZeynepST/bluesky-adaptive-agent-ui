@@ -59,11 +59,10 @@ function WaterFallPlot({ observables }) {
           config={{ responsive: true }}
           useResizeHandler={true}
           // keeping height at a set value makes it stable and no longer overlaps the input area 
-          style={{ width: '100%', height: 500}}
+          style={{ width: '100%', height: '100%'}}
         />
         {/* end of plot */}
-
-
+        
         <div className="waterfall-plot-offset-input-box" >
           <input
             type="number"

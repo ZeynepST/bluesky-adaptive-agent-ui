@@ -1,3 +1,4 @@
+
 .waterfall-plot-container {
     width: 100%;
     display: flex;
@@ -8,12 +9,13 @@
     position: relative;
     width: 100%;
     max-width: 800px;
+    height: 500px;
 }
 
 .waterfall-plot-offset-input-box {
     position: absolute;
-    bottom: -30px;
-    right: 5px;
+    bottom: -50px;
+    right: 10px;
     z-index: 10;
 }
 
