@@ -27,7 +27,7 @@ const ReportDataPage = () => {
     const chosenUidObject = uidsInfo.find(uid => uid.uidValue === uidValue);
 
 
-    const { clusterCenters, recentClusterCenters, transformRCC } = ReportViewModel(uidValue);
+    const { clusterCenters, recentClusterCenters, transformRCC, reportsCacheLength } = ReportViewModel(uidValue);
 
     return (
         <div className="report-data-page">
@@ -37,7 +37,6 @@ const ReportDataPage = () => {
                         <div className="report-data-pg-container">
                             <div className="report-data-graphs">
                                 <div className="latest-cluster-center-graph">
-                                    {/* <LatestClusterCentersPlot data={recentClusterCenters} /> */}
                                     <PlotlyScatter
                                         data={transformRCC}
                                         title="Latest Cluster Centers"
@@ -45,8 +44,7 @@ const ReportDataPage = () => {
                                         yAxisTitle="Cluster Center Value" />
                                 </div>
                                 <div className="cluster-centers-graph">
-                                    <ClusterCentersOT clusterCenters={clusterCenters}/>
-
+                                    <ClusterCentersOT clusterCenters={clusterCenters} reportsCacheLength={reportsCacheLength}/>
                                 </div>
                             </div>
                         </div>
