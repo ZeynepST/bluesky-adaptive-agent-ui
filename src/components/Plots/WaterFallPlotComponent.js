@@ -1,6 +1,6 @@
 import Plot from 'react-plotly.js';
 import { useState } from 'react';
-import '../stylesheets/PlotStylesheets/WaterFallPlotComponent.css';
+import '../../stylesheets/PlotStylesheets/WaterFallPlotComponent.css';
 
 function WaterFallPlot({ observables }) {
 

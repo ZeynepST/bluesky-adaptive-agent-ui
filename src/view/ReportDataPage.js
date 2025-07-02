@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom';
 import { UidContext } from '../view-model/UidContext';
 import { useParams } from 'react-router-dom';
 import { ReportViewModel } from '../view-model/ReportViewModel';
-import LatestClusterCentersPlot from '../components/LatestClusterCentersPlot';
-import ClusterCentersOT from '../components/ClusterCentersOTPlot';
+import LatestClusterCentersPlot from '../components/Plots/LatestClusterCentersPlot';
+import ClusterCentersOT from '../components/Plots/ClusterCentersOTPlot';
 import '../stylesheets/UidStylesheets/UidBanner.css';
 import '../stylesheets/UidStylesheets/SideBar.css';
 import '../stylesheets/UidStylesheets/IngestDataPage.css';
 import '../stylesheets/UidStylesheets/ReportDataPage.css';
 
 
-import PlotlyScatter from '../components/PlotlyScatter';
+import PlotlyScatter from '../components/Plots/PlotlyScatter';
 
 
 
