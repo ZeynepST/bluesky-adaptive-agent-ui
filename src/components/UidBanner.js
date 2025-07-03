@@ -15,7 +15,7 @@ const UidBanner = ({ uidObject, viewMode }) => {
 
     // const { uidsInfo} = useContext(UidContext);
     if (!uidObject) return null;
-    const cacheLen = uidObject.hasIngest ? IngestViewModel(uidObject.uidValue).cacheLen : 0;
+    const cacheLen = uidObject.hasIngest ? IngestViewModel(uidObject.uidValue).cache_len : 0;
 
     return (
 

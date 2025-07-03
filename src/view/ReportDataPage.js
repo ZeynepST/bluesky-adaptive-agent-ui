@@ -27,7 +27,7 @@ const ReportDataPage = () => {
     const chosenUidObject = uidsInfo.find(uid => uid.uidValue === uidValue);
 
 
-    const { clusterCenters, recentClusterCenters, transformRCC, reportsCacheLength } = ReportViewModel(uidValue);
+    const { cluster_centers, recentClusterCenters, transformRCC, reportsCacheLength } = ReportViewModel(uidValue);
 
     return (
         <div className="report-data-page">
@@ -44,7 +44,7 @@ const ReportDataPage = () => {
                                         yAxisTitle="Cluster Center Value" />
                                 </div>
                                 <div className="cluster-centers-graph">
-                                    <ClusterCentersOT clusterCenters={clusterCenters} reportsCacheLength={reportsCacheLength}/>
+                                    <ClusterCentersOT clusterCenters={cluster_centers} reportsCacheLength={reportsCacheLength}/>
                                 </div>
                             </div>
                         </div>
