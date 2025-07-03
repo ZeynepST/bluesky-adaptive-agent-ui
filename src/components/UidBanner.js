@@ -46,6 +46,11 @@ const UidBanner = ({ uidObject, viewMode }) => {
                             <button className={`ingest-report-btns ${viewMode === "report" ? "selected" : ""}`}>Report &gt;</button>
                         </Link>
                     )}
+                     {uidObject.hasReport && uidObject.hasIngest && (
+                        <Link to={`/UidPage/${uidObject.uidValue}/remodel`}>
+                            <button className={`ingest-report-btns ${viewMode === "remodel" ? "selected" : ""}`}>Remodel &gt;</button>
+                        </Link>
+                    )}
                 </div>
             </div>
 

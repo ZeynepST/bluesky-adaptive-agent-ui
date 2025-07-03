@@ -1,11 +1,11 @@
 import { useContext } from 'react';
-import { useNavigate } from "react-router-dom";
 import { UidContext } from '../view-model/UidContext';
 import { useParams } from 'react-router-dom';
 import SideBar from '../components/SideBar';
 import UidBanner from '../components/UidBanner';
 import IngestDataPage from '../view/IngestDataPage';
 import ReportDataPage from '../view/ReportDataPage';
+import RemodelFromReportPage from './RemodelFromReportPage';
 import '../stylesheets/UidStylesheets/UidPage.css';
 
 /**
@@ -18,7 +18,6 @@ const UidPage = () => {
     const chosenUidObject = uidValue
         ? uidsInfo?.find(uid => uid.uidValue === uidValue)
         : null;
-
     return (
         <div className="uid-page-container">
             {uidsInfo && (
@@ -37,6 +36,7 @@ const UidPage = () => {
                                     {/* If a UID object is chosen, the render will depend on whether Report or Ingest was selected */}
                                     {viewMode === "ingest" && (<IngestDataPage />)}
                                     {viewMode === "report" && (<ReportDataPage />)}
+                                    {viewMode==="remodel" && (<RemodelFromReportPage />)}
                                 </div>
                             </div>
                         </>
