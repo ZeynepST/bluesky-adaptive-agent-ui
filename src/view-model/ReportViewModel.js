@@ -54,7 +54,6 @@ export const ReportViewModel = (uidValue) => {
                     mode: 'lines+markers',
                     name: `Cluster ${idx + 1}`,
                 }));
-                console.log("data is ", data);
                 setTransformRCC(data);
             }
             catch (error) {

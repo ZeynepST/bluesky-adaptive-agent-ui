@@ -57,7 +57,6 @@ export const IngestViewModel = (uidValue) => {
                         name: `Independent Variable`,
                     }
                 ];
-                console.log("data is ", data);
                 setTransformIndVar(data);
             }
             catch (error) {
