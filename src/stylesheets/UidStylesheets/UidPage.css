@@ -1,13 +1,48 @@
 .uid-page-container {
+  height: 100%;
   display: flex;
+
+  /* testing */
+  width: 100%;
 }
 
-.uid-page-main-layout {
-  display: flex;
-  flex-direction: row;
+.uid-page-grid-layout {
+  display: grid;
+  grid-template-columns: 250px 400px 1fr;  /* Sidebar | Banner | Content */
+  height: 100%;
+  width: 100%;
+
+  overflow: visible; /* this is to allow shadows to render outside */
 }
 
-.report-ingest-main-content {
-  display: flex;
-  flex-direction: row;
+.uid-sidebar {
+  grid-column: 1;
+  height: 100%;
+  overflow-y: auto;
+
+}
+
+.uid-banner {
+  grid-column: 2;
+  height: 100%;
+}
+
+.uid-page-main-content {
+  grid-column: 3;
+  height: 100%;
+
+  /* testing */
+  width: 100%;
+
+  overflow-y: auto;
+}
+
+.report-ingest-main-content-container {
+  height: 100%;
+
+  /* testing */
+  width: 100%;
+
+  overflow-y: auto;
+  padding: 1rem;
 }

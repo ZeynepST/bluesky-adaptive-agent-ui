@@ -19,36 +19,28 @@ const UidPage = () => {
         ? uidsInfo?.find(uid => uid.uidValue === uidValue)
         : null;
 
-    // /const chosenUidObject = uidsInfo.find(uid => uid.uidValue === uidValue);
-
     return (
         <div className="uid-page-container">
             {uidsInfo && (
-                <div >
-                    <div className="uid-page-main-layout">
+                <div className="uid-page-grid-layout">
+                    {/* <SideBar /> */}
+                    <div className="uid-sidebar">
                         <SideBar />
-                        <div className="report-ingest-main-content">
-                            {chosenUidObject !== null && (
-                                <>
-                                    <UidBanner uidObject={chosenUidObject} viewMode={viewMode} />
-                                    <div className="report-ingest-main-content-container">
-                                        {/* If a UID object is chosen, the render will depend on whether Report or Ingest was selected */}
-                                        {
-                                            viewMode === "ingest" && (
-                                               //testing the usage of key key={uidValue} 
-                                                <IngestDataPage  />
-                                            )
-                                        }
-                                        {
-                                            viewMode === "report" && (
-                                                <ReportDataPage />
-                                            )
-                                        }
-                                    </div>
-                                </>
-                            )}
-                        </div>
                     </div>
+                    {chosenUidObject !== null && (
+                        <>
+                            <div className="uid-banner">
+                                <UidBanner uidObject={chosenUidObject} viewMode={viewMode} />
+                            </div>
+                            <div className="uid-page-main-content">
+                                <div className="report-ingest-main-content-container">
+                                    {/* If a UID object is chosen, the render will depend on whether Report or Ingest was selected */}
+                                    {viewMode === "ingest" && (<IngestDataPage />)}
+                                    {viewMode === "report" && (<ReportDataPage />)}
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
             )}
         </div>

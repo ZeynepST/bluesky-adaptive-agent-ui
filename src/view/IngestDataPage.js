@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { UidContext } from '../view-model/UidContext';
 import { IngestViewModel } from '../view-model/IngestViewModel';
-import WaterFallPlot from '../components/WaterFallPlotComponent';
-import ScatterPlot from '../components/ScatterPlotComponent';
+import WaterFallPlot from '../components/Plots/WaterFallPlotComponent';
+import ScatterPlot from '../components/Plots/ScatterPlotComponent';
 
 import { useParams } from 'react-router-dom';
 import '../stylesheets/UidStylesheets/UidBanner.css';
 import '../stylesheets/UidStylesheets/SideBar.css';
 import '../stylesheets/UidStylesheets/IngestDataPage.css';
 
-import PlotlyScatter from '../components/PlotlyScatter';
+import PlotlyScatter from '../components/Plots/PlotlyScatter';
 
 /**
  * IngestDatPage will render the data under the ingest component of http://localhost:8000/ui/browse

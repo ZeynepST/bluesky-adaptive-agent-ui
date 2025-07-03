@@ -1,23 +1,30 @@
  .side-bar-container {
-   display: flex;
-   height: 100vh;
-   overflow-y: auto;
- }
+  display: flex;
+  height: 100%;
+  /* need to test scroll feature */
+  overflow: hidden;  
+}
 
- .sidebar {
-   width: 250px;
-   background-color: rgb(77, 191, 219);
-   color: white;
-   padding: 1rem;
- }
+.sidebar {
+  height: 100%;
+  width: 100%;
+  background-color: rgb(77, 191, 219);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Adds scrollbar when needed */
+}
 
- .sidebar ul {
-   list-style: disc;
-   padding-left: 1.5rem;
-   margin: 0;
- }
+.sidebar ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin: 0;
+  flex: 1;
+  overflow-y: auto;
+}
 
- .side-bar-title {
+.side-bar-title {
    font-size: 20px;
    font-weight: bold;
    color: rgb(9, 49, 59);
@@ -43,3 +50,22 @@
    font-weight: bold;
    color: white;
  }
+
+  /* .side-bar-container {
+   display: flex;
+   overflow-y: auto;
+   height: 100%;
+ }
+
+ .sidebar {
+   width: 250px;
+   background-color: rgb(77, 191, 219);
+   color: white;
+   padding: 1rem;
+ }
+
+ .sidebar ul {
+   list-style: disc;
+   padding-left: 1.5rem;
+   margin: 0;
+ } */

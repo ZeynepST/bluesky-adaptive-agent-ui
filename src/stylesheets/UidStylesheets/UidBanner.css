@@ -1,10 +1,11 @@
 .uid-banner-container {
     display: flex;
     flex-direction: column;
-    color: rgb(9, 49, 59);
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
-    width: 400px;
+    height: 100%;
     padding: 1rem;
+    background-color: white; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 100%;
 }
 
 .side-bar-title {
@@ -35,6 +36,7 @@
     color: rgb(45, 174, 38);
     cursor: pointer;
 }
+
 .ingest-report-btns.selected {
     text-decoration: underline;
     color: rgb(45, 174, 38);
