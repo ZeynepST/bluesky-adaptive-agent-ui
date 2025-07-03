@@ -12,23 +12,25 @@ import NavBar from './components/NavigationBar';
 function App() {
 
     return (
-         <UidProvider> 
-        <ModelProvider>
-            {/* <UidProvider>   */}
+        <UidProvider>
+            <ModelProvider>
+                {/* <UidProvider>   */}
                 <div className="main-page">
                     <NavBar />
-                    <Routes>
-                        <Route path="/" element={<AgentSwitchBoardPage />} />
-                        <Route path="/DebuggingPage" element={<DebuggingPage />} />
-                        <Route path="/UidPage" element={<UidPage />} />
-                        <Route path="/FinchPage" element={<FinchPage />} />
-                        <Route path="/UidPage/:uidValue?/:viewMode?" element={<UidPage />} />
-                    </Routes>
+                    <div className="page-content">
+                        <Routes>
+                            <Route path="/" element={<AgentSwitchBoardPage />} />
+                            <Route path="/DebuggingPage" element={<DebuggingPage />} />
+                            <Route path="/UidPage" element={<UidPage />} />
+                            <Route path="/FinchPage" element={<FinchPage />} />
+                            <Route path="/UidPage/:uidValue?/:viewMode?" element={<UidPage />} />
+                        </Routes>
+                    </div>
                 </div>
 
-            {/* </UidProvider> */}
-        </ModelProvider >
-          </UidProvider>
+                {/* </UidProvider> */}
+            </ModelProvider >
+        </UidProvider>
     );
 };
 
