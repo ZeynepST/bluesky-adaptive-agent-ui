@@ -5,7 +5,7 @@ import { get_cache_len, get_independent_variables, get_observables, get_ingest_t
 export const IngestViewModel = (uidValue) => {
 
     const [cache_len, setCacheLength] = useState(null);
-    const [independent_vars, setIndependentVar] = useState([]);
+    const [independentVars, setIndependentVar] = useState([]);
     const[transformIndVar, setTransformIndVar]=useState([]);
     const [observables, setObservables] = useState([]);
     const [loadingIngest, setLoadingIngest] = useState(false);
@@ -46,7 +46,7 @@ export const IngestViewModel = (uidValue) => {
         const loadData = async () => {
             try {
                 //this converts the nested [value] to value
-                const y =  independent_vars.map(d => d[0]);
+                const y =  independentVars.map(d => d[0]);
                 const x = y.map((_, i) => i); //index positions
                 const data = [
                     {
@@ -65,11 +65,11 @@ export const IngestViewModel = (uidValue) => {
 
         }
         loadData();
-    }, [independent_vars]);
+    }, [independentVars]);
 
 
     return {
-        loadingIngest, cache_len, independent_vars, observables, ingestTimeStamps, transformIndVar
+        loadingIngest, cache_len, independentVars, observables, ingestTimeStamps, transformIndVar
     };
 
 

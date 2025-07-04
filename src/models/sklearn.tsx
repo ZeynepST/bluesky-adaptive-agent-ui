@@ -1,6 +1,3 @@
-/**
- * I'm using scikit.js to replicate the backend model behavior?
- */
 import * as tf from '@tensorflow/tfjs'
 import * as sk from 'scikitjs'
 import { setBackend, KMeans } from "scikitjs";
@@ -17,19 +14,19 @@ sk.setBackend(tf) //This is required by the documentation
 
 export async function remodelFromReportTS({
     observables,
-    cluster_centers,
+    clusterCenters,
     recentClusterCenters,
-    independent_vars,
+    independentVars,
     idx  //needs further checking
 }: {
     observables: number[][],
-    cluster_centers: number[][][],
+    clusterCenters: number[][][],
     recentClusterCenters: number[][]
-    independent_vars?: any[],
+    independentVars?: any[],
     idx?: number,
 }) {
 
-    const selectedCenters = typeof idx === 'number' ? cluster_centers[idx] : recentClusterCenters;
+    const selectedCenters = typeof idx === 'number' ? clusterCenters[idx] : recentClusterCenters;
 
     console.log("observables shape:", observables.length, Array.isArray(observables[0]) ? observables[0].length : "not 2D");
 

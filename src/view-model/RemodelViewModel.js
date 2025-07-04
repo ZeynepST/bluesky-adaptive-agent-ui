@@ -9,9 +9,9 @@ export const RemodelViewModel = (uidValue) => {
     const [distances, setDistances] = useState([]);
     const [clusters, setClusters] = useState([]);
 
-    const { cluster_centers, recentClusterCenters } = ReportViewModel(uidValue);
+    const { clusterCenters, recentClusterCenters } = ReportViewModel(uidValue);
 
-    const { independent_vars, observables } = IngestViewModel(uidValue);
+    const { independentVars, observables } = IngestViewModel(uidValue);
 
     useEffect(() => {
 
@@ -28,9 +28,9 @@ export const RemodelViewModel = (uidValue) => {
             try {
                 const result = await remodelFromReportTS({
                     observables,
-                    cluster_centers,
+                    clusterCenters,
                     recentClusterCenters,
-                    independent_vars,
+                    independentVars,
                     model_type: "KMeans"
                 });
 
@@ -45,7 +45,7 @@ export const RemodelViewModel = (uidValue) => {
         };
 
         loadData();
-    }, [uidValue, independent_vars, observables, cluster_centers, recentClusterCenters]); //needs further testing
+    }, [uidValue, independentVars, observables, clusterCenters, recentClusterCenters]); //needs further testing
 
     return {
         distances, clusters
