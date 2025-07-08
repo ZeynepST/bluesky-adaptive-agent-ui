@@ -26,7 +26,7 @@ const IngestDataPage = () => {
 
     const chosenUidObject = uidsInfo.find(uid => uid.uidValue === uidValue);
 
-    const { loadingIngest, independentVars, observables, ingestTimeStamps, transformIndVar } = IngestViewModel(uidValue);
+    const { loadingIngest, independentVars, observables, ingestTimeStamps, transformIndVarPlotData} = IngestViewModel(uidValue);
 
     // need to add something of the sort 
     if (!chosenUidObject) {
@@ -43,7 +43,7 @@ const IngestDataPage = () => {
                             <div className="ind-vars-graph">
                                 {/* <ScatterPlot vars={independentVars} /> */}
                                 <PlotlyScatter
-                                    data={transformIndVar}
+                                    data={transformIndVarPlotData}
                                     title="Scatter Plot of Independent Variables"
                                     xAxisTitle="Feature Index"
                                     yAxisTitle="Independent Variables" />
