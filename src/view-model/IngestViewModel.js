@@ -7,6 +7,8 @@ export const IngestViewModel = (uidValue) => {
 
     const [cache_len, setCacheLength] = useState(null);
     const [independentVars, setIndependentVar] = useState([]);
+    //transformIndVarPlotData is the formatted version of independentVars that is ready for plotting with Plotly 
+    //independentVars itself is not directly plottable by Plotly because Plotly expects flat arrays for x and y
     const [transformIndVarPlotData,  setTransformIndVarPlotData] = useState([]);
     const [observables, setObservables] = useState([]);
     const [loadingIngest, setLoadingIngest] = useState(false);
@@ -40,6 +42,7 @@ export const IngestViewModel = (uidValue) => {
         loadData();
     }, [uidValue]); //need to check [uidValue]
 
+    // This useEffect is to derive a Plotly-compatible array of trace objects form independentVars
     useEffect(() => {
 
         if (!uidValue) return;
@@ -51,9 +54,8 @@ export const IngestViewModel = (uidValue) => {
                 const is1D = !Array.isArray(independentVars[0]) || independentVars[0].length === 1;
                 let data;
                 if (is1D) {
-                    //this converts the nested [value] to value
-                    const y = independentVars.map(d => d[0]);
-                    const x = y.map((_, i) => i); //index positions
+                    const y = independentVars.map(d => d[0]); //this converts the nested [value] to value
+                    const x = y.map((_, i) => i); //this extracts the index positions
                     data = [
                         {
                             x: x,
@@ -66,8 +68,8 @@ export const IngestViewModel = (uidValue) => {
                 }
                 else {
                     //Handles 2D: Scatter plot of [x, y] values
-                    const x = independentVars.map(d => d[0]);
-                    const y = independentVars.map(d => d[1]);
+                    const x = independentVars.map(d => d[0]); //[]
+                    const y = independentVars.map(d => d[1]);//[]
                     data = [
                         {
                             x: x,

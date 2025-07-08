@@ -1,7 +1,12 @@
+/**
+ * scikitjs is a Typescript package for machine learning that aims to be a 
+ * TypeScript port of the scikit-learn python library. 
+ * Tensorflow is used as a peer dependency
+ */
 import * as tf from '@tensorflow/tfjs'
 import * as sk from 'scikitjs'
 import { setBackend, KMeans } from "scikitjs";
-sk.setBackend(tf) //This is required by the documentation
+sk.setBackend(tf) 
 
 /**
  * All TS will really need to reimplement is:
