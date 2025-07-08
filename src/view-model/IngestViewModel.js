@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { get_cache_len, get_independent_variables, get_observables, get_ingest_timestamps } from "../models/fetchIngestData";
-import { RemodelViewModel } from "./RemodelViewModel";
+
 
 //uid is the object, not the uid number itself. To access the uid number you need to do uid.uidValue as defined in fetchUids.js
 export const IngestViewModel = (uidValue) => {
@@ -13,6 +13,8 @@ export const IngestViewModel = (uidValue) => {
     const [observables, setObservables] = useState([]);
     const [loadingIngest, setLoadingIngest] = useState(false);
     const [ingestTimeStamps, setIngestTimeStamps] = useState([]);
+
+ 
 
     useEffect(() => {
 
@@ -61,7 +63,7 @@ export const IngestViewModel = (uidValue) => {
                             x: x,
                             y: y,
                             type: 'scatter',
-                            mode: 'lines+markers',
+                            mode: 'markers',
                             name: `Independent Variable`,
                         }
                     ];

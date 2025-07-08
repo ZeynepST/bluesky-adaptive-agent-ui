@@ -6,7 +6,7 @@
 import * as tf from '@tensorflow/tfjs'
 import * as sk from 'scikitjs'
 import { setBackend, KMeans } from "scikitjs";
-sk.setBackend(tf) 
+sk.setBackend(tf)
 
 /**
  * All TS will really need to reimplement is:
@@ -47,7 +47,7 @@ export async function remodelFromReportTS({
 
     //predicts cluster labels
     const clusterTensor = model.predict(X); //predict on the observables 
-    const clusters = await clusterTensor.array();
+    const clusterLabels = await clusterTensor.array();
 
     //computes distances to cluster centers
     const distanceTensor = model.transform(X); //transform observables to distances 
@@ -56,9 +56,18 @@ export async function remodelFromReportTS({
     //this is the result of the remodeling
     return {
         distances,
-        clusters
+        clusterLabels
     };
 }
 
 
 
+/**
+ * distances = [
+    [0.1608, 3.2309, 3.6479],  //the min tells you which cluster it belongs to
+    [3.3210, 0.0779, 1.0776],
+    [3.2602, 0.0779, 1.2275],
+    [3.6711, 1.1523, 0],
+    [0.1608, 3.3555, 3.7011]
+]
+ */

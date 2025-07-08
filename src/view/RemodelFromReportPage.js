@@ -5,26 +5,31 @@ import { useParams } from 'react-router-dom';
 import { RemodelViewModel } from '../view-model/RemodelViewModel';
 import PlotlyScatter from '../components/Plots/PlotlyScatter';
 import { IngestViewModel } from '../view-model/IngestViewModel';
+import { ReportViewModel } from '../view-model/ReportViewModel';
 
 const RemodelFromReportPage = () => {
 
     const { uidsInfo } = useContext(UidContext);
     const { uidValue } = useParams();
     const chosenUidObject = uidsInfo.find(uid => uid.uidValue === uidValue);
-    const { distances } = RemodelViewModel(uidValue);
 
     const { transformIndVarPlotData } = IngestViewModel(uidValue);
+
+    const { clusterCenters, recentClusterCenters } = ReportViewModel(uidValue);
+
+    const { independentVars, observables } = IngestViewModel(uidValue);
+    const { distances } = RemodelViewModel(uidValue, clusterCenters, recentClusterCenters, independentVars, observables);
 
     const [plotData, setPlotData] = useState([]);
     useEffect(() => {
         if (!distances || distances.length === 0 || !transformIndVarPlotData || transformIndVarPlotData.length === 0 || !transformIndVarPlotData[0].x)
             return;
         const data = distances[0].map((_, clusterIdx) => ({
-            x: transformIndVarPlotData[0].x,
+            x: transformIndVarPlotData[0].y,
             y: distances.map(d => d[clusterIdx]),
             type: 'scatter',
-            mode: 'lines+markers',
-            name: `Distance to Cluster ${clusterIdx}`,
+            mode: 'markers',
+            name: `Distance to Cluster ${clusterIdx + 1}`,
         }));
 
         setPlotData(data);

@@ -4,14 +4,10 @@ import { ReportViewModel } from './ReportViewModel';
 import { remodelFromReportTS } from '../models/sklearn.tsx';
 
 //not sure about the parameter 
-export const RemodelViewModel = (uidValue) => {
+export const RemodelViewModel = (uidValue, clusterCenters, recentClusterCenters, independentVars, observables) => {
 
     const [distances, setDistances] = useState([]);
-    const [clusters, setClusters] = useState([]);
-
-    const { clusterCenters, recentClusterCenters } = ReportViewModel(uidValue);
-
-    const { independentVars, observables } = IngestViewModel(uidValue);
+    const [clusterLabels, setClusterLabels] = useState([]);
 
     useEffect(() => {
 
@@ -34,10 +30,10 @@ export const RemodelViewModel = (uidValue) => {
                 });
 
                 setDistances(result.distances);
-                setClusters(result.clusters);
+                setClusterLabels(result.clusterLabels);
 
                 console.log("distances:", result.distances);
-                console.log("clusters:", result.clusters);
+                console.log("clusterLabels:", result.clusterLabels);
             } catch (error) {
                 console.error("Remodel error:", error);
             }
@@ -47,7 +43,7 @@ export const RemodelViewModel = (uidValue) => {
     }, [uidValue, independentVars, observables, clusterCenters, recentClusterCenters]); //needs further testing
 
     return {
-        distances, clusters
+        distances, clusterLabels
     };
 
 }
