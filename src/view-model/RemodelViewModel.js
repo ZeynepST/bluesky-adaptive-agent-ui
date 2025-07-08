@@ -35,6 +35,9 @@ export const RemodelViewModel = (uidValue) => {
 
                 setDistances(result.distances);
                 setClusters(result.clusters);
+
+                console.log("distances:", result.distances);
+                console.log("clusters:", result.clusters);
             } catch (error) {
                 console.error("Remodel error:", error);
             }
