@@ -15,7 +15,7 @@ const UidBanner = ({ uidObject, viewMode }) => {
 
     // const { uidsInfo} = useContext(UidContext);
     if (!uidObject) return null;
-    const cacheLen = uidObject.hasIngest ? IngestViewModel(uidObject.uidValue).cacheLen : 0;
+    const cacheLen = uidObject.hasIngest ? IngestViewModel(uidObject.uidValue).cache_len : 0;
 
     return (
 
@@ -44,6 +44,11 @@ const UidBanner = ({ uidObject, viewMode }) => {
                     {uidObject.hasReport && (
                         <Link to={`/UidPage/${uidObject.uidValue}/report`}>
                             <button className={`ingest-report-btns ${viewMode === "report" ? "selected" : ""}`}>Report &gt;</button>
+                        </Link>
+                    )}
+                     {uidObject.hasReport && uidObject.hasIngest && (
+                        <Link to={`/UidPage/${uidObject.uidValue}/remodel`}>
+                            <button className={`ingest-report-btns ${viewMode === "remodel" ? "selected" : ""}`}>Remodel &gt;</button>
                         </Link>
                     )}
                 </div>

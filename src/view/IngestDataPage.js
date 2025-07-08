@@ -26,7 +26,7 @@ const IngestDataPage = () => {
 
     const chosenUidObject = uidsInfo.find(uid => uid.uidValue === uidValue);
 
-    const { loadingIngest, independentVar, observables, ingestTimeStamps, transformIndVar } = IngestViewModel(uidValue);
+    const { loadingIngest, independentVars, observables, ingestTimeStamps, transformIndVar } = IngestViewModel(uidValue);
 
     return (
         <div className="ingest-data-page">
@@ -36,7 +36,7 @@ const IngestDataPage = () => {
                     <div className="ingest-data-page-container">
                         <div className="ingest-data-page-graphs">
                             <div className="ind-vars-graph">
-                                {/* <ScatterPlot vars={independentVar} /> */}
+                                {/* <ScatterPlot vars={independentVars} /> */}
                                 <PlotlyScatter
                                     data={transformIndVar}
                                     title="Scatter Plot of Independent Variables"

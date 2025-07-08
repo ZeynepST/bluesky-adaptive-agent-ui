@@ -4,8 +4,8 @@ import { get_cache_len, get_independent_variables, get_observables, get_ingest_t
 //uid is the object, not the uid number itself. To access the uid number you need to do uid.uidValue as defined in fetchUids.js
 export const IngestViewModel = (uidValue) => {
 
-    const [cacheLen, setCacheLen] = useState(null);
-    const [independentVar, setIndependentVar] = useState([]);
+    const [cache_len, setCacheLength] = useState(null);
+    const [independentVars, setIndependentVar] = useState([]);
     const[transformIndVar, setTransformIndVar]=useState([]);
     const [observables, setObservables] = useState([]);
     const [loadingIngest, setLoadingIngest] = useState(false);
@@ -24,7 +24,7 @@ export const IngestViewModel = (uidValue) => {
                 const observablesReponse = await get_observables(uidValue);
                 const timeStampResponse = await get_ingest_timestamps(uidValue);
 
-                setCacheLen(cacheResponse);
+                setCacheLength(cacheResponse);
                 setIndependentVar(independentVarResponse);
                 setObservables(observablesReponse);
                 setIngestTimeStamps(timeStampResponse);
@@ -46,7 +46,7 @@ export const IngestViewModel = (uidValue) => {
         const loadData = async () => {
             try {
                 //this converts the nested [value] to value
-                const y =  independentVar.map(d => d[0]);
+                const y =  independentVars.map(d => d[0]);
                 const x = y.map((_, i) => i); //index positions
                 const data = [
                     {
@@ -57,7 +57,6 @@ export const IngestViewModel = (uidValue) => {
                         name: `Independent Variable`,
                     }
                 ];
-                console.log("data is ", data);
                 setTransformIndVar(data);
             }
             catch (error) {
@@ -66,11 +65,11 @@ export const IngestViewModel = (uidValue) => {
 
         }
         loadData();
-    }, [independentVar]);
+    }, [independentVars]);
 
 
     return {
-        loadingIngest, cacheLen, independentVar, observables, ingestTimeStamps, transformIndVar
+        loadingIngest, cache_len, independentVars, observables, ingestTimeStamps, transformIndVar
     };
 
 
