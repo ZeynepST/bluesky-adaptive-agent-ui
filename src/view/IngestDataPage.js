@@ -28,6 +28,11 @@ const IngestDataPage = () => {
 
     const { loadingIngest, independentVars, observables, ingestTimeStamps, transformIndVar } = IngestViewModel(uidValue);
 
+    // need to add something of the sort 
+    if (!chosenUidObject) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className="ingest-data-page">
             <React.Fragment key={uidValue}>
@@ -43,7 +48,7 @@ const IngestDataPage = () => {
                                     xAxisTitle="Feature Index"
                                     yAxisTitle="Independent Variables" />
                             </div>
-                            <div className="observables-graph" style={{ width: '100%', height: '100%'}}>
+                            <div className="observables-graph">
                                 <WaterFallPlot observables={observables} />
                             </div>
 

@@ -16,13 +16,11 @@ export async function remodelFromReportTS({
     observables,
     clusterCenters,
     recentClusterCenters,
-    independentVars,
     idx  //needs further checking
 }: {
     observables: number[][],
     clusterCenters: number[][][],
-    recentClusterCenters: number[][]
-    independentVars?: any[],
+    recentClusterCenters: number[][],
     idx?: number,
 }) {
 

@@ -10,6 +10,10 @@
   flex-direction: column;
   gap: 2rem;
   margin-bottom: 50px;
-
   flex-wrap: wrap;
+}
+
+.observables-graph{
+  width: 100%;
+  height: 100%;
 }
