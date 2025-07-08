@@ -5,7 +5,7 @@ import SideBar from '../components/SideBar';
 import UidBanner from '../components/UidBanner';
 import IngestDataPage from '../view/IngestDataPage';
 import ReportDataPage from '../view/ReportDataPage';
-import RemodelFromReportPage from './RemodelFromReportPage';
+import RemodelFromReportPage from '../view/RemodelFromReportPage';
 import '../stylesheets/UidStylesheets/UidPage.css';
 
 /**
