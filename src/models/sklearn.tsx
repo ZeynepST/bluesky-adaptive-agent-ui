@@ -59,15 +59,3 @@ export async function remodelFromReportTS({
         clusterLabels
     };
 }
-
-
-
-/**
- * distances = [
-    [0.1608, 3.2309, 3.6479],  //the min tells you which cluster it belongs to
-    [3.3210, 0.0779, 1.0776],
-    [3.2602, 0.0779, 1.2275],
-    [3.6711, 1.1523, 0],
-    [0.1608, 3.3555, 3.7011]
-]
- */
