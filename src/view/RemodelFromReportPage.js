@@ -25,6 +25,7 @@ const RemodelFromReportPage = () => {
         return <div>Loading...</div>;
     }
 
+
     return (
         <div className="remodel-from-report-page">
             <React.Fragment key={uidValue}>
@@ -39,15 +40,20 @@ const RemodelFromReportPage = () => {
                                     distances.length > 0 && distances[0] &&
                                     <PlotlyScatter
                                         data={
-                                            // This creates one trace per cluster
-                                            // Each vertical column of points corresponds to a single data point
-                                            distances[0].map((_, clusterIdx) => ({
-                                                x: transformIndVarPlotData[0].y,
-                                                y: distances.map(d => d[clusterIdx]),
-                                                type: 'scatter',
-                                                mode: 'markers',
-                                                name: `Distance to Cluster ${clusterIdx + 1}`,
-                                            }))
+                                            //esstentially iterating through the columns
+                                            distances[0].map((_, clusterIdx) => {
+                                                const xValues = transformIndVarPlotData[0].y;
+                                                const yValues = distances.map(d => d[clusterIdx]); //this iterates through all the rows in distances
+                                                const sortedPairs = xValues.map((x, i) => ({ x, y: yValues[i] }))
+                                                    .sort((a, b) => a.x - b.x);
+                                                return {
+                                                    x: sortedPairs.map(p => p.x),
+                                                    y: sortedPairs.map(p => p.y),
+                                                    type: 'scatter',
+                                                    mode: 'lines+markers',
+                                                    name: `Distance to Cluster ${clusterIdx + 1}`
+                                                };
+                                            })
                                         }
                                         title=""
                                         xAxisTitle="Independent Variable"
@@ -90,12 +96,12 @@ const RemodelFromReportPage = () => {
                                         />}
                                 </div>
                                 {/*Start of plot2-ind-idx-color-cluster-labels-1D" */}
-                                <div className="plot2-ind-idx-color-distance-labels-1D">
+                                {/* <div className="plot2-ind-idx-color-distance-labels-1D">
                                     <ClusterDistancePlot
                                         distances={distances}
                                         transformIndVarPlotData={transformIndVarPlotData}
                                     />
-                                </div>
+                                </div> */}
                             </div>
                             {/* end of 1D ind var plots */}
                             {/******************************************************************************************/}
@@ -131,13 +137,10 @@ const RemodelFromReportPage = () => {
                                     }
                                 </div>
                                 {/* start of plot2-ind-idx-color-distance-labels-2D */}
-                                <div className="plot2-ind-idx-color-distance-labels-2D">
-                                    
-                                </div>
 
                             </div>
                             {/* end of 2D ind variable plots */}
-            
+
                         </div>
                     </div>
                 )
