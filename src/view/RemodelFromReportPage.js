@@ -5,7 +5,9 @@ import { RemodelViewModel } from '../view-model/RemodelViewModel';
 import PlotlyScatter from '../components/Plots/PlotlyScatter';
 import { IngestViewModel } from '../view-model/IngestViewModel';
 import { ReportViewModel } from '../view-model/ReportViewModel';
-import ClusterDistancePlot from '../components/Plots/ClusterDistancePlot';
+import WaterFallPlot from '../components/Plots/WaterFallPlotComponent';
+import prepareWaterfallScatter1D from '../view-model/RemodelViewModel';
+// import ClusterDistancePlot from '../components/Plots/ClusterDistancePlot';
 
 
 const RemodelFromReportPage = () => {
@@ -24,7 +26,7 @@ const RemodelFromReportPage = () => {
     if (!chosenUidObject || !transformIndVarPlotData || transformIndVarPlotData.length === 0 || !transformIndVarPlotData[0].x) {
         return <div>Loading...</div>;
     }
-
+    const plotData = prepareWaterfallScatter1D(observables, clusterLabels, transformIndVarPlotData);
 
     return (
         <div className="remodel-from-report-page">
@@ -33,7 +35,7 @@ const RemodelFromReportPage = () => {
                 {chosenUidObject.uidValue === uidValue && chosenUidObject?.hasReport && chosenUidObject?.hasIngest && (
                     <div className="remodel-from-report-container">
                         <div className="remodel-graphs">
-                            {/* beginning of distancce-index plot */}
+                            {/* beginning of distance-index plot */}
                             <div className="distance-index-graph">
                                 {
                                     // This check prevents: export default RemodelFromReportPage;Cannot read properties of undefined (reading 'map')
@@ -50,7 +52,7 @@ const RemodelFromReportPage = () => {
                                                     x: sortedPairs.map(p => p.x),
                                                     y: sortedPairs.map(p => p.y),
                                                     type: 'scatter',
-                                                    mode: 'lines+markers',
+                                                    mode: 'lines',
                                                     name: `Distance to Cluster ${clusterIdx + 1}`
                                                 };
                                             })
@@ -62,6 +64,7 @@ const RemodelFromReportPage = () => {
                                 }
                             </div>
                             {/* end of distance-index plot */}
+                            {/******************************************************************************************/}
                             {/* beginning of 1D ind plots */}
                             <div className="plots-1D-container">
                                 {/* the plot below assumes independent variables are 1D */}
@@ -77,7 +80,7 @@ const RemodelFromReportPage = () => {
                                                     name: '1D Independent Variables vs Index',
                                                     marker: {
                                                         color: clusterLabels,
-                                                        colorscale: 'Viridis',
+                                                        // colorscale: 'inferno', //make categorical 
                                                         colorbar: {
                                                             title: {
                                                                 text: 'Cluster Labels'
@@ -94,14 +97,18 @@ const RemodelFromReportPage = () => {
                                             xAxisTitle="Index"
                                             yAxisTitle="Independent Variables [1D]"
                                         />}
+                                    {/* this is where  1D check ends need to incorporate the rest of the divs  */}
                                 </div>
-                                {/*Start of plot2-ind-idx-color-cluster-labels-1D" */}
-                                {/* <div className="plot2-ind-idx-color-distance-labels-1D">
-                                    <ClusterDistancePlot
-                                        distances={distances}
-                                        transformIndVarPlotData={transformIndVarPlotData}
+                                <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-1D">
+                                    <PlotlyScatter
+                                        data={
+                                            plotData
+                                        }
+                                        title="Observables Sorted by Independent Variables [1D]"
+                                        xAxisTitle="Independent Variable"
+                                        yAxisTitle="Observables"
                                     />
-                                </div> */}
+                                </div>
                             </div>
                             {/* end of 1D ind var plots */}
                             {/******************************************************************************************/}
