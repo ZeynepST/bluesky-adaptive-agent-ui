@@ -2,14 +2,24 @@ import Plot from 'react-plotly.js';
 import { useState } from 'react';
 import '../../stylesheets/PlotStylesheets/WaterFallPlotComponent.css';
 
-function WaterFallPlot({ observables }) {
+function WaterFallPlot({
+  data,
+  title,
+  xAxisTitle,
+  yAxisTitle,
+  xAxisRange,
+  yAxisRange,
+  xAxisLayout,
+  className,
+  colors
+}) {
 
   //the offset for the waterfall plot will be determined by the user
   const [offSet, setOffSet] = useState("");
 
   // offsetObservables is an array where the value of each row is shifted upward by its index
-  const offsetObservables = observables.map((row, rowIndex) =>
-    row.map(value => value + (rowIndex *( Number(offSet) || 1)))
+  const offsetObservables = data?.map((row, rowIndex) =>
+    row.map(value => value + (rowIndex * (Number(offSet) || 1)))
   );
 
   //singeLine represents each line on the plot
@@ -29,7 +39,7 @@ function WaterFallPlot({ observables }) {
           data={singleLine}
           layout={{
             title: {
-              text: 'Waterfall Plot of Observables',
+              text: title,
               x: 0.5,
               xanchor: 'center',
               font: {
@@ -38,7 +48,7 @@ function WaterFallPlot({ observables }) {
             },
             xaxis: {
               title: {
-                text: 'Index',
+                text: xAxisTitle,
                 font: {
                   size: 10
                 }
@@ -46,7 +56,7 @@ function WaterFallPlot({ observables }) {
             },
             yaxis: {
               title: {
-                text: 'Value',
+                text: yAxisTitle,
                 font: {
                   size: 10
                 }
@@ -59,10 +69,10 @@ function WaterFallPlot({ observables }) {
           config={{ responsive: true }}
           useResizeHandler={true}
           // keeping height at a set value makes it stable and no longer overlaps the input area 
-          style={{ width: '100%', height: '100%'}}
+          style={{ width: '100%', height: '100%' }}
         />
         {/* end of plot */}
-        
+
         <div className="waterfall-plot-offset-input-box" >
           <input
             type="number"

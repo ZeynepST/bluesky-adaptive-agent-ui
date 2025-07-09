@@ -26,7 +26,7 @@ const IngestDataPage = () => {
 
     const chosenUidObject = uidsInfo.find(uid => uid.uidValue === uidValue);
 
-    const { loadingIngest, independentVars, observables, ingestTimeStamps, transformIndVarPlotData} = IngestViewModel(uidValue);
+    const { loadingIngest, independentVars, observables, ingestTimeStamps, transformIndVarPlotData } = IngestViewModel(uidValue);
 
     // need to add something of the sort 
     if (!chosenUidObject) {
@@ -41,7 +41,6 @@ const IngestDataPage = () => {
                     <div className="ingest-data-page-container">
                         <div className="ingest-data-page-graphs">
                             <div className="ind-vars-graph">
-                                {/* <ScatterPlot vars={independentVars} /> */}
                                 <PlotlyScatter
                                     data={transformIndVarPlotData}
                                     title="Scatter Plot of Independent Variables"
@@ -49,16 +48,18 @@ const IngestDataPage = () => {
                                     yAxisTitle="Independent Variables" />
                             </div>
                             <div className="observables-graph">
-                                <WaterFallPlot observables={observables} />
+                                <WaterFallPlot
+                                    data={observables}
+                                    title="Waterfall Plot of Observables"
+                                    xAxisTitle="Index"
+                                    yAxisTitle="Value"
+                                />
                             </div>
-
                         </div>
-
                     </div>
                 )}
             </React.Fragment>
         </div>
     );
 }
-
 export default IngestDataPage;
