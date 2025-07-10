@@ -30,9 +30,7 @@ export async function remodelFromReportTS({
 }) {
 
     const selectedCenters = typeof idx === 'number' ? clusterCenters[idx] : recentClusterCenters;
-
-    console.log("observables shape:", observables.length, Array.isArray(observables[0]) ? observables[0].length : "not 2D");
-
+    
     // convert data to tensors
     const X = tf.tensor2d(observables);
     const centers = tf.tensor2d(selectedCenters);
