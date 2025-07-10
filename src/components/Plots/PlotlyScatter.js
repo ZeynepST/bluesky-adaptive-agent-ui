@@ -3,7 +3,7 @@ import Plot from 'react-plotly.js';
 
 // will need to add licensing 
 export default function PlotlyScatter({
-  data,
+  data, //data must be a Plotly-compatible array of trace objects. Each object has keys like x,y, mode, etc. 
   title,
   xAxisTitle,
   yAxisTitle,
@@ -17,6 +17,7 @@ export default function PlotlyScatter({
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
+    //resize observer is used to automatically size the Plotly chart based on the parent container's size
     const resizeObserver = new ResizeObserver((entries) => {
       if (entries[0]) {
         const { width, height } = entries[0].contentRect;

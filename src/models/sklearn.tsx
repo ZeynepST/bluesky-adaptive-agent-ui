@@ -1,7 +1,12 @@
+/**
+ * scikitjs is a Typescript package for machine learning that aims to be a 
+ * TypeScript port of the scikit-learn python library. 
+ * Tensorflow is used as a peer dependency
+ */
 import * as tf from '@tensorflow/tfjs'
 import * as sk from 'scikitjs'
 import { setBackend, KMeans } from "scikitjs";
-sk.setBackend(tf) //This is required by the documentation
+sk.setBackend(tf)
 
 /**
  * All TS will really need to reimplement is:
@@ -16,20 +21,16 @@ export async function remodelFromReportTS({
     observables,
     clusterCenters,
     recentClusterCenters,
-    independentVars,
     idx  //needs further checking
 }: {
     observables: number[][],
     clusterCenters: number[][][],
-    recentClusterCenters: number[][]
-    independentVars?: any[],
+    recentClusterCenters: number[][],
     idx?: number,
 }) {
 
     const selectedCenters = typeof idx === 'number' ? clusterCenters[idx] : recentClusterCenters;
-
-    console.log("observables shape:", observables.length, Array.isArray(observables[0]) ? observables[0].length : "not 2D");
-
+    
     // convert data to tensors
     const X = tf.tensor2d(observables);
     const centers = tf.tensor2d(selectedCenters);
@@ -44,7 +45,7 @@ export async function remodelFromReportTS({
 
     //predicts cluster labels
     const clusterTensor = model.predict(X); //predict on the observables 
-    const clusters = await clusterTensor.array();
+    const clusterLabels = await clusterTensor.array();
 
     //computes distances to cluster centers
     const distanceTensor = model.transform(X); //transform observables to distances 
@@ -53,9 +54,6 @@ export async function remodelFromReportTS({
     //this is the result of the remodeling
     return {
         distances,
-        clusters
+        clusterLabels
     };
 }
-
-
-

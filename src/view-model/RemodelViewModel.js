@@ -4,14 +4,10 @@ import { ReportViewModel } from './ReportViewModel';
 import { remodelFromReportTS } from '../models/sklearn.tsx';
 
 //not sure about the parameter 
-export const RemodelViewModel = (uidValue) => {
+export const RemodelViewModel = (uidValue, clusterCenters, recentClusterCenters, independentVars, observables) => {
 
     const [distances, setDistances] = useState([]);
-    const [clusters, setClusters] = useState([]);
-
-    const { clusterCenters, recentClusterCenters } = ReportViewModel(uidValue);
-
-    const { independentVars, observables } = IngestViewModel(uidValue);
+    const [clusterLabels, setClusterLabels] = useState([]);
 
     useEffect(() => {
 
@@ -30,15 +26,12 @@ export const RemodelViewModel = (uidValue) => {
                     observables,
                     clusterCenters,
                     recentClusterCenters,
-                    independentVars,
                     model_type: "KMeans"
                 });
 
                 setDistances(result.distances);
-                setClusters(result.clusters);
+                setClusterLabels(result.clusterLabels);
 
-                console.log("distances:", result.distances);
-                console.log("clusters:", result.clusters);
             } catch (error) {
                 console.error("Remodel error:", error);
             }
@@ -48,7 +41,83 @@ export const RemodelViewModel = (uidValue) => {
     }, [uidValue, independentVars, observables, clusterCenters, recentClusterCenters]); //needs further testing
 
     return {
-        distances, clusters
+        distances, clusterLabels
     };
 
+}
+
+export default function prepareWaterfallScatter1D(observables, clusterLabels, independentVars) {
+    const traces = [];
+    const colorMap = ['#636EFA', '#00CC96', '#EF553B', '#AB63FA', '#FFA15A', '#19D3F3'];
+    const seenLabels = new Set(); //this ensures that the legend doesn't repeat clusterLabel values 
+
+    const paired = observables.map((obs, i) => ({
+        observable: obs,
+        cluster: clusterLabels[i],
+        independentVar: independentVars[i]
+    }));
+
+    // sorts by independent variable value in ascending order 
+    paired.sort((a, b) => a.independentVar - b.independentVar);
+
+    paired.forEach((entry, stackIndex) => {
+        const x = entry.observable.map((_, idx) => idx);
+        const y = entry.observable.map(val => val + stackIndex); // stack by sorted index will add offset 
+
+        const clusterLabel = entry.cluster;
+        const showLegend = !seenLabels.has(clusterLabel);
+        seenLabels.add(clusterLabel);
+
+        traces.push({
+            x,
+            y,
+            mode: 'lines',
+            type: 'scatter',
+            name: `Cluster ${clusterLabel}`,
+            line: {
+                color: colorMap[clusterLabel % colorMap.length],
+            },
+            showlegend: showLegend,
+        });
+    });
+    return traces;
+}
+
+export const prepareWaterfallScatterWOIndependent = (observables, clusterLabels) => {
+    const traces = [];
+    const offsetAmount = 1;
+    const colorMap = ['#636EFA', '#EF553B', '#00CC96', '#AB63FA'];
+    const seenLabels = new Set(); // Tracks which clusters have already been labeled
+
+    for (let i = 0; i < observables.length; i++) {
+        const yValues = observables[i].map(val => val + i * offsetAmount);
+        const xValues = observables[i].map((_, idx) => idx);
+
+        // Pairs each value with corresponding x, then sorts
+        const pairedValues = xValues.map((xVal, index) => ({
+            xValues: xVal,
+            yValues: yValues[index],
+        }));
+        const sortedPairValues = pairedValues.sort((a, b) => a.xValues - b.xValues);
+
+        const x = sortedPairValues.map(p => p.xValues);
+        const y = sortedPairValues.map(p => p.yValues);
+
+        const clusterLabel = clusterLabels[i];
+        const showLegend = !seenLabels.has(clusterLabel);
+        seenLabels.add(clusterLabel);
+
+        traces.push({
+            x,
+            y,
+            mode: 'lines',
+            type: 'scatter',
+            name: `Cluster ${clusterLabel}`,
+            marker: {
+                color: colorMap[clusterLabel % colorMap.length],
+            },
+            showlegend: showLegend,
+        });
+    }
+    return traces;
 }

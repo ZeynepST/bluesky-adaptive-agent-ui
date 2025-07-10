@@ -26,7 +26,12 @@ const IngestDataPage = () => {
 
     const chosenUidObject = uidsInfo.find(uid => uid.uidValue === uidValue);
 
-    const { loadingIngest, independentVars, observables, ingestTimeStamps, transformIndVar } = IngestViewModel(uidValue);
+    const { loadingIngest, independentVars, observables, ingestTimeStamps, transformIndVarPlotData } = IngestViewModel(uidValue);
+
+    // need to add something of the sort 
+    if (!chosenUidObject) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="ingest-data-page">
@@ -36,24 +41,25 @@ const IngestDataPage = () => {
                     <div className="ingest-data-page-container">
                         <div className="ingest-data-page-graphs">
                             <div className="ind-vars-graph">
-                                {/* <ScatterPlot vars={independentVars} /> */}
                                 <PlotlyScatter
-                                    data={transformIndVar}
+                                    data={transformIndVarPlotData}
                                     title="Scatter Plot of Independent Variables"
                                     xAxisTitle="Feature Index"
                                     yAxisTitle="Independent Variables" />
                             </div>
-                            <div className="observables-graph" style={{ width: '100%', height: '100%'}}>
-                                <WaterFallPlot observables={observables} />
+                            <div className="observables-graph">
+                                <WaterFallPlot
+                                    data={observables}
+                                    title="Waterfall Plot of Observables"
+                                    xAxisTitle="Index"
+                                    yAxisTitle="Value"
+                                />
                             </div>
-
                         </div>
-
                     </div>
                 )}
             </React.Fragment>
         </div>
     );
 }
-
 export default IngestDataPage;
