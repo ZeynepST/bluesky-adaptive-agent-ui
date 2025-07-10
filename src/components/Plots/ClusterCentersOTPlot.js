@@ -9,6 +9,25 @@ import { useState, useRef, useEffect } from 'react';
  */
 export default function ClusterCentersOT({ clusterCenters, reportsCacheLength }) {
 
+
+    const plotContainer = useRef(null);
+    const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+    useEffect(() => {
+        const resizeObserver = new ResizeObserver((entries) => {
+            if (entries[0]) {
+                const { width, height } = entries[0].contentRect;
+                setDimensions({ width, height });
+            }
+        });
+
+        if (plotContainer.current) {
+            resizeObserver.observe(plotContainer.current);
+        }
+
+        return () => resizeObserver.disconnect();
+    }, []);
+
     /**
      * cc stands for cluster centers.
      * By using a useState for the report index, it ensures that whenever the report index changes, the traces as defined below is computed 
@@ -88,38 +107,42 @@ export default function ClusterCentersOT({ clusterCenters, reportsCacheLength })
                     {!playing ? (<button onClick={startPlayback}>Play &#9654;</button>) : (<button onClick={stopPlayback}>Pause &#x23f8;</button>)}
                 </div>
             </div>
-            
+
             {/* start of plot */}
-            <Plot
-                data={traces}
-                layout={
-                    {
-                        title: {
-                            text: `Cluster Centers from Report ${ccReportIndex + 1}`,
-                        },
-                        xaxis: { title: 'Feature Index' },
-                        yaxis: { title: 'Value' },
-                        autosize: true,
-                        margin: { l: 40, r: 20, t: 40, b: 40 },
-                        annotations: [
-                            {
-                                text: `Cache Length: ${reportsCacheLength[ccReportIndex] || 0}`,
-                                xref: 'paper',
-                                yref: 'paper',
-                                x: 1,
-                                y: 1.02,
-                                showarrow: false,
-                                font: {
-                                    size: 14,
-                                    color: 'gray'
-                                },
-                                marginTop: '10px'
-                            }
-                        ],
+            <div ref={plotContainer}>
+                <Plot
+                    data={traces}
+                    layout={
+                        {
+                            title: {
+                                text: `Cluster Centers from Report ${ccReportIndex + 1}`,
+                            },
+                            xaxis: { title: {text: 'Feature Index' }},
+                            yaxis: { title:{text: 'Value'} },
+                            autosize: true,
+                            width: dimensions.width,
+                            height: dimensions.height,
+                            margin: { l: 40, r: 20, t: 40, b: 40 },
+                            annotations: [
+                                {
+                                    text: `Cache Length: ${reportsCacheLength[ccReportIndex] || 0}`,
+                                    xref: 'paper',
+                                    yref: 'paper',
+                                    x: 1,
+                                    y: 1.02,
+                                    showarrow: false,
+                                    font: {
+                                        size: 14,
+                                        color: 'gray'
+                                    },
+                                    marginTop: '10px'
+                                }
+                            ],
+                        }
                     }
-                }
-                config={{ responsive: true }}
-            />
+                    config={{ responsive: true }}
+                />
+            </div>
             {/* end of plot */}
         </div>
     );
