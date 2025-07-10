@@ -3,6 +3,19 @@ import { IngestViewModel } from './IngestViewModel'
 import { ReportViewModel } from './ReportViewModel';
 import { remodelFromReportTS } from '../models/sklearn.tsx';
 
+const colorMap = [
+    '#1f77b4', // blue
+    '#ff7f0e', // orange
+    '#2ca02c', // green
+    '#d62728', // red
+    '#9467bd', // purple
+    '#8c564b', // brown
+    '#e377c2', // pink
+    '#7f7f7f', // gray
+    '#bcbd22', // olive
+    '#17becf'  // cyan
+];
+
 //not sure about the parameter 
 export const RemodelViewModel = (uidValue, clusterCenters, recentClusterCenters, independentVars, observables) => {
 
@@ -48,7 +61,7 @@ export const RemodelViewModel = (uidValue, clusterCenters, recentClusterCenters,
 
 export default function prepareWaterfallScatter1D(observables, clusterLabels, independentVars) {
     const traces = [];
-    const colorMap = ['#636EFA', '#00CC96', '#EF553B', '#AB63FA', '#FFA15A', '#19D3F3'];
+    // const colorMap = ['#636EFA', '#00CC96', '#EF553B', '#AB63FA', '#FFA15A', '#19D3F3'];
     const seenLabels = new Set(); //this ensures that the legend doesn't repeat clusterLabel values 
 
     const paired = observables.map((obs, i) => ({
