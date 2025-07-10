@@ -1,5 +1,5 @@
 import Plot from 'react-plotly.js';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import '../../stylesheets/PlotStylesheets/WaterFallPlotComponent.css';
 
 function WaterFallPlot({
@@ -14,6 +14,24 @@ function WaterFallPlot({
   colors
 }) {
 
+  const plotContainer = useRef(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    //resize observer is used to automatically size the Plotly chart based on the parent container's size
+    const resizeObserver = new ResizeObserver((entries) => {
+      if (entries[0]) {
+        const { width, height } = entries[0].contentRect;
+        setDimensions({ width, height });
+      }
+    });
+
+    if (plotContainer.current) {
+      resizeObserver.observe(plotContainer.current);
+    }
+
+    return () => resizeObserver.disconnect();
+  }, []);
   //the offset for the waterfall plot will be determined by the user
   const [offSet, setOffSet] = useState("");
 
@@ -32,45 +50,45 @@ function WaterFallPlot({
   }));
 
   return (
-    <div className="waterfall-plot-container">
+    <div className="waterfall-plot-container" >
       <div className="waterfall-plot-wrapper">
         {/* beginning of plot */}
-        <Plot
-          data={singleLine}
-          layout={{
-            title: {
-              text: title,
-              x: 0.5,
-              xanchor: 'center',
-              font: {
-                size: 15
-              }
-            },
-            xaxis: {
+        <div ref={plotContainer}>
+          <Plot
+            data={singleLine}
+            layout={{
               title: {
-                text: xAxisTitle,
+                text: title,
+                x: 0.5,
+                xanchor: 'center',
                 font: {
-                  size: 10
+                  size: 15
                 }
-              }
-            },
-            yaxis: {
-              title: {
-                text: yAxisTitle,
-                font: {
-                  size: 10
+              },
+              xaxis: {
+                title: {
+                  text: xAxisTitle,
+                  font: {
+                    size: 10
+                  }
                 }
-              }
-            },
-            autosize: true,
-            margin: { l: 40, r: 20, t: 40, b: 40 },
-          }}
-
-          config={{ responsive: true }}
-          useResizeHandler={true}
-          // keeping height at a set value makes it stable and no longer overlaps the input area 
-          style={{ width: '100%', height: '100%' }}
-        />
+              },
+              yaxis: {
+                title: {
+                  text: yAxisTitle,
+                  font: {
+                    size: 10
+                  }
+                }
+              },
+              autosize: true,
+              width: dimensions.width,
+              height: dimensions.height,
+              margin: { l: 40, r: 20, t: 40, b: 40 },
+            }}
+            config={{ responsive: true }}
+          />
+        </div>
         {/* end of plot */}
 
         <div className="waterfall-plot-offset-input-box" >
