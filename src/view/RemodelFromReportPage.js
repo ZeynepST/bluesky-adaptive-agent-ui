@@ -26,7 +26,7 @@ const RemodelFromReportPage = () => {
     const { distances, clusterLabels } = RemodelViewModel(uidValue, clusterCenters, recentClusterCenters, independentVars, observables, transformIndVarPlotData);
     const uniqueLabels = [...new Set(clusterLabels)];
 
-    const [offSetWFScatter1D, setOffSetWFScatter1D] = useState(1);
+    const [offSetWFScatter1D, setOffSetWFScatter1D] = useState("");
 
     //may move this
     const tab10 = [

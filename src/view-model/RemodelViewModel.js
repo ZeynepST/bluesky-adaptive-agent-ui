@@ -63,6 +63,9 @@ export default function prepareWaterfallScatter1D(observables, clusterLabels, in
     const traces = [];
     const seenLabels = new Set(); //this ensures that the legend doesn't repeat clusterLabel values 
     //the offset for the waterfall plot will be determined by the user
+    if(offset===""){
+        offset=1;
+    }
 
     const paired = observables.map((obs, i) => ({
         observable: obs,
