@@ -31,7 +31,7 @@ export const RemodelViewModel = (uidValue, clusterCenters, recentClusterCenters,
 
                 setDistances(result.distances);
                 setClusterLabels(result.clusterLabels);
-                
+
             } catch (error) {
                 console.error("Remodel error:", error);
             }
@@ -46,26 +46,25 @@ export const RemodelViewModel = (uidValue, clusterCenters, recentClusterCenters,
 
 }
 
-export default function prepareWaterfallScatter1D(observables, clusterLabels, transformIndVarPlotData) {
+export default function prepareWaterfallScatter1D(observables, clusterLabels, independentVars) {
     const traces = [];
-    const offsetAmount = 1;
-    const colorMap = ['#636EFA', '#EF553B', '#00CC96', '#AB63FA'];
-    const seenLabels = new Set();
+    const colorMap = ['#636EFA', '#00CC96', '#EF553B', '#AB63FA', '#FFA15A', '#19D3F3'];
+    const seenLabels = new Set(); //this ensures that the legend doesn't repeat clusterLabel values 
 
-    for (let i = 0; i < observables.length; i++) {
-        const yValues = observables[i].map(val => val + i * offsetAmount);
-        const xValues = transformIndVarPlotData?.[0]?.y ?? [];
- 
-        const pairedValues = xValues.map((xVal, index) => ({
-            xValues: xVal,
-            yValues: yValues[index],
-        }));
-        const sortedPairValues = pairedValues.sort((a, b) => a.xValues - b.xValues);
+    const paired = observables.map((obs, i) => ({
+        observable: obs,
+        cluster: clusterLabels[i],
+        independentVar: independentVars[i]
+    }));
 
-        const x = sortedPairValues.map(p => p.xValues);
-        const y = sortedPairValues.map(p => p.yValues);
+    // sorts by independent variable value in ascending order 
+    paired.sort((a, b) => a.independentVar - b.independentVar);
 
-        const clusterLabel = clusterLabels[i];
+    paired.forEach((entry, stackIndex) => {
+        const x = entry.observable.map((_, idx) => idx);
+        const y = entry.observable.map(val => val + stackIndex); // stack by sorted index will add offset 
+
+        const clusterLabel = entry.cluster;
         const showLegend = !seenLabels.has(clusterLabel);
         seenLabels.add(clusterLabel);
 
@@ -75,17 +74,16 @@ export default function prepareWaterfallScatter1D(observables, clusterLabels, tr
             mode: 'lines',
             type: 'scatter',
             name: `Cluster ${clusterLabel}`,
-            marker: {
+            line: {
                 color: colorMap[clusterLabel % colorMap.length],
             },
-            showlegend: showLegend, // this ensures that it only shows legend once per cluster
+            showlegend: showLegend,
         });
-    }
-
+    });
     return traces;
 }
 
-export const prepareWaterfallScatterWOIndependent=(observables, clusterLabels) =>{
+export const prepareWaterfallScatterWOIndependent = (observables, clusterLabels) => {
     const traces = [];
     const offsetAmount = 1;
     const colorMap = ['#636EFA', '#EF553B', '#00CC96', '#AB63FA'];
