@@ -65,6 +65,14 @@ export default function PlotlyScatter({
             t: title ? 40 : 30,
             b: xAxisTitle ? 60 : 30,
           },
+          //added coloraxis
+          coloraxis: {
+            colorscale: 'Viridis',
+            colorbar: {
+              title: 'Distance',
+              x: 1.22, // move it slightly right of the plot
+            }
+          },
         }}
         config={{ responsive: true }}
       />
