@@ -1,0 +1,32 @@
+.plotly-heatmap-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.plotly-heatmap-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.plotly-heatmap-offset-input-box {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end; /* Align to right side */
+  margin-top: 8px; /* Spacing below the plot */
+}
+
+.plotly-heatmap-offset-input {
+  padding: 10px 14px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border 0.2s ease-in-out;
+  width: 215px;
+}
+
+.plotly-heatmap-offset-input:focus {
+  border-color: #4dbfdb;
+  box-shadow: 0 0 4px rgba(77, 191, 219, 0.4);
+}
