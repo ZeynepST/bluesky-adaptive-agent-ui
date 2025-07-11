@@ -26,7 +26,11 @@ const IngestDataPage = () => {
 
     const chosenUidObject = uidsInfo.find(uid => uid.uidValue === uidValue);
 
-    const { loadingIngest, independentVars, observables, ingestTimeStamps, transformIndVarPlotData } = IngestViewModel(uidValue);
+    /**
+     * No further processing is needed for transformIndVarPlotData when independent variables are 2D. This logic is handled in IngestViewModel.js
+     */
+    const { loadingIngest, independentVars, observables, ingestTimeStamps, transformIndVarPlotData, is1D } = IngestViewModel(uidValue);
+    console.log("the transformindvarplot data is ", transformIndVarPlotData);
 
     // need to add something of the sort 
     if (!chosenUidObject) {
@@ -40,13 +44,27 @@ const IngestDataPage = () => {
                 {chosenUidObject?.uidValue === uidValue && chosenUidObject?.hasIngest && (
                     <div className="ingest-data-page-container">
                         <div className="ingest-data-page-graphs">
-                            <div className="ind-vars-graph">
-                                <PlotlyScatter
-                                    data={transformIndVarPlotData}
-                                    title="Scatter Plot of Independent Variables"
-                                    xAxisTitle="Feature Index"
-                                    yAxisTitle="Independent Variables" />
-                            </div>
+                            {is1D &&
+                                <div className="ind-vars-graph">
+                                    <PlotlyScatter
+                                        data={transformIndVarPlotData}
+                                        title="Scatter Plot of Independent Variables [1D]"
+                                        xAxisTitle="Feature Index"
+                                        yAxisTitle="Independent Variables"
+                                    />
+                                </div>
+                            }
+                            {!is1D &&
+                                <div className="ind-vars-graph">
+                                    <PlotlyScatter
+                                        data={transformIndVarPlotData}
+                                        title="Scatter Plot of Independent Variables [2D]"
+                                        xAxisTitle="x"
+                                        yAxisTitle="y"
+                                    />
+                                </div>
+                            }
+
                             <div className="observables-graph">
                                 <WaterFallPlot
                                     data={observables}

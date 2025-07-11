@@ -7,8 +7,11 @@ export const IngestViewModel = (uidValue) => {
 
     const [cache_len, setCacheLength] = useState(null);
     const [independentVars, setIndependentVar] = useState([]);
-    //transformIndVarPlotData is the formatted version of independentVars that is ready for plotting with Plotly 
-    //independentVars itself is not directly plottable by Plotly because Plotly expects flat arrays for x and y
+    /**
+     * transformIndVarPlotData is the formatted version of independentVars that is ready for plotting with Plotly 
+     * independentVars itself is not directly plottable by Plotly because Plotly expects flat arrays for x and y
+     * IngestViewModel handles the logic for when independent variables are either 1D or 2D. No furhter processing for transformIndVarPlotData is needed elsewhere
+     */
     const [transformIndVarPlotData, setTransformIndVarPlotData] = useState([]);
     const [observables, setObservables] = useState([]);
     const [loadingIngest, setLoadingIngest] = useState(false);
