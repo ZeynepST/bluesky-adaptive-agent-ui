@@ -41,7 +41,7 @@ export default function PlotlyHeatmap(
     if (!array || array.length === 0) {
         return <div className="text-sm text-gray-500 italic">No data available</div>;
     }
-    // console.log("the array passed is ", array);
+
     // Calculate the height based on the number of rows in the array
     const dynamicHeight = Math.max(array.length * verticalScaleFactor, 0);
 
