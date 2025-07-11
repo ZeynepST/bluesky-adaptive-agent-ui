@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useState } from 'react';
 import { UidContext } from '../view-model/UidContext';
 import { useParams } from 'react-router-dom';
 import { RemodelViewModel } from '../view-model/RemodelViewModel';
@@ -7,6 +8,9 @@ import { IngestViewModel } from '../view-model/IngestViewModel';
 import { ReportViewModel } from '../view-model/ReportViewModel';
 import prepareWaterfallScatter1D from '../view-model/RemodelViewModel';
 // import ClusterDistancePlot from '../components/Plots/ClusterDistancePlot';
+// Stylesheets: 
+import '../stylesheets/UidStylesheets/RemodelFromReportPage.css';
+
 
 
 const RemodelFromReportPage = () => {
@@ -21,6 +25,9 @@ const RemodelFromReportPage = () => {
 
     const { distances, clusterLabels } = RemodelViewModel(uidValue, clusterCenters, recentClusterCenters, independentVars, observables, transformIndVarPlotData);
     const uniqueLabels = [...new Set(clusterLabels)];
+
+    const [offSetWFScatter1D, setOffSetWFScatter1D] = useState("");
+
     //may move this
     const tab10 = [
         '#1f77b4', // blue
@@ -39,7 +46,7 @@ const RemodelFromReportPage = () => {
     uniqueLabels.forEach((label, idx) => {
         clusterColorMap[label] = tab10[idx % tab10.length];
     });
- 
+
     const indIdxClusterTraces = uniqueLabels.map((label, idx) => { //this loops through each unique cluster label
         const color = tab10[idx % tab10.length]; //picks a color from tab10. %tab10.length ensures a loop around in event that there are more than 10 clusters
         //the arrays below hold the x and y values for just one cluster at a time (so 0 or 1 or 2, etc)
@@ -67,7 +74,8 @@ const RemodelFromReportPage = () => {
     if (!chosenUidObject || !transformIndVarPlotData || transformIndVarPlotData.length === 0 || !transformIndVarPlotData[0].x) {
         return <div>Loading...</div>;
     }
-    const plotData = prepareWaterfallScatter1D(observables, clusterLabels, independentVars);
+
+    const plotData = prepareWaterfallScatter1D(observables, clusterLabels, independentVars, offSetWFScatter1D);
 
     return (
         <div className="remodel-from-report-page">
@@ -75,7 +83,7 @@ const RemodelFromReportPage = () => {
                 {/* This ensures that the ReportDataPage doesn't render information for the wrong UID */}
                 {chosenUidObject.uidValue === uidValue && chosenUidObject?.hasReport && chosenUidObject?.hasIngest && (
                     <div className="remodel-from-report-container">
-                        <div className="remodel-graphs">
+                        <div className="remodel-from-report-page-graphs">
                             {/* beginning of distance-index plot */}
                             <div className="distance-index-graph">
                                 {
@@ -108,36 +116,48 @@ const RemodelFromReportPage = () => {
                             {/******************************************************************************************/}
                             {/* beginning of 1D ind plots */}
                             <div className="plots-1D-container">
-                                {/* the plot below assumes independent variables are 1D */}
-                                {is1D && <div className="plot1-ind-idx-color-cluster-labels-1D">
-                                    <PlotlyScatter
-                                        data={indIdxClusterTraces}
-                                        title=""
-                                        xAxisTitle="Index"
-                                        yAxisTitle="Independent Variables [1D]"
-                                    />
-                                </div>
-                                }
-                                {is1D && <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-1D">
-                                    <PlotlyScatter
-                                        data={
-                                            plotData
-                                        }
-                                        title="Observables Sorted by Independent Variables [1D]"
-                                        xAxisTitle="Index"
-                                        yAxisTitle="Observables"
-                                        layout={{
-                                            yaxis: {
-                                                tickmode: "linear",
-                                                dtick: 1,
-                                                title: {
-                                                    text: "Sorted Position"
-                                                },
-                                            }
-                                        }}
-                                    />
-                                </div>
-                                }
+                                {is1D && (
+                                    <div>
+                                        <div className="plot1-ind-idx-color-cluster-labels-1D">
+                                            <PlotlyScatter
+                                                data={indIdxClusterTraces}
+                                                title=""
+                                                xAxisTitle="Index"
+                                                yAxisTitle="Independent Variables [1D]"
+                                            />
+                                        </div>
+                                        <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-1D-container">
+                                            <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-1D-wrapper">
+                                                <PlotlyScatter
+                                                    data={
+                                                        plotData
+                                                    }
+                                                    title="Observables Sorted by Independent Variables [1D]"
+                                                    xAxisTitle="Index"
+                                                    yAxisTitle="Observables"
+                                                    layout={{
+                                                        yaxis: {
+                                                            tickmode: "linear",
+                                                            dtick: 1,
+                                                            title: {
+                                                                text: "Sorted Position"
+                                                            },
+                                                        }
+                                                    }}
+                                                />
+                                                <div className="waterfall-plot-scatter1D-offset-input-box" >
+                                                    <input
+                                                        type="number"
+                                                        className="offSetWFScatter1D-input"
+                                                        placeholder="Enter Offset..."
+                                                        value={offSetWFScatter1D}
+                                                        onChange={(e) => setOffSetWFScatter1D(Number(e.target.value))}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                             {/* end of 1D ind var plots */}
                             {/******************************************************************************************/}

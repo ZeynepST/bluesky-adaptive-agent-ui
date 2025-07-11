@@ -8,8 +8,6 @@
 .waterfall-plot-wrapper {
     position: relative;
     width: 100%;
-    max-width: 800px;
-    height: 500px;
 }
 
 .waterfall-plot-offset-input-box {

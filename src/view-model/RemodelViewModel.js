@@ -3,6 +3,19 @@ import { IngestViewModel } from './IngestViewModel'
 import { ReportViewModel } from './ReportViewModel';
 import { remodelFromReportTS } from '../models/sklearn.tsx';
 
+const colorMap = [
+    '#1f77b4', // blue
+    '#ff7f0e', // orange
+    '#2ca02c', // green
+    '#d62728', // red
+    '#9467bd', // purple
+    '#8c564b', // brown
+    '#e377c2', // pink
+    '#7f7f7f', // gray
+    '#bcbd22', // olive
+    '#17becf'  // cyan
+];
+
 //not sure about the parameter 
 export const RemodelViewModel = (uidValue, clusterCenters, recentClusterCenters, independentVars, observables) => {
 
@@ -46,10 +59,13 @@ export const RemodelViewModel = (uidValue, clusterCenters, recentClusterCenters,
 
 }
 
-export default function prepareWaterfallScatter1D(observables, clusterLabels, independentVars) {
+export default function prepareWaterfallScatter1D(observables, clusterLabels, independentVars, offset=1) {
     const traces = [];
-    const colorMap = ['#636EFA', '#00CC96', '#EF553B', '#AB63FA', '#FFA15A', '#19D3F3'];
     const seenLabels = new Set(); //this ensures that the legend doesn't repeat clusterLabel values 
+    //the offset for the waterfall plot will be determined by the user
+    if(offset===""){
+        offset=1;
+    }
 
     const paired = observables.map((obs, i) => ({
         observable: obs,
@@ -62,7 +78,7 @@ export default function prepareWaterfallScatter1D(observables, clusterLabels, in
 
     paired.forEach((entry, stackIndex) => {
         const x = entry.observable.map((_, idx) => idx);
-        const y = entry.observable.map(val => val + stackIndex); // stack by sorted index will add offset 
+        const y = entry.observable.map(val => val + stackIndex*offset); // stack by sorted index will add offset 
 
         const clusterLabel = entry.cluster;
         const showLegend = !seenLabels.has(clusterLabel);
@@ -86,7 +102,6 @@ export default function prepareWaterfallScatter1D(observables, clusterLabels, in
 export const prepareWaterfallScatterWOIndependent = (observables, clusterLabels) => {
     const traces = [];
     const offsetAmount = 1;
-    const colorMap = ['#636EFA', '#EF553B', '#00CC96', '#AB63FA'];
     const seenLabels = new Set(); // Tracks which clusters have already been labeled
 
     for (let i = 0; i < observables.length; i++) {
