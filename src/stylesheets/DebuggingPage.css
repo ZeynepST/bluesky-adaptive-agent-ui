@@ -3,15 +3,24 @@
    light blue: rgb(77, 191, 219)
 
 */
+.debugging-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    width: 100%;
+    overflow-y: auto;
+    padding: 20px;
+    padding-bottom: 10vh;
+}
 
-.mv-container {
+.debugging-page-container {
     margin: auto;
     margin-top: 20px;
     margin-bottom: 20px;
     display: flex;
     flex-direction: row;
     width: fit-content;
-    overflow: auto;
     position: relative;
     border-radius: 20px;
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.08);
