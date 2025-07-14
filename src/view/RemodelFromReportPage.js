@@ -125,11 +125,11 @@ const RemodelFromReportPage = () => {
             setSelectedScatterClusterIdx(selectedScatterClusterIdx + 1);
         }
     };
-    const handlePrev = () => {
+    const handlePrevHM = () => {
         setSelectedHMClusterIdx(prev => Math.max(0, prev - 1));
     };
 
-    const handleNext = () => {
+    const handleNextHM = () => {
         setSelectedHMClusterIdx(prev => Math.min(numClusters - 1, prev + 1));
     };
 
@@ -290,7 +290,7 @@ const RemodelFromReportPage = () => {
                                                     gridBounds={gridBounds}
                                                 />
                                                 <div className="cluster-distance-plot-selector-container">
-                                                    <button onClick={handlePrev} disabled={selectedHMClusterIdx === 0}>
+                                                    <button onClick={handlePrevHM} disabled={selectedHMClusterIdx === 0}>
                                                         &larr; Prev
                                                     </button>
                                                     <Select
@@ -301,7 +301,7 @@ const RemodelFromReportPage = () => {
                                                         onChange={(option) => setSelectedHMClusterIdx(option.value)}
                                                         value={{ label: `Cluster ${selectedHMClusterIdx}`, value: selectedHMClusterIdx }}
                                                     />
-                                                    <button onClick={handleNext} disabled={selectedHMClusterIdx === numClusters - 1}>
+                                                    <button onClick={handleNextHM} disabled={selectedHMClusterIdx === numClusters - 1}>
                                                         Next &rarr;
                                                     </button>
                                                 </div>
