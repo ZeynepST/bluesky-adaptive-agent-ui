@@ -86,7 +86,7 @@ const RemodelFromReportPage = () => {
         };
     });
 
-    const plotData = prepareWaterfallScatter1D(observables, clusterLabels, independentVars, offSetWFScatter1D, is1D);
+    const waterFallPlotData = prepareWaterfallScatter1D(observables, clusterLabels, independentVars, offSetWFScatter1D, is1D);
     const heatmapData = createHeatmapGrid(independentVars, distances, selectedHMClusterIdx);
 
     const scatterDistanceIdxData2D = () => {
@@ -193,23 +193,15 @@ const RemodelFromReportPage = () => {
                                             />
                                         </div>
                                         <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-1D-container">
+                                            {/* This is the waterfall plot */}
                                             <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-1D-wrapper">
                                                 <PlotlyScatter
                                                     data={
-                                                        plotData
+                                                        waterFallPlotData
                                                     }
                                                     title="Observables Sorted by Independent Variables [1D]"
                                                     xAxisTitle="Index"
                                                     yAxisTitle="Observables"
-                                                    // layout={{
-                                                    //     yaxis: {
-                                                    //         tickmode: "linear",
-                                                    //         dtick: 1,
-                                                    //         title: {
-                                                    //             text: "Sorted Position"
-                                                    //         },
-                                                    //     }
-                                                    // }}
                                                     yAxisLayout={{
                                                         showticklabels: false,
                                                         ticks: "",
@@ -318,10 +310,11 @@ const RemodelFromReportPage = () => {
                                             {/* End of plot1 for 2D */}
                                             {/* beginning of plot2 for 2D */}
                                             <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-2D-container">
+                                                {/* This is the waterfall plot */}
                                                 <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-2D-wrapper">
                                                     <PlotlyScatter
                                                         data={
-                                                            plotData
+                                                            waterFallPlotData
                                                         }
                                                         title="Observables Sorted by Independent Variables [2D]"
                                                         xAxisTitle="Index"
