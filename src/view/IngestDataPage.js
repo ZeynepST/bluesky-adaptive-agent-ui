@@ -59,8 +59,8 @@ const IngestDataPage = () => {
                                     <PlotlyScatter
                                         data={transformIndVarPlotData}
                                         title="Scatter Plot of Independent Variables [2D]"
-                                        xAxisTitle="x"
-                                        yAxisTitle="y"
+                                        xAxisTitle="Index 0"
+                                        yAxisTitle="Index 1"
                                     />
                                 </div>
                             }
