@@ -8,23 +8,32 @@
 .remodel-from-report-page-graphs {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 4rem;
     margin-bottom: 50px;
     flex-wrap: wrap;
 }
+.plots-1D > div,
+.plots-2D > div {
+    margin-bottom: 3rem; /* Increase from current spacing */
+}
 
-.distance-index-graph {
+.distance-index-graph-1D,
+.distance-index-graph-2D {
     width: 100%;
     height: 100%;
 }
 
 /* end of index graph css  */
-.plots-1D-container {
+.plots-1D-container,
+.plots-2D-container {
     width: 100%;
     height: 100%;
 }
-
-.plot1-ind-idx-color-cluster-labels-1D {
+.plots-1D, .plots-2D{
+    margin-bottom: 50px;
+}
+.plot1-ind-idx-color-cluster-labels-1D,
+.plot1-ind-idx-color-cluster-labels-2D {
     width: 100%;
     height: 100%;
 }
@@ -34,21 +43,32 @@
     height: 100%;
 }
 
+.cluster-distance-plot-selector-container{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;  /* This is the gap between the prev/next arrows and the selection option */
+    margin-bottom: 50px;
+}
+
 /* ##################################################################### */
-/* beginning of plot2-observable-sortedby-ind-coloredby-clusterlabel-1D*/
-.plot2-observable-sortedby-ind-coloredby-clusterlabel-1D-container {
+/* beginning of plot2-observable-sortedby-ind-coloredby-clusterlabel-1D and plot2-observable-sortedby-ind-coloredby-clusterlabel-2D */
+.plot2-observable-sortedby-ind-coloredby-clusterlabel-1D-container,
+.plot2-observable-sortedby-ind-coloredby-clusterlabel-2D-container {
     width: 100%;
     display: flex;
     justify-content: center;
 }
 
-.plot2-observable-sortedby-ind-coloredby-clusterlabel-1D-wrapper {
+.plot2-observable-sortedby-ind-coloredby-clusterlabel-1D-wrapper,
+.plot2-observable-sortedby-ind-coloredby-clusterlabel-2D-wrapper {
     position: relative;
     width: 100%;
     height: 500px;
 }
 
-.waterfall-plot-scatter1D-offset-input-box {
+.waterfall-plot-scatter1D-offset-input-box,
+.waterfall-plot-scatter2D-offset-input-box {
     position: absolute;
     bottom: -50px;
     right: 10px;
@@ -56,7 +76,8 @@
 
 }
 
-.offSetWFScatter1D-input {
+.offSetWFScatter1D-input,
+.offSetWFScatter2D-input {
     padding: 10px 14px;
     font-size: 15px;
     border: 1px solid #ccc;
@@ -66,10 +87,12 @@
     width: 215px;
 }
 
-.offSetWFScatter1D-input:focus {
+.offSetWFScatter1D-input:focus,
+.offSetWFScatter2D-input:focus {
     border-color: #4dbfdb;
     box-shadow: 0 0 4px rgba(77, 191, 219, 0.4);
 }
 
 /* end of plot2-observable-sortedby-ind-coloredby-clusterlabel-1D */
 /* ##################################################################### */
+

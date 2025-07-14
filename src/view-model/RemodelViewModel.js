@@ -59,18 +59,18 @@ export const RemodelViewModel = (uidValue, clusterCenters, recentClusterCenters,
 
 }
 
-export default function prepareWaterfallScatter1D(observables, clusterLabels, independentVars, offset=1) {
+export default function prepareWaterfallScatter1D(observables, clusterLabels, independentVars, offset = 1, is1D = true) {
     const traces = [];
     const seenLabels = new Set(); //this ensures that the legend doesn't repeat clusterLabel values 
     //the offset for the waterfall plot will be determined by the user
-    if(offset===""){
-        offset=1;
+    if (offset === "") {
+        offset = 1;
     }
 
     const paired = observables.map((obs, i) => ({
         observable: obs,
         cluster: clusterLabels[i],
-        independentVar: independentVars[i]
+        independentVar: is1D ? independentVars[i] : independentVars[i][0] //if independent vars is 2D, extract the x value 
     }));
 
     // sorts by independent variable value in ascending order 
@@ -78,12 +78,11 @@ export default function prepareWaterfallScatter1D(observables, clusterLabels, in
 
     paired.forEach((entry, stackIndex) => {
         const x = entry.observable.map((_, idx) => idx);
-        const y = entry.observable.map(val => val + stackIndex*offset); // stack by sorted index will add offset 
+        const y = entry.observable.map(val => val + stackIndex * offset); // stack by sorted index will add offset 
 
         const clusterLabel = entry.cluster;
         const showLegend = !seenLabels.has(clusterLabel);
         seenLabels.add(clusterLabel);
-
         traces.push({
             x,
             y,
@@ -98,6 +97,57 @@ export default function prepareWaterfallScatter1D(observables, clusterLabels, in
     });
     return traces;
 }
+
+// This function creates a 2D grid of interpolated values based on the plotted 2D independent variables
+// With a grid, a smooth heatmap that shows how the distance values change across the entire area is created
+export function createHeatmapGrid(independentVars, distances, cluster, gridSize=20) {
+    // This finds the data bounds
+    const xValues = independentVars.map(point => point[0]);
+    const yValues = independentVars.map(point => point[1]);
+
+    const xMin = Math.min(...xValues);
+    const xMax = Math.max(...xValues);
+    const yMin = Math.min(...yValues);
+    const yMax = Math.max(...yValues);
+
+    // Calculating grid spacing
+    const xStep = (xMax - xMin) / (gridSize - 1);
+    const yStep = (yMax - yMin) / (gridSize - 1);
+
+    const grid = [];
+
+    for (let i = 0; i < gridSize; i++) {
+        const row = [];
+        const yGrid = yMin + i * yStep;
+
+        for (let j = 0; j < gridSize; j++) {
+            const xGrid = xMin + j * xStep;
+
+            // Inverse Distance Weighting Interpolation:
+            //   -For each grid cell, the function calculates a weighted average of all data points
+            //   - Closter points have more influence (Blue areas: close to cluster, Red areas: far from cluster)
+            let totalWeight = 0;
+            let weightedSum = 0;
+            for (let k = 0; k < independentVars.length; k++) {
+                const dx = independentVars[k][0] - xGrid;
+                const dy = independentVars[k][1] - yGrid;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const weight = 1 / (distance + 0.001);
+
+                const value = distances[k][cluster];
+
+                weightedSum += value * weight;
+                totalWeight += weight;
+            }
+
+            row.push(weightedSum / totalWeight);
+        }
+        grid.push(row);
+    }
+    return grid;
+};
+
+//unused at the moment:
 
 export const prepareWaterfallScatterWOIndependent = (observables, clusterLabels) => {
     const traces = [];
