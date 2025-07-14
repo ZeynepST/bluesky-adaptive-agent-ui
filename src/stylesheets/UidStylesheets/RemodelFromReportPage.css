@@ -12,9 +12,11 @@
     margin-bottom: 50px;
     flex-wrap: wrap;
 }
-.plots-1D > div,
-.plots-2D > div {
-    margin-bottom: 3rem; /* Increase from current spacing */
+
+.plots-1D>div,
+.plots-2D>div {
+    margin-bottom: 3rem;
+    /* Increase from current spacing */
 }
 
 .distance-index-graph-1D,
@@ -29,9 +31,12 @@
     width: 100%;
     height: 100%;
 }
-.plots-1D, .plots-2D{
+
+.plots-1D,
+.plots-2D {
     margin-bottom: 50px;
 }
+
 .plot1-ind-idx-color-cluster-labels-1D,
 .plot1-ind-idx-color-cluster-labels-2D {
     width: 100%;
@@ -43,14 +48,21 @@
     height: 100%;
 }
 
-.cluster-distance-plot-selector-container, .waterfall-plot-scatter2D-selector-container{
+.cluster-distance-plot-selector-container,
+.waterfall-plot-scatter2D-selector-container {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 1rem;  /* This is the gap between the prev/next arrows and the selection option */
+    gap: 1rem;
+    /* This is the gap between the prev/next arrows and the selection option */
     margin-bottom: 50px;
 }
-.waterfall-plot-scatter2D-selector-container{
+
+.cluster-distance-plot-selector-container {
+    margin-top: 5px;
+}
+
+.waterfall-plot-scatter2D-selector-container {
     margin-top: 40px;
 }
 
@@ -97,4 +109,3 @@
 
 /* end of plot2-observable-sortedby-ind-coloredby-clusterlabel-1D */
 /* ##################################################################### */
-
