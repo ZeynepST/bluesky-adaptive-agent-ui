@@ -201,14 +201,19 @@ const RemodelFromReportPage = () => {
                                                     title="Observables Sorted by Independent Variables [1D]"
                                                     xAxisTitle="Index"
                                                     yAxisTitle="Observables"
-                                                    layout={{
-                                                        yaxis: {
-                                                            tickmode: "linear",
-                                                            dtick: 1,
-                                                            title: {
-                                                                text: "Sorted Position"
-                                                            },
-                                                        }
+                                                    // layout={{
+                                                    //     yaxis: {
+                                                    //         tickmode: "linear",
+                                                    //         dtick: 1,
+                                                    //         title: {
+                                                    //             text: "Sorted Position"
+                                                    //         },
+                                                    //     }
+                                                    // }}
+                                                    yAxisLayout={{
+                                                        showticklabels: false,
+                                                        ticks: "",
+                                                        showgrid: false,
                                                     }}
                                                 />
                                                 <div className="waterfall-plot-scatter1D-offset-input-box" >
@@ -239,8 +244,8 @@ const RemodelFromReportPage = () => {
                                                     <PlotlyScatter
                                                         data={scatterDistanceIdxData2D()}
                                                         title={`Distance to Cluster ${selectedScatterClusterIdx} - 2D View`}
-                                                        xAxisTitle="Independent Variable 1 (X)"
-                                                        yAxisTitle="Independent Variable 2 (Y)"
+                                                        xAxisTitle="Index 0"
+                                                        yAxisTitle="Index 1"
                                                     />
                                                 </div>
                                             </div>
@@ -321,14 +326,10 @@ const RemodelFromReportPage = () => {
                                                         title="Observables Sorted by Independent Variables [2D]"
                                                         xAxisTitle="Index"
                                                         yAxisTitle="Observables"
-                                                        layout={{
-                                                            yaxis: {
-                                                                tickmode: "linear",
-                                                                dtick: 1,
-                                                                title: {
-                                                                    text: "Sorted Position"
-                                                                },
-                                                            }
+                                                        yAxisLayout={{
+                                                            showticklabels: false,
+                                                            ticks: "",
+                                                            showgrid: false,
                                                         }}
                                                     />
                                                     <div className="waterfall-plot-scatter2D-offset-input-box" >
