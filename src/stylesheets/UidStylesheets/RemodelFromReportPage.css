@@ -43,12 +43,15 @@
     height: 100%;
 }
 
-.cluster-distance-plot-selector-container{
+.cluster-distance-plot-selector-container, .waterfall-plot-scatter2D-selector-container{
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: 1rem;  /* This is the gap between the prev/next arrows and the selection option */
     margin-bottom: 50px;
+}
+.waterfall-plot-scatter2D-selector-container{
+    margin-top: 40px;
 }
 
 /* ##################################################################### */
@@ -73,7 +76,6 @@
     bottom: -50px;
     right: 10px;
     z-index: 10;
-
 }
 
 .offSetWFScatter1D-input,

@@ -59,7 +59,12 @@ export const RemodelViewModel = (uidValue, clusterCenters, recentClusterCenters,
 
 }
 
-export default function prepareWaterfallScatter1D(observables, clusterLabels, independentVars, offset = 1, is1D = true) {
+/**
+ * prepareWaterFallScatter prepares traces for the waterfall plot where observables is sorted either by the independent variable or distances.
+ * If distances is passed, then the function assumes that the sorting will be based on distances to a cluster selected by the user 
+ */
+
+export function prepareWaterFallScatter(observables, clusterLabels, independentVars, offset = 1, is1D = true, distances = null, selectedCluster = null) {
     const traces = [];
     const seenLabels = new Set(); //this ensures that the legend doesn't repeat clusterLabel values 
     //the offset for the waterfall plot will be determined by the user
@@ -70,11 +75,13 @@ export default function prepareWaterfallScatter1D(observables, clusterLabels, in
     const paired = observables.map((obs, i) => ({
         observable: obs,
         cluster: clusterLabels[i],
-        independentVar: is1D ? independentVars[i] : independentVars[i][0] //if independent vars is 2D, extract the x value 
+        independentVar: is1D ? independentVars[i] : independentVars[i][0], //if independent vars is 2D, extract the x value 
+        distanceToCluster: !is1D && distances!==null && selectedCluster !== null ? distances[i][selectedCluster] : null
     }));
 
-    // sorts by independent variable value in ascending order 
-    paired.sort((a, b) => a.independentVar - b.independentVar);
+    // sorts by independent variable or distance to a selected cluster value in ascending order 
+    (distances && selectedCluster !== null) ? paired.sort((a, b) => a.distanceToCluster - b.distanceToCluster) : paired.sort((a, b) => a.independentVar - b.independentVar);
+
 
     paired.forEach((entry, stackIndex) => {
         const x = entry.observable.map((_, idx) => idx);
@@ -98,9 +105,10 @@ export default function prepareWaterfallScatter1D(observables, clusterLabels, in
     return traces;
 }
 
+
 // This function creates a 2D grid of interpolated values based on the plotted 2D independent variables
 // With a grid, a smooth heatmap that shows how the distance values change across the entire area is created
-export function createHeatmapGrid(independentVars, distances, cluster, gridSize=20) {
+export function createHeatmapGrid(independentVars, distances, cluster, gridSize = 20) {
     // This finds the data bounds
     const xValues = independentVars.map(point => point[0]);
     const yValues = independentVars.map(point => point[1]);

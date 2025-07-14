@@ -6,8 +6,8 @@ import { useParams } from 'react-router-dom';
 import { RemodelViewModel } from '../view-model/RemodelViewModel';
 import { IngestViewModel } from '../view-model/IngestViewModel';
 import { ReportViewModel } from '../view-model/ReportViewModel';
-import prepareWaterfallScatter1D from '../view-model/RemodelViewModel';
 import { createHeatmapGrid } from '../view-model/RemodelViewModel.js';
+import { prepareWaterFallScatter } from '../view-model/RemodelViewModel.js';
 import PlotlyScatter from '../components/Plots/PlotlyScatter';
 import PlotlyHeatmap from '../components/Plots/PlotlyHeatmap';
 // import ClusterDistancePlot from '../components/Plots/ClusterDistancePlot';
@@ -45,10 +45,9 @@ const RemodelFromReportPage = () => {
     // selectedHMClusterIdx is the cluster index being represented in the heat map for the distance-index-graph-2D plot
     const [selectedHMClusterIdx, setSelectedHMClusterIdx] = useState(0);
 
-
     const [selectedScatterClusterIdx, setSelectedScatterClusterIdx] = useState(0);
 
-    const distanceArray = distances.map(row => row[selectedHMClusterIdx]);
+    const [selectedWaterFallClusterIdx, setSelectedWaterFallClusterIdx] = useState(0);
 
     const numClusters = distances[0]?.length || 0;
 
@@ -86,7 +85,6 @@ const RemodelFromReportPage = () => {
         };
     });
 
-    const waterFallPlotData = prepareWaterfallScatter1D(observables, clusterLabels, independentVars, offSetWFScatter1D, is1D);
     const heatmapData = createHeatmapGrid(independentVars, distances, selectedHMClusterIdx);
 
     const scatterDistanceIdxData2D = () => {
@@ -96,7 +94,6 @@ const RemodelFromReportPage = () => {
         const hoverTexts = clusterLabels.map((label, i) =>
             `Point ${i}<br>Cluster Label: ${label}<br>Distance to Cluster ${selectedScatterClusterIdx}: ${distanceValues[i].toFixed(2)}`
         );
-
         return [{
             x,
             y,
@@ -134,6 +131,17 @@ const RemodelFromReportPage = () => {
 
     const handleNext = () => {
         setSelectedHMClusterIdx(prev => Math.min(numClusters - 1, prev + 1));
+    };
+
+    const handlePrevWaterFall = () => {
+        if (selectedWaterFallClusterIdx > 0) {
+            setSelectedWaterFallClusterIdx(selectedWaterFallClusterIdx - 1);
+        }
+    };
+    const handleNextWaterFall = () => {
+        if (selectedWaterFallClusterIdx < numClusters - 1) {
+            setSelectedWaterFallClusterIdx(selectedWaterFallClusterIdx + 1);
+        }
     };
     //End of Handler Functions 
 
@@ -197,7 +205,7 @@ const RemodelFromReportPage = () => {
                                             <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-1D-wrapper">
                                                 <PlotlyScatter
                                                     data={
-                                                        waterFallPlotData
+                                                        prepareWaterFallScatter(observables, clusterLabels, independentVars, offSetWFScatter1D, is1D)
                                                     }
                                                     title="Observables Sorted by Independent Variables [1D]"
                                                     xAxisTitle="Index"
@@ -314,9 +322,9 @@ const RemodelFromReportPage = () => {
                                                 <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-2D-wrapper">
                                                     <PlotlyScatter
                                                         data={
-                                                            waterFallPlotData
+                                                            prepareWaterFallScatter(observables, clusterLabels, independentVars, offSetWFScatter1D, is1D, distances, selectedWaterFallClusterIdx)
                                                         }
-                                                        title="Observables Sorted by Independent Variables [2D]"
+                                                        title={`Observables Sorted by Distances to Cluster ${selectedWaterFallClusterIdx} - 2D View`}
                                                         xAxisTitle="Index"
                                                         yAxisTitle="Observables"
                                                         yAxisLayout={{
@@ -333,6 +341,24 @@ const RemodelFromReportPage = () => {
                                                             value={offSetWFScatter1D}
                                                             onChange={(e) => setOffSetWFScatter1D(Number(e.target.value))}
                                                         />
+                                                    </div>
+
+                                                    {/* [selectedWaterFallClusterIdx, setSelectedWaterFallClusterIdx] */}
+                                                    <div className="waterfall-plot-scatter2D-selector-container">
+                                                        <button onClick={handlePrevWaterFall} disabled={selectedHMClusterIdx === 0}>
+                                                            &larr; Prev
+                                                        </button>
+                                                        <Select
+                                                            options={distances[0].map((_, idx) => ({
+                                                                label: `Cluster ${idx}`,
+                                                                value: idx
+                                                            }))}
+                                                            onChange={(option) => setSelectedWaterFallClusterIdx(option.value)}
+                                                            value={{ label: `Cluster ${selectedWaterFallClusterIdx}`, value: selectedWaterFallClusterIdx }}
+                                                        />
+                                                        <button onClick={handleNextWaterFall} disabled={selectedWaterFallClusterIdx === numClusters - 1}>
+                                                            Next &rarr;
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
