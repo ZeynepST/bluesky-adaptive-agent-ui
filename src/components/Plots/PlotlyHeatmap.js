@@ -106,13 +106,15 @@ export default function PlotlyHeatmap(
                     width: 2
                 }
             },
-            text: dataPoints.map((_, i) => `P${i}`),
-            textposition: 'middle center',
-            textfont: {
-                color: 'black',
-                size: 10,
-                family: 'Arial Black'
-            },
+            // Uncomment the code below to display the Point # directly on the heatmap
+            // text: dataPoints.map((_, i) => `P${i}`),
+            // textposition: 'middle center',
+            // textfont: {
+            //     color: 'black',
+            //     size: 10,
+            //     family: 'Arial Black'
+            // },
+            hovertemplate: dataPoints.map((_, i) => `Label: P${i}<br>X: %{x:.2f}<br>Y: %{y:.2f}<extra></extra>`),
             name: 'Data Points',
             showlegend: false
         });
