@@ -12,6 +12,7 @@ export default function PlotlyScatter({
   xAxisLayout,
   yAxisLayout,
   className,
+  colorAxisRange, //This is a new feature to lock the colorscale axis 
 }) {
   const plotContainer = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -31,8 +32,6 @@ export default function PlotlyScatter({
 
     return () => resizeObserver.disconnect();
   }, []);
-
-
 
   return (
     <div className={`pb-4 ${className ?? ''}`} ref={plotContainer}>
@@ -71,7 +70,8 @@ export default function PlotlyScatter({
             colorbar: {
               title: 'Distance',
               x: 1.22, // move it slightly right of the plot
-            }
+            },
+            ...(colorAxisRange ?? {})  // Applies cmin/cmax if provided
           },
         }}
         config={{ responsive: true }}

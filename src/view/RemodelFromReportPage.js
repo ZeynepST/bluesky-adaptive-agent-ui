@@ -109,6 +109,7 @@ const RemodelFromReportPage = () => {
                 color: distanceValues,
                 size: 10,
                 colorscale: 'Viridis',
+                coloraxis: 'coloraxis', // links to the layout.coloraxis
                 colorbar: {
                     title: `Distance to Cluster ${selectedScatterClusterIdx}`
                 }
@@ -251,6 +252,7 @@ const RemodelFromReportPage = () => {
                                                         title={`Distance to Cluster ${selectedScatterClusterIdx} - 2D View`}
                                                         xAxisTitle="Index 0"
                                                         yAxisTitle="Index 1"
+                                                        colorAxisRange={{ cmin: globalMinDistances, cmax: globalMaxDistances }}
                                                     />
                                                 </div>
                                             </div>
@@ -349,8 +351,6 @@ const RemodelFromReportPage = () => {
                                                             onChange={(e) => setOffSetWFScatter1D(Number(e.target.value))}
                                                         />
                                                     </div>
-
-                                                    {/* [selectedWaterFallClusterIdx, setSelectedWaterFallClusterIdx] */}
                                                     <div className="waterfall-plot-scatter2D-selector-container">
                                                         <button onClick={handlePrevWaterFall} disabled={selectedHMClusterIdx === 0}>
                                                             &larr; Prev
