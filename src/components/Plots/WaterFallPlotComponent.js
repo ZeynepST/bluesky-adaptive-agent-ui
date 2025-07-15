@@ -61,24 +61,15 @@ function WaterFallPlot({
                 text: title,
                 x: 0.5,
                 xanchor: 'center',
-                font: {
-                  size: 15
-                }
               },
               xaxis: {
                 title: {
                   text: xAxisTitle,
-                  font: {
-                    size: 10
-                  }
                 }
               },
               yaxis: {
                 title: {
                   text: yAxisTitle,
-                  font: {
-                    size: 10
-                  }
                 }
               },
               autosize: true,
