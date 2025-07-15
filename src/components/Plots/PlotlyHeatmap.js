@@ -1,3 +1,9 @@
+/**
+ * This component is modified from the Bluesky/Finch React component library.
+ * Original source: https://github.com/bluesky/finch
+ * License: BSD 3-Clause License (see original license at the link above)
+ */
+
 import React, { useRef, useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 import '../../stylesheets/PlotStylesheets/PlotlyHeatmap.css';

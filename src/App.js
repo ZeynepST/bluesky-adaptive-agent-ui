@@ -4,6 +4,11 @@ import { UidProvider } from './view-model/UidContext';
 import AgentSwitchBoardPage from './view/AgentSwitchBoard';
 import DebuggingPage from './view/DebuggingPage';
 import UidPage from './view/UidPage';
+/**
+ * '@blueskyproject/finch/style.css' is from the Bluesky/Finch React component library.
+ * Original source: https://github.com/bluesky/finch
+ * License: BSD 3-Clause License (see original license at the link above)
+ */
 import '@blueskyproject/finch/style.css';
 import './stylesheets/index.css';
 import FinchPage from './view/FinchPage';
