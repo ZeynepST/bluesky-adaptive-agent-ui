@@ -66,27 +66,49 @@ export const RemodelViewModel = (uidValue, clusterCenters, recentClusterCenters,
 
 export function prepareWaterFallScatter(observables, clusterLabels, independentVars, offset = 1, is1D = true, distances = null, selectedCluster = null) {
     const traces = [];
-    const seenLabels = new Set(); //this ensures that the legend doesn't repeat clusterLabel values 
-    //the offset for the waterfall plot will be determined by the user
+    const seenLabels = new Set();
     if (offset === "") {
         offset = 1;
     }
+    let paired = [];
 
-    const paired = observables.map((obs, i) => ({
-        observable: obs,
-        cluster: clusterLabels[i],
-        independentVar: is1D ? independentVars[i] : independentVars[i][0], //if independent vars is 2D, extract the x value 
-        distanceToCluster: !is1D && distances!==null && selectedCluster !== null ? distances[i][selectedCluster] : null
-    }));
-
-    // sorts by independent variable or distance to a selected cluster value in ascending order 
-    (distances && selectedCluster !== null) ? paired.sort((a, b) => a.distanceToCluster - b.distanceToCluster) : paired.sort((a, b) => a.independentVar - b.independentVar);
-
-
+    if (distances && selectedCluster !== null) {
+        // First group by cluster
+        const clusterMap = new Map();
+        observables.forEach((obs, i) => { // Loop through every observable 
+            const cluster = clusterLabels[i];
+            const independentVar = is1D ? independentVars[i] : independentVars[i][0]; // If independent vars is 2D, extract the x value 
+            const distanceToCluster = distances[i][selectedCluster];
+            const entry = {
+                observable: obs,
+                cluster,
+                independentVar,
+                distanceToCluster
+            };
+            if (!clusterMap.has(cluster)) {
+                clusterMap.set(cluster, []); // If the map does not have the cluster, then initialize it with an empty array
+            }
+            clusterMap.get(cluster).push(entry);
+        });
+        // Sort within each cluster by distance to selected cluster
+        for (const [cluster, entries] of clusterMap.entries()) {
+            entries.sort((a, b) => a.distanceToCluster - b.distanceToCluster);
+            paired = paired.concat(entries); // append in sorted order
+        }
+    }
+    else {
+        paired = observables.map((obs, i) => ({
+            observable: obs,
+            cluster: clusterLabels[i], //the clusterlabel of this obs sample
+            independentVar: is1D ? independentVars[i] : independentVars[i][0], //if independent vars is 2D, extract the x value 
+            distanceToCluster: !is1D && distances !== null && selectedCluster !== null ? distances[i][selectedCluster] : null
+        }));
+        (distances && selectedCluster !== null) ? paired.sort((a, b) => a.distanceToCluster - b.distanceToCluster) : paired.sort((a, b) => a.independentVar - b.independentVar);
+    }
+    // Build the waterfall traces
     paired.forEach((entry, stackIndex) => {
         const x = entry.observable.map((_, idx) => idx);
         const y = entry.observable.map(val => val + stackIndex * offset); // stack by sorted index will add offset 
-
         const clusterLabel = entry.cluster;
         const showLegend = !seenLabels.has(clusterLabel);
         seenLabels.add(clusterLabel);
@@ -104,7 +126,6 @@ export function prepareWaterFallScatter(observables, clusterLabels, independentV
     });
     return traces;
 }
-
 
 // This function creates a 2D grid of interpolated values based on the plotted 2D independent variables
 // With a grid, a smooth heatmap that shows how the distance values change across the entire area is created
