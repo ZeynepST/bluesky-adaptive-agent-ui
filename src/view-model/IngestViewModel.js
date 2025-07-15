@@ -69,6 +69,9 @@ export const IngestViewModel = (uidValue) => {
                             type: 'scatter',
                             mode: 'markers',
                             name: `Independent Variable`,
+                            marker: {
+                                size: 15
+                            }
                         }
                     ];
                 }
@@ -83,6 +86,9 @@ export const IngestViewModel = (uidValue) => {
                             type: 'scatter',
                             mode: 'markers',
                             name: 'Independent Variables (2D)',
+                            marker: {
+                                size: 15
+                            }
                         }
                     ];
                     setIs1D(false); //setting 

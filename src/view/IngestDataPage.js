@@ -30,8 +30,6 @@ const IngestDataPage = () => {
      * No further processing is needed for transformIndVarPlotData when independent variables are 2D. This logic is handled in IngestViewModel.js
      */
     const { loadingIngest, independentVars, observables, ingestTimeStamps, transformIndVarPlotData, is1D } = IngestViewModel(uidValue);
-    console.log("the transformindvarplot data is ", transformIndVarPlotData);
-
     // need to add something of the sort 
     if (!chosenUidObject) {
         return <div>Loading...</div>;
