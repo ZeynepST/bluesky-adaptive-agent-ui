@@ -16,9 +16,11 @@ export default function PlotlyHeatmap(
         lockPlotHeightToParent = false,
         lockPlotWidthHeightToInputArray = false,
         dataPoints = null, // Array of [x, y] coordinates
-        selectedCluster = 0, 
+        selectedCluster = 0,
         distances = null, // Distance array for coloring points
-        gridBounds = null // {xMin, xMax, yMin, yMax} for mapping points to grid coordinates
+        gridBounds = null, // {xMin, xMax, yMin, yMax} for mapping points to grid coordinates
+        zMin = 0,
+        zMax = null
     }
 ) {
     const [zMaxOffset, setZMaxOffset] = useState("");
@@ -53,8 +55,8 @@ export default function PlotlyHeatmap(
             z: array,
             type: 'heatmap',
             colorscale: colorScale,
-            zmin: 0,
-            zmax: zMaxOffset, // In Plotly heatmaps, zmax is the paramater used to define the upper bound of the color scale's domain. 
+            zmin: zMin,
+            zmax: zMax ?? zMaxOffset, // In Plotly heatmaps, zmax is the paramater used to define the upper bound of the color scale's domain. 
             showscale: showScale,
             name: 'Distance Field'
         }
@@ -65,23 +67,20 @@ export default function PlotlyHeatmap(
         // Convert actual coordinates to grid coordinates
         const gridSize = array[0].length; // this assumes a square grid
         const gridHeight = array.length;
-        
-        const xGrid = dataPoints.map(point => 
+
+        const xGrid = dataPoints.map(point =>
             ((point[0] - gridBounds.xMin) / (gridBounds.xMax - gridBounds.xMin)) * (gridSize - 1)
         );
-        const yGrid = dataPoints.map(point => 
+        const yGrid = dataPoints.map(point =>
             ((point[1] - gridBounds.yMin) / (gridBounds.yMax - gridBounds.yMin)) * (gridHeight - 1)
         );
 
         // Get colors for points based on their distance to selected cluster
         let pointColors = dataPoints.map((_, i) => 'white');
         let pointSizes = dataPoints.map(() => 12);
-        
+
         if (distances) {
             const clusterDistances = distances.map(d => d[selectedCluster]);
-            const minDist = Math.min(...clusterDistances);
-            const maxDist = Math.max(...clusterDistances);
-            
             pointColors = clusterDistances.map(dist => {
                 return `rgb(0,0,0)`; // This was chosen for easy visualization
             });

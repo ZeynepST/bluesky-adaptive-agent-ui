@@ -61,14 +61,19 @@ const RemodelFromReportPage = () => {
         return <div>Loading...</div>;
     }
 
+    // The global max and min for distances is used to lock the axis limits for the color-axis in the heatmap
+    const allDistances = distances.flat(); // flatten distances: [[...], [...], ...] -> [...]
+    const globalMinDistances = Math.min(...allDistances);
+    const globalMaxDistances = Math.max(...allDistances);
+
     const indIdxClusterTraces = uniqueLabels.map((label, idx) => { //this loops through each unique cluster label
         const color = tab10[idx % tab10.length]; //picks a color from tab10. %tab10.length ensures a loop around in event that there are more than 10 clusters
         //the arrays below hold the x and y values for just one cluster at a time (so 0 or 1 or 2, etc)
         const x = [];
         const y = [];
-        transformIndVarPlotData[0].x.forEach((val, i) => { //this loops over every point in the data
-            //valu is the x-value (so the index ) and i is the index in the array
-            if (clusterLabels[i] === label) { //checking if this point's cluster label matches the one being processed right now
+        transformIndVarPlotData[0].x.forEach((val, i) => { // this loops over every point in the data
+            //val is the x-value (so the index ) and i is the index in the array
+            if (clusterLabels[i] === label) { // checking if this point's cluster label matches the one being processed right now
                 x.push(val);
                 y.push(transformIndVarPlotData[0].y[i]);
             }
@@ -288,6 +293,8 @@ const RemodelFromReportPage = () => {
                                                     selectedCluster={selectedHMClusterIdx}
                                                     distances={distances}
                                                     gridBounds={gridBounds}
+                                                    zMin={globalMinDistances}
+                                                    zMax={globalMaxDistances}
                                                 />
                                                 <div className="cluster-distance-plot-selector-container">
                                                     <button onClick={handlePrevHM} disabled={selectedHMClusterIdx === 0}>
