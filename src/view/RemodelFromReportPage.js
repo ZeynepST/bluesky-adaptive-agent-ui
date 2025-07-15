@@ -352,7 +352,7 @@ const RemodelFromReportPage = () => {
                                                         />
                                                     </div>
                                                     <div className="waterfall-plot-scatter2D-selector-container">
-                                                        <button onClick={handlePrevWaterFall} disabled={selectedHMClusterIdx === 0}>
+                                                        <button onClick={handlePrevWaterFall} disabled={selectedWaterFallClusterIdx === 0}>
                                                             &larr; Prev
                                                         </button>
                                                         <Select
