@@ -1,5 +1,5 @@
-import React, { useState, useContext, useCallback ,useEffect} from 'react';
-import {useNavigate } from "react-router-dom";
+import React, { useState, useContext, useCallback, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { ModelContext } from "../view-model/ModelContext";
 import '../stylesheets/DebuggingPage.css';
 import '../stylesheets/index.css';
@@ -39,10 +39,10 @@ const DebuggingPage = () => {
 
     const [searchText, setSearchText] = useState('');
 
-    useEffect(()=>{
-         setListNames(names);
-        
-    },[names]);
+    useEffect(() => {
+        setListNames(names);
+
+    }, [names]);
 
     const requestVariable = async () => {
         const value = await get_variable(varName1);
@@ -133,7 +133,7 @@ const DebuggingPage = () => {
         if (event.key === "Enter" && searchText.trim()) {
             event.preventDefault();
             setSearchText('');
-            const filteredSearchNames=listNames.filter(name => name.toLowerCase().includes(searchText.toLowerCase()));
+            const filteredSearchNames = listNames.filter(name => name.toLowerCase().includes(searchText.toLowerCase()));
             setListNames(filteredSearchNames);
         }
     }
@@ -149,117 +149,120 @@ const DebuggingPage = () => {
         else {
             setListNames(names);
         }
-    },[names]);
-   
+    }, [names]);
+
 
     return (
-        <div className="mv-container">
-            <div className="left">
-                <div className="variable-dashboard-container">
-                    <h1 id="var-dashboard">Variable Dashboard</h1>
-                    {/* v-row1 refers to where the get variable button is  */}
-                    <div className="v-row1">
-                        <div className="var-name-output-container">
-                            <textarea id="enter-var" placeholder="Enter Variable Name" value={varName1} onChange={(e) => setVarName1(e.target.value)}> </textarea>
-                            <button className="submit-var-btn" onClick={requestVariable}>Get Value</button>
-                            <div className="var-name-output">{fetchedVarName}</div>
+
+        <div className="debugging-page-wrapper">
+            <div className="debugging-page-container">
+                    <div className="left">
+                        <div className="variable-dashboard-container">
+                            <h1 id="var-dashboard">Variable Dashboard</h1>
+                            {/* v-row1 refers to where the get variable button is  */}
+                            <div className="v-row1">
+                                <div className="var-name-output-container">
+                                    <textarea id="enter-var" placeholder="Enter Variable Name" value={varName1} onChange={(e) => setVarName1(e.target.value)}> </textarea>
+                                    <button className="submit-var-btn" onClick={requestVariable}>Get Value</button>
+                                    <div className="var-name-output">{fetchedVarName}</div>
+                                </div>
+                            </div>
+
+                            {/*v-row2 refers to the area where update variable is*/}
+                            <div className="v-row2">
+                                <div className="v-row2-text-areas">
+                                    {/* <label className="enter-var-title" htmlFor="enter-var">Enter Variable Name</label> */}
+                                    <textarea id="enter-var" placeholder="Enter Variable Name" value={varName2} onChange={(e) => setVarName2(e.target.value)}></textarea>
+                                    {updateVarErrors.name && <p className="error-text">{updateVarErrors.name}</p>}
+                                    <textarea id="enter-value" placeholder="Enter New Value" value={newValue} onChange={(e) => setNewValue(e.target.value)}></textarea>
+                                    {updateVarErrors.value && <p className="error-text">{updateVarErrors.value}</p>}
+                                </div>
+                                <div>
+                                    {updateVarErrors.response && <p className="error-text">{updateVarErrors.response}</p>}
+                                    <button className="submit-var-btn" onClick={submitUpdatedVariable}>Update Variable</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="method-dashboard-container">
+                            <h1 id="var-dashboard">Method Dashboard</h1>
+                            <div className="v-row2-text-areas">
+                                <textarea id="enter-var" placeholder="Enter Method Name" value={methodName} onChange={(e) => setMethodName(e.target.value)} > </textarea>
+                                {callMethodErrors.mName && <p className="error-text">{callMethodErrors.mName}</p>}
+
+                            </div>
+                            <div className="method-list-container">
+                                <label className="enter-var-title" htmlFor="enter-var">{description1}</label>
+                                <textarea id="enter-description" value={argsValue} onChange={(e) => setArgs(e.target.value)} ></textarea>
+                                {callMethodErrors.args && <p className="error-text">{callMethodErrors.args}</p>}
+                            </div>
+                            <div className="method-list-container">
+                                <label className="enter-var-title" htmlFor="enter-var">{description2}</label>
+                                <textarea id="enter-description" value={kwargsValue} onChange={(e) => setKwargs(e.target.value)}>  </textarea>
+                                {callMethodErrors.kwargs && <p className="error-text">{callMethodErrors.kwargs}</p>}
+                            </div>
+                            <div>
+                                {callMethodErrors.response && <p className="error-text">{callMethodErrors.response}</p>}
+                                <button className="submit-var-btn" onClick={submitMethodCall}>Call Method</button>
+                            </div>
                         </div>
                     </div>
+                    {/* end of left side */}
 
-                    {/*v-row2 refers to the area where update variable is*/}
-                    <div className="v-row2">
-                        <div className="v-row2-text-areas">
-                            {/* <label className="enter-var-title" htmlFor="enter-var">Enter Variable Name</label> */}
-                            <textarea id="enter-var" placeholder="Enter Variable Name" value={varName2} onChange={(e) => setVarName2(e.target.value)}></textarea>
-                            {updateVarErrors.name && <p className="error-text">{updateVarErrors.name}</p>}
-                            <textarea id="enter-value" placeholder="Enter New Value" value={newValue} onChange={(e) => setNewValue(e.target.value)}></textarea>
-                            {updateVarErrors.value && <p className="error-text">{updateVarErrors.value}</p>}
-                        </div>
-                        <div>
-                            {updateVarErrors.response && <p className="error-text">{updateVarErrors.response}</p>}
-                            <button className="submit-var-btn" onClick={submitUpdatedVariable}>Update Variable</button>
-                        </div>
-                    </div>
-                </div>
+                    {/* start of right side */}
+                    <div className="right">
+                        <div className="available-dashboard-container">
+                            <h1 id="var-dashboard">Available Variables and Methods</h1>
+                            {/* // className={selectedFilter ===filter ? 'active' : ''} */}
+                            <div className="filter-overlay">
+                                <div className="filter-btns-container">
+                                    {filterOptions.map(filter => (
+                                        <button key={filter} onClick={() => getFilteredNames(filter)}
+                                            className={`filter-btns ${selectedFilter === filter ? 'active' : ''}`}>
+                                            {filter}
+                                        </button>
+                                    ))}
+                                </div>
+                                <input type="text"
+                                    className="search-bar"
+                                    placeholder="Search..."
+                                    value={searchText}
+                                    onChange={handleSearchInput}
+                                    onKeyDown={handleSearch}
+                                />
+                            </div>
 
-                <div className="method-dashboard-container">
-                    <h1 id="var-dashboard">Method Dashboard</h1>
-                    <div className="v-row2-text-areas">
-                        <textarea id="enter-var" placeholder="Enter Method Name" value={methodName} onChange={(e) => setMethodName(e.target.value)} > </textarea>
-                        {callMethodErrors.mName && <p className="error-text">{callMethodErrors.mName}</p>}
+                            <div className="names-table-container">
+                                {/* now the table */}
+                                <table className="names-table-style">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {listNames.map((x, index) => (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td>{x}</td>
+                                            </tr>
+                                        )
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {/* end of table */}
 
-                    </div>
-                    <div className="method-list-container">
-                        <label className="enter-var-title" htmlFor="enter-var">{description1}</label>
-                        <textarea id="enter-description" value={argsValue} onChange={(e) => setArgs(e.target.value)} ></textarea>
-                        {callMethodErrors.args && <p className="error-text">{callMethodErrors.args}</p>}
-                    </div>
-                    <div className="method-list-container">
-                        <label className="enter-var-title" htmlFor="enter-var">{description2}</label>
-                        <textarea id="enter-description" value={kwargsValue} onChange={(e) => setKwargs(e.target.value)}>  </textarea>
-                        {callMethodErrors.kwargs && <p className="error-text">{callMethodErrors.kwargs}</p>}
-                    </div>
-                    <div>
-                        {callMethodErrors.response && <p className="error-text">{callMethodErrors.response}</p>}
-                        <button className="submit-var-btn" onClick={submitMethodCall}>Call Method</button>
-                    </div>
-                </div>
-            </div>
-            {/* end of left side */}
-
-            {/* start of right side */}
-            <div className="right">
-                <div className="available-dashboard-container">
-                    <h1 id="var-dashboard">Available Variables and Methods</h1>
-                    {/* // className={selectedFilter ===filter ? 'active' : ''} */}
-                    <div className="filter-overlay">
-                        <div className="filter-btns-container">
-                            {filterOptions.map(filter => (
-                            <button key={filter} onClick={() => getFilteredNames(filter)}
-                                className={`filter-btns ${selectedFilter === filter ? 'active' : ''}`}>
-                                {filter}
+                            <button className="refresh-btn" onClick={manual_refresh}
+                                disabled={!canRefresh}
+                                style={{
+                                    backgroundColor: canRefresh ? ' rgb(45, 174, 38)' : 'lightgray',
+                                }}>
+                                Refresh Available
                             </button>
-                        ))}
                         </div>
-                        <input type="text"
-                            className="search-bar"
-                            placeholder="Search..."
-                            value={searchText}
-                            onChange={handleSearchInput}
-                            onKeyDown={handleSearch}
-                        />
                     </div>
-
-                    <div className="names-table-container">
-                        {/* now the table */}
-                        <table className="names-table-style">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Name</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {listNames.map((x, index) => (
-                                    <tr key={index}>
-                                        <td>{index + 1}</td>
-                                        <td>{x}</td>
-                                    </tr>
-                                )
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                    {/* end of table */}
-                    
-                    <button className="refresh-btn" onClick={manual_refresh}
-                        disabled={!canRefresh}
-                        style={{
-                            backgroundColor: canRefresh ? ' rgb(45, 174, 38)' : 'lightgray',
-                        }}>
-                        Refresh Available
-                    </button>
-                </div>
             </div>
         </div>
     );

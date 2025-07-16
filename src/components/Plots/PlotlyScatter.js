@@ -1,3 +1,9 @@
+/**
+ * This component is modified from the Bluesky/Finch React component library.
+ * Original source: https://github.com/bluesky/finch
+ * License: BSD 3-Clause License (see original license at the link above)
+ */
+
 import React, { useRef, useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 
@@ -12,6 +18,7 @@ export default function PlotlyScatter({
   xAxisLayout,
   yAxisLayout,
   className,
+  colorAxisRange, //This is a new feature to lock the colorscale axis 
 }) {
   const plotContainer = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -31,8 +38,6 @@ export default function PlotlyScatter({
 
     return () => resizeObserver.disconnect();
   }, []);
-
-
 
   return (
     <div className={`pb-4 ${className ?? ''}`} ref={plotContainer}>
@@ -64,6 +69,15 @@ export default function PlotlyScatter({
             r: 30,
             t: title ? 40 : 30,
             b: xAxisTitle ? 60 : 30,
+          },
+          //added coloraxis
+          coloraxis: {
+            colorscale: 'Viridis',
+            colorbar: {
+              title: 'Distance',
+              x: 1.22, // move it slightly right of the plot
+            },
+            ...(colorAxisRange ?? {})  // Applies cmin/cmax if provided
           },
         }}
         config={{ responsive: true }}

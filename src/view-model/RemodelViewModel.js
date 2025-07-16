@@ -59,31 +59,71 @@ export const RemodelViewModel = (uidValue, clusterCenters, recentClusterCenters,
 
 }
 
-export default function prepareWaterfallScatter1D(observables, clusterLabels, independentVars, offset=1) {
+/**
+ * prepareWaterFallScatter prepares traces for the waterfall plot where observables is sorted either by the independent variable or distances.
+ * If distances is passed, then the function assumes that the sorting will be based on distances to a cluster selected by the user 
+ */
+
+export function prepareWaterFallScatter(observables, clusterLabels, independentVars, offset = 1, is1D = true, distances = null, selectedCluster = null) {
     const traces = [];
-    const seenLabels = new Set(); //this ensures that the legend doesn't repeat clusterLabel values 
-    //the offset for the waterfall plot will be determined by the user
-    if(offset===""){
-        offset=1;
+    const seenLabels = new Set();
+    if (offset === "") {
+        offset = 1;
     }
+    let paired = [];
+    // const clusterMap = new Map();
 
-    const paired = observables.map((obs, i) => ({
-        observable: obs,
-        cluster: clusterLabels[i],
-        independentVar: independentVars[i]
-    }));
+    if (distances && selectedCluster !== null) {
+        // First group by cluster
+        const clusterMap = new Map();
+        observables.forEach((obs, i) => { // Loop through every observable 
+            const cluster = clusterLabels[i];
+            const independentVar = is1D ? independentVars[i] : independentVars[i][0]; // If independent vars is 2D, extract the x value 
+            const distanceToCluster = distances[i][selectedCluster];
+            const entry = {
+                observable: obs,
+                cluster,
+                independentVar,
+                distanceToCluster
+            };
+            if (!clusterMap.has(cluster)) {
+                clusterMap.set(cluster, []); // If the map does not have the cluster, then initialize it with an empty array
+            }
+            clusterMap.get(cluster).push(entry);
+        });
 
-    // sorts by independent variable value in ascending order 
-    paired.sort((a, b) => a.independentVar - b.independentVar);
-
-    paired.forEach((entry, stackIndex) => {
+        let clusterBaseOffset = 0;
+        const clusterSpacing = 0; // space between clusters. // No effect is 0
+        for (const [cluster, entries] of clusterMap.entries()) {
+            entries.sort((a, b) => a.distanceToCluster - b.distanceToCluster);
+            entries.forEach((entry, intraIndex) => {
+                // Each line is offset within its cluster
+                entry.stackIndex = clusterBaseOffset + intraIndex ;
+            });
+            clusterBaseOffset += entries.length  + clusterSpacing;
+            paired = paired.concat(entries);
+        }
+    }
+    else {
+        paired = observables.map((obs, i) => ({
+            observable: obs,
+            cluster: clusterLabels[i], //the clusterlabel of this obs sample
+            independentVar: is1D ? independentVars[i] : independentVars[i][0], //if independent vars is 2D, extract the x value 
+            distanceToCluster: !is1D && distances !== null && selectedCluster !== null ? distances[i][selectedCluster] : null,
+            stackIndex: i //testing
+        }));
+        (distances !== null && selectedCluster !== null) ? paired.sort((a, b) => a.distanceToCluster - b.distanceToCluster) : paired.sort((a, b) => a.independentVar - b.independentVar);
+    }
+    // Build the waterfall traces
+    paired.forEach((entry) => {
         const x = entry.observable.map((_, idx) => idx);
-        const y = entry.observable.map(val => val + stackIndex*offset); // stack by sorted index will add offset 
+        // const y = entry.observable.map(val => val + stackIndex * offset);
+        const y = entry.observable.map(val => val + entry.stackIndex * offset); // space between lines withineach cluster // No effect is 1
+
 
         const clusterLabel = entry.cluster;
         const showLegend = !seenLabels.has(clusterLabel);
         seenLabels.add(clusterLabel);
-
         traces.push({
             x,
             y,
@@ -98,6 +138,57 @@ export default function prepareWaterfallScatter1D(observables, clusterLabels, in
     });
     return traces;
 }
+
+// This function creates a 2D grid of interpolated values based on the plotted 2D independent variables
+// With a grid, a smooth heatmap that shows how the distance values change across the entire area is created
+export function createHeatmapGrid(independentVars, distances, cluster, gridSize = 20) {
+    // This finds the data bounds
+    const xValues = independentVars.map(point => point[0]);
+    const yValues = independentVars.map(point => point[1]);
+
+    const xMin = Math.min(...xValues);
+    const xMax = Math.max(...xValues);
+    const yMin = Math.min(...yValues);
+    const yMax = Math.max(...yValues);
+
+    // Calculating grid spacing
+    const xStep = (xMax - xMin) / (gridSize - 1);
+    const yStep = (yMax - yMin) / (gridSize - 1);
+
+    const grid = [];
+
+    for (let i = 0; i < gridSize; i++) {
+        const row = [];
+        const yGrid = yMin + i * yStep;
+
+        for (let j = 0; j < gridSize; j++) {
+            const xGrid = xMin + j * xStep;
+
+            // Inverse Distance Weighting Interpolation:
+            //   -For each grid cell, the function calculates a weighted average of all data points
+            //   - Closter points have more influence (Blue areas: close to cluster, Red areas: far from cluster)
+            let totalWeight = 0;
+            let weightedSum = 0;
+            for (let k = 0; k < independentVars.length; k++) {
+                const dx = independentVars[k][0] - xGrid;
+                const dy = independentVars[k][1] - yGrid;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const weight = 1 / (distance + 0.001);
+
+                const value = distances[k][cluster];
+
+                weightedSum += value * weight;
+                totalWeight += weight;
+            }
+
+            row.push(weightedSum / totalWeight);
+        }
+        grid.push(row);
+    }
+    return grid;
+};
+
+//unused at the moment:
 
 export const prepareWaterfallScatterWOIndependent = (observables, clusterLabels) => {
     const traces = [];
