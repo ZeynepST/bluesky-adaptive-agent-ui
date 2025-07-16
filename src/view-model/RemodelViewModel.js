@@ -71,6 +71,7 @@ export function prepareWaterFallScatter(observables, clusterLabels, independentV
         offset = 1;
     }
     let paired = [];
+    // const clusterMap = new Map();
 
     if (distances && selectedCluster !== null) {
         // First group by cluster
@@ -90,10 +91,19 @@ export function prepareWaterFallScatter(observables, clusterLabels, independentV
             }
             clusterMap.get(cluster).push(entry);
         });
-        // Sort within each cluster by distance to selected cluster
+
+        let clusterBaseOffset = 0;
+        const clusterSpacing = 0; // space between clusters. // No effect is 0
+        const intraLineOffset = 1; // space between lines withineach cluster // No effect is 1
+
         for (const [cluster, entries] of clusterMap.entries()) {
             entries.sort((a, b) => a.distanceToCluster - b.distanceToCluster);
-            paired = paired.concat(entries); // append in sorted order
+            entries.forEach((entry, intraIndex) => {
+                // Each line is offset within its cluster
+                entry.stackIndex = clusterBaseOffset + intraIndex * intraLineOffset;
+            });
+            clusterBaseOffset += entries.length * intraLineOffset + clusterSpacing;
+            paired = paired.concat(entries);
         }
     }
     else {
@@ -101,14 +111,17 @@ export function prepareWaterFallScatter(observables, clusterLabels, independentV
             observable: obs,
             cluster: clusterLabels[i], //the clusterlabel of this obs sample
             independentVar: is1D ? independentVars[i] : independentVars[i][0], //if independent vars is 2D, extract the x value 
-            distanceToCluster: !is1D && distances !== null && selectedCluster !== null ? distances[i][selectedCluster] : null
+            distanceToCluster: !is1D && distances !== null && selectedCluster !== null ? distances[i][selectedCluster] : null,
+            stackIndex: i //testing
         }));
-        (distances && selectedCluster !== null) ? paired.sort((a, b) => a.distanceToCluster - b.distanceToCluster) : paired.sort((a, b) => a.independentVar - b.independentVar);
+        (distances !== null && selectedCluster !== null) ? paired.sort((a, b) => a.distanceToCluster - b.distanceToCluster) : paired.sort((a, b) => a.independentVar - b.independentVar);
     }
     // Build the waterfall traces
-    paired.forEach((entry, stackIndex) => {
+    paired.forEach((entry) => {
         const x = entry.observable.map((_, idx) => idx);
-        const y = entry.observable.map(val => val + stackIndex * offset); // stack by sorted index will add offset 
+        // const y = entry.observable.map(val => val + stackIndex * offset);
+        const y = entry.observable.map(val => val + entry.stackIndex * offset);
+
         const clusterLabel = entry.cluster;
         const showLegend = !seenLabels.has(clusterLabel);
         seenLabels.add(clusterLabel);
