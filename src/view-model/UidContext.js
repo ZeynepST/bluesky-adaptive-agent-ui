@@ -3,10 +3,26 @@ import axios from "axios";
 import { createContext } from "react";
 import { get_uids } from "../models/fetchUids";
 
+/**
+ * UidContext provides state and refresh logic for UID data used across the application.
+ * It fetches UID info from the server and allows child components to trigger a refresh.
+ * @context
+ * @property {Array} uidsInfo - List of UIDs and related metadata.
+ * @property {boolean} uidRefresh - Flag to trigger re-fetching UIDs.
+ * @property {Function} setUidRefresh - Function to toggle `uidRefresh`.
+ * @property {Function} get_uids - Async function that fetches UID data.
+*/
 export const UidContext = createContext();
+
+
+/**
+ * UidProvider component wraps children with UID context 
+ * @param {Object} props - The component's props. 
+ * @param {React.ReactNode} props.children - The components that will consume the context.
+ * @returns 
+ */
 export function UidProvider({ children }) {
 
-    //uidsInfo is the list of uids and some respective information which will first be populated in a useEffect
     const [uidsInfo, setUidsInfo] = useState([]);
     const [uidRefresh, setUidRefresh] = useState(false);
 
@@ -24,9 +40,9 @@ export function UidProvider({ children }) {
 
         fetchUidData();
     }, [uidRefresh]);
-    
+
     return (
-        <UidContext.Provider value={{ uidRefresh, uidsInfo, get_uids, setUidRefresh}}>
+        <UidContext.Provider value={{ uidRefresh, uidsInfo, get_uids, setUidRefresh }}>
             {children}
         </UidContext.Provider>
     );
