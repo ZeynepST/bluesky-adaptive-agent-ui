@@ -1,5 +1,4 @@
 import { useState, useContext, useCallback, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
 import { ModelContext } from "../view-model/ModelContext";
 
 // Stylesheets: 
@@ -39,7 +38,7 @@ const DebuggingPage = () => {
     /**
      * Extracted functions and variables from ModelContext.
      */
-    const { call_method, get_variable_value, update_variable, names, canRefresh, manual_refresh } = useContext(ModelContext);
+    const { call_method, get_variable_value, update_variable_value, names, canRefresh, manual_refresh } = useContext(ModelContext);
 
     /**
      * Stores list of variable and method names from `names`, which is exported from ModelContext 
@@ -57,10 +56,13 @@ const DebuggingPage = () => {
 
     // varValue1 refers to the variable name entered by user for "Get Variable".
     const [varName1, setVarName1] = useState("");
+
     // fetchedVarName refers to the variable value fetched by the backend. Set by `get_variable_value`.
     const [fetchedVarValue, setFetchedVarValue] = useState("");
+
     // varName2 refers to variable name to be updated.
     const [varName2, setVarName2] = useState("");
+
     /**
      * New value entered by the user to update a variable.
      * Not to be confused with the value returned by the backend.
@@ -106,6 +108,10 @@ const DebuggingPage = () => {
     */
     const [updateVarErrors, setUpdateVarErrors] = useState({ response: "", name: "", value: "" });
 
+    /**
+     * User input for variable/method name to search for
+     * @state {string}
+     */
     const [searchText, setSearchText] = useState('');
 
     /**
@@ -138,11 +144,11 @@ const DebuggingPage = () => {
     };
 
     /**
-     * Requests updating the value of a variable using `update_variable` and updates the UI state.
-     *
-     * Calls the asynchronous `update_variable` function with the input `varName2`.
-     * Sets the result to `varName2`. If the result is not found, displays the error returned`.
-     * Clears the input field (`varName2`) afterward.
+     * Requests updating the value of a variable using `update_variable_variable` and updates the UI state.
+     * - Validates `varName2` and `newValue`
+     * - Calls the asynchronous `update_variable_variable` function with the inputs `varName2` and `newValue`.
+     * - Handles errors and sets approprite error message for the UI.
+     * - Clears the input fields `varName2` and `newValue` afterward.
      *
      * @async
      * @function requestVariable
@@ -160,7 +166,7 @@ const DebuggingPage = () => {
             setUpdateVarErrors(errors);
             return;
         }
-        const reply = await update_variable(varName2, newValue);
+        const reply = await update_variable_value(varName2, newValue);
         if (reply !== "success") {
             errors.response = reply;
             setUpdateVarErrors(errors);
@@ -171,6 +177,17 @@ const DebuggingPage = () => {
         setUpdateVarErrors({ response: "", name: "", value: "" });
     }
 
+    /**
+     * Submits a method call with specified arguments and keyword arguments.
+     * - Validates `methodName`, `argsValue`, and `kwargsValue` inputs.
+     * - If inputs are valid, sends data using `call_method` ModelContext function.
+     * - Handles errors and sets approprite error message for the UI.
+     * - Clears input fields on success. 
+     * 
+     * @async 
+     * @function submitMethodCall
+     * @returns {Promise<void>}
+     */
     const submitMethodCall = async () => {
         let errors = { mName: "", args: "", kwargs: "", response: "" };
         if (!methodName.trim()) {
@@ -211,7 +228,6 @@ const DebuggingPage = () => {
             setCallMethodErrors(errors);
             return;
         };
-
         setMethodName("");
         setArgs("");
         setKwargs("");
@@ -243,7 +259,6 @@ const DebuggingPage = () => {
             setListNames(names);
         }
     }, [names]);
-
 
     return (
         <div className="debugging-page-wrapper">

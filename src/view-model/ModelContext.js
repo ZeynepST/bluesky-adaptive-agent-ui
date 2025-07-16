@@ -18,7 +18,7 @@ import { UidContext } from "./UidContext";
  * @property {Function} generate_report - Triggers report generation.
  * @property {Function} generate_suggestion - Triggers suggestion generation.
  * @property {Function} submit_uids - Sends UIDs to the server for ingestion.
- * @property {Function} update_variable - Updates a server variable to a new value.
+ * @property {Function} update_variable_value - Updates a server variable to a new value.
  * @property {Function} get_variable_value - Fetches the value of a server variable.
  * @property {Function} call_method - Calls a server method with arguments.
  * @property {Object} buttonStates - UI state for toggle buttons.
@@ -233,7 +233,7 @@ export function ModelProvider({ children }) {
         }
     }
 
-    const update_variable = async (variable_name, new_value) => {
+    const update_variable_value = async (variable_name, new_value) => {
         try {
             let payload = { "value": new_value }; 
             const response = await axios.post(`/api/variable/${variable_name}`, payload);
@@ -268,7 +268,7 @@ export function ModelProvider({ children }) {
     return (
         <ModelContext.Provider value={{
             manual_refresh, names, setNames, canRefresh, get_names, call_method,
-            update_variable, get_variable_value, submit_uids, reportStatus, toggle, toggle_queue_add_position, buttonStates,
+            update_variable_value, get_variable_value, submit_uids, reportStatus, toggle, toggle_queue_add_position, buttonStates,
             generate_report, generate_suggestion, suggestionStatus
         }}>
             {children}
