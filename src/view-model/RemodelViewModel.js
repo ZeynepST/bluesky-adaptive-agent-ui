@@ -94,15 +94,13 @@ export function prepareWaterFallScatter(observables, clusterLabels, independentV
 
         let clusterBaseOffset = 0;
         const clusterSpacing = 0; // space between clusters. // No effect is 0
-        const intraLineOffset = 1; // space between lines withineach cluster // No effect is 1
-
         for (const [cluster, entries] of clusterMap.entries()) {
             entries.sort((a, b) => a.distanceToCluster - b.distanceToCluster);
             entries.forEach((entry, intraIndex) => {
                 // Each line is offset within its cluster
-                entry.stackIndex = clusterBaseOffset + intraIndex * intraLineOffset;
+                entry.stackIndex = clusterBaseOffset + intraIndex ;
             });
-            clusterBaseOffset += entries.length * intraLineOffset + clusterSpacing;
+            clusterBaseOffset += entries.length  + clusterSpacing;
             paired = paired.concat(entries);
         }
     }
@@ -120,7 +118,8 @@ export function prepareWaterFallScatter(observables, clusterLabels, independentV
     paired.forEach((entry) => {
         const x = entry.observable.map((_, idx) => idx);
         // const y = entry.observable.map(val => val + stackIndex * offset);
-        const y = entry.observable.map(val => val + entry.stackIndex * offset);
+        const y = entry.observable.map(val => val + entry.stackIndex * offset); // space between lines withineach cluster // No effect is 1
+
 
         const clusterLabel = entry.cluster;
         const showLegend = !seenLabels.has(clusterLabel);

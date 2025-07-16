@@ -340,7 +340,7 @@ const RemodelFromReportPage = () => {
                                                             prepareWaterFallScatter(observables, clusterLabels, independentVars, offSetWFScatter1D, is1D, distances, selectedWaterFallClusterIdx)
                                                         }
                                                         title={`Observables Sorted by Distances to Cluster ${selectedWaterFallClusterIdx} - 2D View`}
-                                                        xAxisTitle="Index"
+                                                        xAxisTitle="Observables Index"
                                                         yAxisTitle="Observables"
                                                         yAxisLayout={{
                                                             showticklabels: false,
