@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { createContext } from "react";
 import { get_uids } from "../models/fetchUids";
 

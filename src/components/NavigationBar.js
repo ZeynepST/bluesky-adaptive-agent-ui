@@ -1,5 +1,17 @@
 import { Link } from 'react-router-dom';
+
+//Stylesheets:
 import '../stylesheets/NavBar.css';
+
+/**
+ * NavBar component provides global navigation links for the application.
+ * 
+ * - Renders links to all major pages: Switchboard, Methods/Variables, UID, and Finch.
+ * - Uses `react-router-dom`'s Link component
+ * @component
+ * @returns {JSX.Element} The rendered navigation bar. 
+ */
+
 
 const NavBar = () => {
 
@@ -13,7 +25,6 @@ const NavBar = () => {
                 <li><Link to="/FinchPage">Finch</Link></li>
             </ul>
         </nav>
-
     );
 
 }
