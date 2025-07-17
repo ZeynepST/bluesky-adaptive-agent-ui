@@ -16,7 +16,10 @@ const AgentSwitchBoardPage = () => {
 
     const description = "Enter list of UIDs to tell the agent about. \n This can be in a comma separated list, or with one UID per line."
 
-    const { submit_uids, buttonStates, toggle, toggle_queue_add_position, generate_report, reportStatus, generate_suggestion, suggestionStatus } = useContext(ModelContext);
+    const { submit_uids, buttonStates, toggle, toggle_queue_add_position,
+        generate_report, reportStatus, generate_suggestion, suggestionStatus,
+        loadingUidSubmission, uidSubmissionStatus
+    } = useContext(ModelContext);
 
     const [uidContent, setUIDContent] = useState('');
     const [uidErrors, setUIDErrors] = useState('');
@@ -41,9 +44,7 @@ const AgentSwitchBoardPage = () => {
         }
         const reply = await submit_uids(uidContent);
         if (reply !== "success") {
-            errors.test = "Failure";
-        }
-        if (errors.test) {
+            errors.test = reply;
             setUIDErrors(errors);
             return;
         }
@@ -107,7 +108,18 @@ const AgentSwitchBoardPage = () => {
                     </label>
                     <textarea className="tell-uid" value={uidContent} onChange={(e) => setUIDContent(e.target.value)} />
                     {uidErrors.test && <p className="error-text">{uidErrors.test}</p>}
-                    <button className="submit-uid-btn" onClick={submitUIDButton}>Submit</button>
+                    {/* <button className="submit-uid-btn" onClick={submitUIDButton}>Submit</button> */}
+                    <button
+                        className="submit-uid-btn"
+                        onClick={submitUIDButton}
+                        disabled={loadingUidSubmission}
+                    >
+                        {loadingUidSubmission ? (
+                            <span className="spinner" aria-label="Loading..." />
+                        ) : (
+                            'Submit'
+                        )}
+                    </button>
                 </div>
             </div>
         </div>
