@@ -1,5 +1,29 @@
-//fetch data and process it
 import axios from "axios";
+/**
+ * Fetches and processes a list of UIDs associated with MockClusterAgent runs.
+ *
+ * Makes a GET request to the `/api/v1/search/` endpoint, filters results for
+ * items where `agent_name` starts with "MockClusterAgent", and extracts
+ * key metadata 
+ *
+ * @async
+ * @function get_uids
+ * @returns {Promise<Array<Object>>} A promise that resolves to an array of parsed UID objects.
+ * 
+ * Each object in the array has the shape:
+ * {
+ *   uidValue: string,
+ *   datetime: string | null,
+ *   hasIngest: boolean,
+ *   hasReport: boolean,
+ *   agentName: string | null,
+ *   modelType: string | null,
+ *   modelAlgorithm: string | null,
+ *   maxIter: number | null,
+ *   numberOfClusters: number | null,
+ *   randomState: number | null,
+ * }
+ */
 
 export const get_uids = async () => {
 
@@ -14,7 +38,7 @@ export const get_uids = async () => {
             const model_params = item.attributes.metadata.start.model_params;
             // streamNames refers to ingest and report.
             const streamNames = metadata?.summary?.stream_names || [];
-
+            
             return {
                 uidValue,
                 datetime: metadata?.summary?.datetime || null,

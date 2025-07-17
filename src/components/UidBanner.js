@@ -1,24 +1,32 @@
-import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { UidContext } from '../view-model/UidContext';
+import { IngestViewModel } from "../view-model/IngestViewModel";
+
+//Stylesheets:
 import '../stylesheets/UidStylesheets/UidBanner.css';
 import '../stylesheets/UidStylesheets/SideBar.css';
-import { IngestViewModel } from "../view-model/IngestViewModel";
 
 
 /**
- * UidBanner component displays specific UID information such as agent name and model type. If the UID object has ingest and/or report
- * then it will render buttons which will then render specific pages with data on either one. 
+ * UidBanner component displays metadata and controls for a specific UID.
+ * 
+ *  - Shows key UID-related informastion such as agent name, model type, algorithm, etc.
+ *  - If ingest/and or report and remodel data is available, renders buttons that navigate to their corresponding 
+ *    data pages using React Router.
+ * 
+ * @component
+ * @param {Object} props
+ * @param {Object} props.uidObject - The UID object whose metadata will be displayed.
+ * @param {string} props.viewMode - The currently selected view mode (ingest, report, or remodel).
+ *
+ * @returns {JSX.Element|null} The rendered banner or null if no uidObject is provided.
  */
 
 const UidBanner = ({ uidObject, viewMode }) => {
 
-    // const { uidsInfo} = useContext(UidContext);
     if (!uidObject) return null;
     const cacheLen = uidObject.hasIngest ? IngestViewModel(uidObject.uidValue).cache_len : 0;
 
     return (
-
         <aside className="uid-banner-container">
             <h1 className="side-bar-title">Dashboard</h1>
             <hr className="side-bar-delimiter" />

@@ -4,10 +4,15 @@ import { ModelContext } from "../view-model/ModelContext";
 import '../stylesheets/index.css';
 import '../stylesheets/SwitchBoardPage.css';
 
-
+/**
+ * AgentSwitchBoardPage component provides a UI for:
+ * - Toggling features (e.g., direct to queue, continuous suggestion/report)
+ * - Submitting UIDs
+ * - Generating suggestions and reports
+ * 
+ * @component
+ */
 const AgentSwitchBoardPage = () => {
-
-    const navigate = useNavigate();
 
     const description = "Enter list of UIDs to tell the agent about. \n This can be in a comma separated list, or with one UID per line."
 
@@ -16,7 +21,13 @@ const AgentSwitchBoardPage = () => {
     const [uidContent, setUIDContent] = useState('');
     const [uidErrors, setUIDErrors] = useState('');
 
-
+    /**
+     * submitUIDButton validates and sends UID input to the backend.
+     * Displays validation or submission error if any.
+     * @async
+     * @function
+     * @returns {Promise<void>}
+     */
     const submitUIDButton = async () => {
         let errors = { test: "" };
 
@@ -36,7 +47,6 @@ const AgentSwitchBoardPage = () => {
             setUIDErrors(errors);
             return;
         }
-
         setUIDContent("");
         setUIDErrors({ test: "" });
     }
@@ -45,9 +55,7 @@ const AgentSwitchBoardPage = () => {
         <div className="agent-switchboard-wrapper">
             <div className='agent-switchboard-container'>
                 <h1 id='agent-switchboard-title'>Agent Switchboard</h1>
-
                 <div className="top3-btns-container">
-
                     <div id="direct-to-queue-container" className="toggle-btn-container">
                         <label htmlFor={"direct_to_queue"}>Add to Front</label>
                         <button className={`top-btns ${buttonStates.direct_to_queue !== null ? ((buttonStates.direct_to_queue === 'true' || buttonStates.direct_to_queue === true) ? 'on' : 'off') : 'error'}`} key={"direct_to_queue"} onClick={() => toggle("direct_to_queue")}>
@@ -72,7 +80,6 @@ const AgentSwitchBoardPage = () => {
                             }
                         </button>
                     </div>
-
                 </div>
                 <div className="queue-add-position-container">
                     <div className="toggle-btn-container">
@@ -84,7 +91,6 @@ const AgentSwitchBoardPage = () => {
                         </button>
                     </div>
                 </div>
-
                 <div className='generate-btns-container'>
                     <button className={`suggestion-btn ${suggestionStatus === 'loading' ? "loading" : suggestionStatus === "error" ? "error" : "idle"}`} onClick={() => generate_suggestion()}>
                         {suggestionStatus === 'error' ? 'ERROR' : 'Generate Suggestion'}
@@ -94,18 +100,15 @@ const AgentSwitchBoardPage = () => {
                         {reportStatus === 'error' ? 'ERROR' : 'Generate Report'}
                     </button>
                 </div>
-
                 <div className="tell-agent-container">
                     <label className="uid-text-area-title" htmlFor="tell-uid">Specify UIDs to Inform Agent</label>
                     <label className="uid-text-area-description" htmlFor="tell-uid">
                         {description}
                     </label>
                     <textarea className="tell-uid" value={uidContent} onChange={(e) => setUIDContent(e.target.value)} />
-                    {/* {uidErrors.uidContent && <p className="error-text">{uidErrors.uidContent}</p>} */}
                     {uidErrors.test && <p className="error-text">{uidErrors.test}</p>}
                     <button className="submit-uid-btn" onClick={submitUIDButton}>Submit</button>
                 </div>
-
             </div>
         </div>
     );

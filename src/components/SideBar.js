@@ -2,12 +2,24 @@ import { Link } from 'react-router-dom';
 import React, { useContext } from 'react';
 import { UidContext } from '../view-model/UidContext';
 import { useParams } from 'react-router-dom';
+
+// Stylesheets: 
 import '../stylesheets/UidStylesheets/SideBar.css';
 
 
 /**
  * This SideBar component will appear on on the ReportDataPage to display the list of UIDs and the links to their respective 
  * report and ingest page if the UID has this information. 
+ */
+
+/**
+ * Sidebar component displays a list of all UIDs from the UidContext
+ * 
+ *  -Each UID is rendered as a clickable link using React Router.
+ *  - If a UID is currently selected (based on the URL param), it is highlighted
+ *  - Used within the UID page to allow navigation between UID-specific views.
+ * 
+ * @component 
  */
 
 const SideBar = () => {
