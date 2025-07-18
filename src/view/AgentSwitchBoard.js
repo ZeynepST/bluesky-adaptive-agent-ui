@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { UidContext } from '../view-model/UidContext';
 import { ModelContext } from "../view-model/ModelContext";
 import { IngestViewModel } from '../view-model/IngestViewModel';
@@ -22,11 +22,34 @@ const AgentSwitchBoardPage = () => {
     const [uidContent, setUIDContent] = useState('');
     const [uidErrors, setUIDErrors] = useState('');
 
-    const { uidsInfo } = useContext(UidContext);
+    const { uidsInfo, uidRefresh } = useContext(UidContext);
     const { submit_uids, buttonStates, toggle, toggle_queue_add_position,
         generate_report, reportStatus, generate_suggestion, suggestionStatus,
         loadingUidSubmission
     } = useContext(ModelContext);
+
+
+
+    const [refreshKey, setRefreshKey] = useState(0);
+    const [cacheLen, setCacheLen] = useState(0);
+
+    const [showReportErrorMessage, setShowReportErrorMessage] = React.useState(false);
+    const [blinkingActive, setBlinkingActive] = useState(false);
+
+    const currentUid = uidsInfo.at(0);
+    const numberOfClusters = currentUid?.numberOfClusters ?? 0;
+    const ingestData = IngestViewModel(currentUid?.hasIngest ? currentUid.uidValue : null, refreshKey);
+
+    useEffect(() => {
+        setCacheLen(ingestData?.cache_len ?? 0);
+    }, [ingestData?.cache_len]);
+
+    useEffect(() => {
+        if (cacheLen >= numberOfClusters) {
+            setShowReportErrorMessage(false);
+            setBlinkingActive(false);
+        }
+    }, [cacheLen, numberOfClusters]);
 
 
     /**
@@ -55,22 +78,10 @@ const AgentSwitchBoardPage = () => {
         }
         setUIDContent("");
         setUIDErrors({ test: "" });
+
+        setRefreshKey(prev => prev + 1);
+
     }
-
-    const currentUid = uidsInfo.at(-1);
-
-    console.log("uids info: ", uidsInfo);
-    console.log("current uid: ", currentUid);
-
-    // Must call IngestViewModel unconditionally to avoid "React has detected a change in the order of Hooks called by ModelProvider"
-    // Pass uidValue only if hasIngest is true, else null or empty string
-    const ingestData = IngestViewModel(currentUid?.hasIngest ? currentUid.uidValue : null);
-
-    const cacheLen = currentUid?.hasIngest ? ingestData.cache_len : 0;
-    const numberOfClusters = currentUid?.numberOfClusters ?? 0;
-
-    const [showReportErrorMessage, setShowReportErrorMessage] = React.useState(false);
-    const [blinkingActive, setBlinkingActive] = useState(false);
 
     const onReportClick = () => {
         if (cacheLen < numberOfClusters) {

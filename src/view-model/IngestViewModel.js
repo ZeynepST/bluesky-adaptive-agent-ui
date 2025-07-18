@@ -3,7 +3,7 @@ import { get_cache_len, get_independent_variables, get_observables, get_ingest_t
 
 
 //uid is the object, not the uid number itself. To access the uid number you need to do uid.uidValue as defined in fetchUids.js
-export const IngestViewModel = (uidValue) => {
+export const IngestViewModel = (uidValue,  refreshKey = 0) => {
 
     const [cache_len, setCacheLength] = useState(null);
     const [independentVars, setIndependentVar] = useState([]);
@@ -46,7 +46,7 @@ export const IngestViewModel = (uidValue) => {
             }
         }
         loadData();
-    }, [uidValue]); //need to check [uidValue]
+    }, [uidValue, refreshKey]); //need to check [uidValue]
 
     // This useEffect is to derive a Plotly-compatible array of trace objects form independentVars
     useEffect(() => {
