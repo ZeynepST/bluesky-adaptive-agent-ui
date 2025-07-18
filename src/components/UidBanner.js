@@ -24,7 +24,8 @@ import '../stylesheets/UidStylesheets/SideBar.css';
 const UidBanner = ({ uidObject, viewMode }) => {
 
     if (!uidObject) return null;
-    const cacheLen = uidObject.hasIngest ? IngestViewModel(uidObject.uidValue).cache_len : 0;
+
+    const  cacheLen = IngestViewModel(uidObject.hasIngest ? uidObject.uidValue : null)?.cache_len;
 
     return (
         <aside className="uid-banner-container">
@@ -54,7 +55,7 @@ const UidBanner = ({ uidObject, viewMode }) => {
                             <button className={`ingest-report-btns ${viewMode === "report" ? "selected" : ""}`}>Report &gt;</button>
                         </Link>
                     )}
-                     {uidObject.hasReport && uidObject.hasIngest && (
+                    {uidObject.hasReport && uidObject.hasIngest && (
                         <Link to={`/UidPage/${uidObject.uidValue}/remodel`}>
                             <button className={`ingest-report-btns ${viewMode === "remodel" ? "selected" : ""}`}>Remodel &gt;</button>
                         </Link>
