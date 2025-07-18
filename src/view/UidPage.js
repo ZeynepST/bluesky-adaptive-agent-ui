@@ -48,9 +48,9 @@ const UidPage = () => {
                             <div className="uid-page-main-content">
                                 <div className="report-ingest-main-content-container">
                                     {/* If a UID object is chosen, the render will depend on whether Report or Ingest was selected */}
-                                    {viewMode === "ingest" && (<IngestDataPage />)}
-                                    {viewMode === "report" && (<ReportDataPage />)}
-                                    {viewMode==="remodel" && (<RemodelFromReportPage />)}
+                                    {viewMode === "ingest"  && chosenUidObject.hasIngest && (<IngestDataPage />)}
+                                    {viewMode === "report"  && chosenUidObject.hasReport && (<ReportDataPage />)}
+                                    {viewMode==="remodel"  && chosenUidObject.hasReport && (<RemodelFromReportPage />)}
                                 </div>
                             </div>
                         </>
