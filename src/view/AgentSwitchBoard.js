@@ -1,6 +1,9 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from "react-router-dom";
+import { UidContext } from '../view-model/UidContext';
 import { ModelContext } from "../view-model/ModelContext";
+import { IngestViewModel } from '../view-model/IngestViewModel';
+
+// Stylesheets:
 import '../stylesheets/index.css';
 import '../stylesheets/SwitchBoardPage.css';
 
@@ -16,13 +19,15 @@ const AgentSwitchBoardPage = () => {
 
     const description = "Enter list of UIDs to tell the agent about. \n This can be in a comma separated list, or with one UID per line."
 
-    const { submit_uids, buttonStates, toggle, toggle_queue_add_position,
-        generate_report, reportStatus, generate_suggestion, suggestionStatus,
-        loadingUidSubmission, uidSubmissionStatus
-    } = useContext(ModelContext);
-
     const [uidContent, setUIDContent] = useState('');
     const [uidErrors, setUIDErrors] = useState('');
+
+    const { uidsInfo } = useContext(UidContext);
+    const { submit_uids, buttonStates, toggle, toggle_queue_add_position,
+        generate_report, reportStatus, generate_suggestion, suggestionStatus,
+        loadingUidSubmission
+    } = useContext(ModelContext);
+
 
     /**
      * submitUIDButton validates and sends UID input to the backend.
@@ -51,6 +56,38 @@ const AgentSwitchBoardPage = () => {
         setUIDContent("");
         setUIDErrors({ test: "" });
     }
+
+    const currentUid = uidsInfo.at(-1);
+
+    console.log("uids info: ", uidsInfo);
+    console.log("current uid: ", currentUid);
+
+    // Must call IngestViewModel unconditionally to avoid "React has detected a change in the order of Hooks called by ModelProvider"
+    // Pass uidValue only if hasIngest is true, else null or empty string
+    const ingestData = IngestViewModel(currentUid?.hasIngest ? currentUid.uidValue : null);
+
+    const cacheLen = currentUid?.hasIngest ? ingestData.cache_len : 0;
+    const numberOfClusters = currentUid?.numberOfClusters ?? 0;
+
+    const [showReportErrorMessage, setShowReportErrorMessage] = React.useState(false);
+    const [blinkingActive, setBlinkingActive] = useState(false);
+
+    const onReportClick = () => {
+        if (cacheLen < numberOfClusters) {
+            setShowReportErrorMessage(true); // trigger message display
+            setBlinkingActive(true);
+
+            // Stop blinking after 30 seconds
+            setTimeout(() => {
+                setBlinkingActive(false);
+            }, 30000);
+
+        } else {
+            setShowReportErrorMessage(false); // clear message if previously shown
+            setBlinkingActive(false);
+            generate_report();
+        }
+    };
 
     return (
         <div className="agent-switchboard-wrapper">
@@ -93,13 +130,31 @@ const AgentSwitchBoardPage = () => {
                     </div>
                 </div>
                 <div className='generate-btns-container'>
-                    <button className={`suggestion-btn ${suggestionStatus === 'loading' ? "loading" : suggestionStatus === "error" ? "error" : "idle"}`} onClick={() => generate_suggestion()}>
-                        {suggestionStatus === 'error' ? 'ERROR' : 'Generate Suggestion'}
-                    </button>
+                    <div className="suggest-btn-container">
+                        <button className={`suggestion-btn ${suggestionStatus === 'loading' ? "loading" : suggestionStatus === "error" ? "error" : "idle"}`} onClick={() => generate_suggestion()}>
+                            {suggestionStatus === 'error' ? 'ERROR' : 'Generate Suggestion'}
+                        </button>
+                    </div>
+                    <div className="report-btn-container">
+                        <button
+                            className={`report-btn ${reportStatus === 'loading' ? "loading" : "idle"}`}
+                            onClick={onReportClick}
+                            disabled={reportStatus === 'loading'}
+                        >
+                            {reportStatus === 'loading' ? "Loading..." : "Generate Report"}
+                        </button>
 
-                    <button className={`report-btn ${reportStatus === 'loading' ? "loading" : reportStatus === "error" ? "error" : "idle"}`} onClick={() => generate_report()}>
-                        {reportStatus === 'error' ? 'ERROR' : 'Generate Report'}
-                    </button>
+                        {showReportErrorMessage && (
+                            <div className="report-error-icon-container">
+                                <div className={`blinking-icon ${blinkingActive ? 'blinking' : ''}`}>!</div>
+                                <div className="tooltip">
+                                    Submit at least {numberOfClusters} UIDs to enable report generation.<br />
+                                    You currently have {cacheLen} UIDs ingested.
+                                </div>
+                            </div>
+                        )}
+
+                    </div>
                 </div>
                 <div className="tell-agent-container">
                     <label className="uid-text-area-title" htmlFor="tell-uid">Specify UIDs to Inform Agent</label>

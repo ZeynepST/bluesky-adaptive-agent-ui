@@ -35,6 +35,8 @@ export const ModelContext = createContext();
  */
 export function ModelProvider({ children }) {
 
+    const { setUidRefresh } = useContext(UidContext);
+
     /**
      * List of available variable and method names
      * @type {string[]}
@@ -42,8 +44,6 @@ export function ModelProvider({ children }) {
     const [names, setNames] = useState([]);
     const [canRefresh, setCanRefresh] = useState(true);
     const timeoutRefresh = useRef(null);
-
-    const { get_uids, setUidRefresh } = useContext(UidContext);
 
     const [loadingUidSubmission, setLoadingUidSubmission] = useState(false);
     const [uidSubmissionStatus, setUidSubmissionStatus] = useState(null); //"success", "error"
@@ -181,6 +181,7 @@ export function ModelProvider({ children }) {
         }
         setUidRefresh(prev => !prev);
     }
+
     const generate_report = async () => {
         try {
             setReportStatus("loading");

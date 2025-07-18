@@ -96,6 +96,21 @@
     padding: 5px;
     gap: 2rem;
     margin-top: 40px;
+    align-items: flex-start; /* ensures buttons align at top */
+}
+
+.report-btn-container,
+.suggestion-btn-container {
+    position:relative;
+    display: flex;
+    flex-direction: column;
+    height: 85px; /* fixed height = button height + space for error text */
+    width: 150px; 
+}
+.report-btn, .suggest-btn{
+    flex-shrink: 0; /* prevent shrinkings */
+    height: 55px; /* fixed height */
+    box-sizing: border-box; /* includes padding and border in height */
 }
 
 .suggestion-btn.idle,
@@ -129,6 +144,90 @@
 .report-btn.error,
 .suggestion-btn.error {
     background-color: red;
+}
+
+.report-error-info-text {
+    color: #d93025;
+    font-size: 0.9rem;
+    margin: 5px 0 0 0;
+    min-height: 1.4em;
+    /* enough for 1 line, adjust if multi-line */
+    line-height: 1.4em;
+    visibility: hidden;
+    /* hide but keep space */
+    transition: visibility 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    margin-top: 5px;
+}
+
+.report-error-info-text.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.report-error-info-text.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+.report-error-icon-container {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+.blinking-icon {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
+    text-align: center;
+    line-height: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+}
+
+
+/* Applies animation only when this class is present */
+.blinking {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.tooltip {
+    background-color: #333;
+    color: #fff;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    position: absolute;
+    top: 20px;
+    right: 0;
+    z-index: 20;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    max-width: 250px;
+}
+
+.blinking-icon:hover + .tooltip {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 /* Agent UID */
@@ -169,8 +268,13 @@
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 
@@ -197,6 +301,3 @@
     color: red;
     margin: 0;
 }
-
-
-
