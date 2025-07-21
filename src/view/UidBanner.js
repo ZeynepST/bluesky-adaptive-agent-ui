@@ -40,7 +40,7 @@ const UidBanner = ({ uidObject, viewMode }) => {
                     <div><span className="uid-banner-labels">Max Iterations:</span> {uidObject.maxIter}</div>
                     <div><span className="uid-banner-labels">Number of Clusters:</span> {uidObject.numberOfClusters}</div>
                     <div><span className="uid-banner-labels">Random State:</span> {uidObject.randomState}</div>
-                    <div><span className="uid-banner-labels">Cache Length:</span> {cacheLen}</div>
+                    <div><span className="uid-banner-labels">Cache Length:</span> {cacheLen ?? 0}</div>
                 </li>
             </ul>
             <div className="ingest-report-btns-container">
