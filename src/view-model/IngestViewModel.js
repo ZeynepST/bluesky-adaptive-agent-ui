@@ -2,8 +2,13 @@ import { useState, useEffect } from "react";
 import { get_cache_len, get_independent_variables, get_observables, get_ingest_timestamps } from "../models/fetchIngestData";
 
 
-//uid is the object, not the uid number itself. To access the uid number you need to do uid.uidValue as defined in fetchUids.js
-export const IngestViewModel = (uidValue,  refreshKey = 0) => {
+/**
+ * IngestViewModel is for managing and transforming ingest-related data
+ * @param {string} uidValue -
+ * @param {number} [refreshKey=0] - Option trigger for re-fetching data manually. 
+ * @returns 
+ */
+export const IngestViewModel = (uidValue, refreshKey = 0) => {
 
     const [cache_len, setCacheLength] = useState(null);
     const [independentVars, setIndependentVar] = useState([]);
@@ -13,16 +18,24 @@ export const IngestViewModel = (uidValue,  refreshKey = 0) => {
      * IngestViewModel handles the logic for when independent variables are either 1D or 2D. No furhter processing for transformIndVarPlotData is needed elsewhere
      */
     const [transformIndVarPlotData, setTransformIndVarPlotData] = useState([]);
+
+    // Observables associated with this UID
     const [observables, setObservables] = useState([]);
+
+    // Tracks whether data is being loading
     const [loadingIngest, setLoadingIngest] = useState(false);
+
+    // Timestamp of ingest actions 
     const [ingestTimeStamps, setIngestTimeStamps] = useState([]);
+
+    // Used to control how to visualize data (true = 1D; false = 2D)
     const [is1D, setIs1D] = useState(true);
 
-
-
+    // Fetches ingest-related data from API on UID or refresh key change 
     useEffect(() => {
 
         if (!uidValue) return;
+        console.log("type of uidValue is ", typeof(uidValue));
 
         const loadData = async () => {
             try {
