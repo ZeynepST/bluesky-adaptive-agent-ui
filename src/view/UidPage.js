@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import { UidContext } from '../view-model/UidContext';
 import { useParams } from 'react-router-dom';
-import SideBar from '../components/SideBar';
-import UidBanner from '../components/UidBanner';
+import SideBar from '../view/SideBar';
+import UidBanner from '../view/UidBanner';
 import IngestDataPage from '../view/IngestDataPage';
 import ReportDataPage from '../view/ReportDataPage';
 import RemodelFromReportPage from '../view/RemodelFromReportPage';
