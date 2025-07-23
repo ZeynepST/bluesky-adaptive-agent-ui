@@ -129,7 +129,7 @@ export function prepareWaterFallScatter(observables, clusterLabels, independentV
             y,
             mode: 'lines',
             type: 'scatter',
-            name: `Cluster ${clusterLabel}`,
+            name: `Cluster ${clusterLabel +1}`,
             line: {
                 color: colorMap[clusterLabel % colorMap.length],
             },

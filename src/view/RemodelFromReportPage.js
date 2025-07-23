@@ -68,7 +68,8 @@ const RemodelFromReportPage = () => {
 
     // indIdxClusterTraces holds the traces for the scatter plot of the independent variables 
     const indIdxClusterTraces = uniqueLabels.map((label, idx) => { //this loops through each unique cluster label
-        const color = tab10[idx % tab10.length]; //picks a color from tab10. %tab10.length ensures a loop around in event that there are more than 10 clusters
+       const color = tab10[label % tab10.length]; //picks a color from tab10. %tab10.length ensures a loop around in event that there are more than 10 clusters
+
         //the arrays below hold the x and y values for just one cluster at a time (so 0 or 1 or 2, etc)
         const x = [];
         const y = [];
@@ -84,7 +85,7 @@ const RemodelFromReportPage = () => {
             y,
             type: 'scatter',
             mode: 'markers',
-            name: `Cluster ${label}`,
+            name: `Cluster ${label+1}`,
             marker: {
                 color,
                 size: 15
@@ -99,21 +100,21 @@ const RemodelFromReportPage = () => {
         const y = transformIndVarPlotData[0].y;
         const distanceValues = distances.map(d => d[selectedScatterClusterIdx]);
         const hoverTexts = clusterLabels.map((label, i) =>
-            `Point ${i}<br>Cluster Label: ${label}<br>Distance to Cluster ${selectedScatterClusterIdx}: ${distanceValues[i].toFixed(2)}`
+            `Point ${i}<br>Cluster Label: ${label}<br>Distance to Cluster ${selectedScatterClusterIdx+1}: ${distanceValues[i].toFixed(2)}`
         );
         return [{
             x,
             y,
             type: 'scatter',
             mode: 'markers',
-            name: `Distance to Cluster ${selectedScatterClusterIdx}`,
+            name: `Distance to Cluster ${selectedScatterClusterIdx+1}`,
             marker: {
                 color: distanceValues,
                 size: 15,
                 colorscale: 'Viridis',
                 coloraxis: 'coloraxis', // links to the layout.coloraxis
                 colorbar: {
-                    title: `Distance to Cluster ${selectedScatterClusterIdx}`
+                    title: `Distance to Cluster ${selectedScatterClusterIdx+1}`
                 }
             },
             text: hoverTexts,
@@ -255,7 +256,7 @@ const RemodelFromReportPage = () => {
                                                 <div className="distance-index-graph-2D">
                                                     <PlotlyScatter
                                                         data={scatterDistanceIdxData2D()}
-                                                        title={`Distance to Cluster ${selectedScatterClusterIdx} - 2D View`}
+                                                        title={`Distance to Cluster ${selectedScatterClusterIdx+1} - 2D View`}
                                                         xAxisTitle="Index 0"
                                                         yAxisTitle="Index 1"
                                                         colorAxisRange={{ cmin: globalMinDistances, cmax: globalMaxDistances }}
@@ -276,7 +277,7 @@ const RemodelFromReportPage = () => {
                                                         value: idx
                                                     }))}
                                                     onChange={(option) => setSelectedScatterClusterIdx(option.value)}
-                                                    value={{ label: `Cluster ${selectedScatterClusterIdx}`, value: selectedScatterClusterIdx }}
+                                                    value={{ label: `Cluster ${selectedScatterClusterIdx+1}`, value: selectedScatterClusterIdx }}
                                                 />
                                                 <button
                                                     onClick={handleNextScatter}
@@ -291,7 +292,7 @@ const RemodelFromReportPage = () => {
                                             <div className="distance-index-graph-2D-heatmap">
                                                 <PlotlyHeatmap
                                                     array={heatmapData}
-                                                    title={`Distance to Cluster ${selectedHMClusterIdx} - 2D View`}
+                                                    title={`Distance to Cluster ${selectedHMClusterIdx+1} - 2D View`}
                                                     xAxisTitle="Index 0"
                                                     yAxisTitle="Index 1"
                                                     colorScale="Viridis"
@@ -310,11 +311,11 @@ const RemodelFromReportPage = () => {
                                                     </button>
                                                     <Select
                                                         options={distances[0].map((_, idx) => ({
-                                                            label: `Cluster ${idx}`,
+                                                            label: `Cluster ${idx+1}`,
                                                             value: idx
                                                         }))}
                                                         onChange={(option) => setSelectedHMClusterIdx(option.value)}
-                                                        value={{ label: `Cluster ${selectedHMClusterIdx}`, value: selectedHMClusterIdx }}
+                                                        value={{ label: `Cluster ${selectedHMClusterIdx+1}`, value: selectedHMClusterIdx }}
                                                     />
                                                     <button onClick={handleNextHM} disabled={selectedHMClusterIdx === numClusters - 1}>
                                                         Next &rarr;
@@ -339,7 +340,7 @@ const RemodelFromReportPage = () => {
                                                         data={
                                                             prepareWaterFallScatter(observables, clusterLabels, independentVars, offSetWFScatter1D, is1D, distances, selectedWaterFallClusterIdx)
                                                         }
-                                                        title={`Observables Sorted by Distances to Cluster ${selectedWaterFallClusterIdx} - 2D View`}
+                                                        title={`Observables Sorted by Distances to Cluster ${selectedWaterFallClusterIdx +1} - 2D View`}
                                                         xAxisTitle="Observables Index"
                                                         yAxisTitle="Observables"
                                                         yAxisLayout={{
@@ -363,11 +364,11 @@ const RemodelFromReportPage = () => {
                                                         </button>
                                                         <Select
                                                             options={distances[0].map((_, idx) => ({
-                                                                label: `Cluster ${idx}`,
+                                                                label: `Cluster ${idx+1}`,
                                                                 value: idx
                                                             }))}
                                                             onChange={(option) => setSelectedWaterFallClusterIdx(option.value)}
-                                                            value={{ label: `Cluster ${selectedWaterFallClusterIdx}`, value: selectedWaterFallClusterIdx }}
+                                                            value={{ label: `Cluster ${selectedWaterFallClusterIdx+1}`, value: selectedWaterFallClusterIdx }}
                                                         />
                                                         <button onClick={handleNextWaterFall} disabled={selectedWaterFallClusterIdx === numClusters - 1}>
                                                             Next &rarr;
