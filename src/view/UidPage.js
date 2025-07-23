@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useMemo} from 'react';
 import { UidContext } from '../view-model/UidContext';
 import { useParams } from 'react-router-dom';
 import SideBar from '../view/SideBar';
@@ -30,9 +30,11 @@ const UidPage = () => {
     const { viewMode, uidValue } = useParams();
 
     // Find the UID object based on the uidValue param
-    const chosenUidObject = uidValue
-        ? uidsInfo?.find(uid => uid.uidValue === uidValue)
-        : null;
+    // useMemo ensures that chosenUidObject is recomputed any time uidsInfo or uidValue changes.
+    const chosenUidObject = useMemo(() => {
+        return uidValue ? uidsInfo.find(uid => uid.uidValue === uidValue) : null;
+    }, [uidsInfo, uidValue]);
+
     return (
         <div className="uid-page-container">
             {uidsInfo && (
@@ -48,9 +50,9 @@ const UidPage = () => {
                             <div className="uid-page-main-content">
                                 <div className="report-ingest-main-content-container">
                                     {/* If a UID object is chosen, the render will depend on whether Report or Ingest was selected */}
-                                    {viewMode === "ingest"  && chosenUidObject.hasIngest && (<IngestDataPage />)}
-                                    {viewMode === "report"  && chosenUidObject.hasReport && (<ReportDataPage />)}
-                                    {viewMode==="remodel"  && chosenUidObject.hasReport && (<RemodelFromReportPage />)}
+                                    {viewMode === "ingest" && chosenUidObject.hasIngest && (<IngestDataPage />)}
+                                    {viewMode === "report" && chosenUidObject.hasReport && (<ReportDataPage />)}
+                                    {viewMode === "remodel" && chosenUidObject.hasReport && (<RemodelFromReportPage />)}
                                 </div>
                             </div>
                         </>
