@@ -58,7 +58,7 @@ const RemodelFromReportPage = () => {
 
     if (!chosenUidObject || !transformIndVarPlotData || transformIndVarPlotData.length === 0 || !transformIndVarPlotData[0].x || !clusterLabels ||
         clusterLabels.length === 0 || !independentVars || !distances || independentVars.length === 0) {
-        return <div>Loading...</div>;
+        return <span className="spinner" aria-label="Loading..." />;
     }
 
     // The global max and min for distances is used to lock the axis limits for the color-axis in the heatmap

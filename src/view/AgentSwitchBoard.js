@@ -152,7 +152,12 @@ const AgentSwitchBoardPage = () => {
                             onClick={onReportClick}
                             disabled={reportStatus === 'loading'}
                         >
-                            {reportStatus === 'loading' ? "Loading..." : "Generate Report"}
+                            {reportStatus === 'loading' ?
+                                (
+                                    <span className="spinner" aria-label="Loading..." />
+                                )
+                                :
+                                "Generate Report"}
                         </button>
 
                         {showReportErrorMessage && (
