@@ -85,8 +85,10 @@ const AgentSwitchBoardPage = () => {
 
     const onReportClick = () => {
         if (cacheLen < numberOfClusters) {
+            generate_report();
             setShowReportErrorMessage(true); // trigger message display
             setBlinkingActive(true);
+            // generate_report();
 
             // Stop blinking after 30 seconds
             setTimeout(() => {
@@ -147,8 +149,8 @@ const AgentSwitchBoardPage = () => {
                         </button>
                     </div>
                     <div className="report-btn-container">
-                        <button
-                            className={`report-btn ${reportStatus === 'loading' ? "loading" : "idle"}`}
+                        {/*  className={`report-btn ${reportStatus === 'loading' ? "loading" : "idle"}`} */}
+                        <button className={`report-btn ${reportStatus === 'loading' ? "loading" : reportStatus === "error" ? "error" : "idle"}`} 
                             onClick={onReportClick}
                             disabled={reportStatus === 'loading'}
                         >
@@ -157,7 +159,7 @@ const AgentSwitchBoardPage = () => {
                                     <span className="spinner" aria-label="Loading..." />
                                 )
                                 :
-                                "Generate Report"}
+                                reportStatus === 'error' ? 'ERROR' : 'Generate Report'}
                         </button>
 
                         {showReportErrorMessage && (
