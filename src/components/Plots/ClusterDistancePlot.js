@@ -11,7 +11,7 @@ const ClusterDistancePlot = ({ distances, transformIndVarPlotData }) => {
 
     const clusterOptions = Array.from({ length: numClusters }, (_, i) => ({
         value: i,
-        label: `Cluster ${i+1}`
+        label: `Cluster ${i}`
     }));
 
     const handlePrev = () => {
@@ -27,7 +27,7 @@ const ClusterDistancePlot = ({ distances, transformIndVarPlotData }) => {
         y: transformIndVarPlotData[0].y,
         type: 'scatter',
         mode: 'markers',
-        name: `Distance to Cluster ${selectedCluster+1}`,
+        name: `Distance to Cluster ${selectedCluster}`,
         marker: {
             color: distances.map(d => d[selectedCluster]),
             colorscale: 'Viridis',
@@ -44,7 +44,7 @@ const ClusterDistancePlot = ({ distances, transformIndVarPlotData }) => {
         <div>
             <PlotlyScatter
                 data={[trace]}
-                title={`Distances to Cluster ${selectedCluster +1 }`}
+                title={`Distances to Cluster ${selectedCluster}`}
                 xAxisTitle="Index"
                 yAxisTitle="Independent Variable (1D)"
             />

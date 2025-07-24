@@ -52,7 +52,7 @@ export const ReportViewModel = (uidValue) => {
                     y: center,
                     type: 'scatter',
                     mode: 'lines+markers',
-                    name: `Cluster ${idx + 1}`,
+                    name: `Cluster ${idx}`,
                 }));
                 setTransformRCC(data);
             }

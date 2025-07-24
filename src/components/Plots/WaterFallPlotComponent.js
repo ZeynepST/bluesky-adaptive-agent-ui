@@ -46,7 +46,7 @@ function WaterFallPlot({
     y: row,
     type: 'scatter',
     mode: 'lines',
-    name: `Series ${i+1}`,
+    name: `Series ${i}`,
   }));
 
   return (
