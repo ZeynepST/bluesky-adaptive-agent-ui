@@ -35,6 +35,8 @@ export const ModelContext = createContext();
  */
 export function ModelProvider({ children }) {
 
+    const { setUidRefresh } = useContext(UidContext);
+
     /**
      * List of available variable and method names
      * @type {string[]}
@@ -43,7 +45,8 @@ export function ModelProvider({ children }) {
     const [canRefresh, setCanRefresh] = useState(true);
     const timeoutRefresh = useRef(null);
 
-    const { get_uids, setUidRefresh } = useContext(UidContext);
+    const [loadingUidSubmission, setLoadingUidSubmission] = useState(false);
+    const [uidSubmissionStatus, setUidSubmissionStatus] = useState(null); //"success", "error"
 
     /**
      * Initializes the state for a toggleable button based on its current backend value.
@@ -178,6 +181,7 @@ export function ModelProvider({ children }) {
         }
         setUidRefresh(prev => !prev);
     }
+
     const generate_report = async () => {
         try {
             setReportStatus("loading");
@@ -207,20 +211,52 @@ export function ModelProvider({ children }) {
     }
 
     const submit_uids = async (content) => {
+        setLoadingUidSubmission(true);
+        setUidSubmissionStatus(null); // This resets status while loading 
+
         try {
             const processedContent = content.split(/[\n,]+/);
             const payload = { "value": [[processedContent], {}] };
             const response = await axios.post('/api/variable/ingest_uids', payload);
-            // Since uids were submitted, there will be an ingest feature with data, hence the list of uids must be updated.
-            setUidRefresh(prev => !prev);
-            return "success";
+
+            if (response.status !== 200) {
+                setUidSubmissionStatus("error");
+                return "error";
+            }
+
+            const resData = response?.data;
+
+            if (resData?.ingest_uids?.[0] === "accepted") {
+                setUidRefresh(prev => !prev);
+                setUidSubmissionStatus("success");
+                return "success";
+            }
+            setUidSubmissionStatus("error");
+            return resData?.result?.msg || "error";
         }
         catch (error) {
-            console.error("Error with submitting UID ", error);
-            setUidRefresh(prev => !prev);
-            return "The following error was received: ";
-        }
+            const resData = error?.response?.data;
+            const statusCode = error?.response?.status;
+            if (statusCode === 500) {
+                console.error("Server-side timeout or internal error");
+                setUidSubmissionStatus("error");
+                return "server timeout or failure";
+            }
 
+            // This is optimistic UI !!Need to check!!
+            // This is for when the backend somehow responds with 200 OK but triggers catch. 
+            // if (resData?.ingest_uids?.[0] === "accepted") {
+            //     setUidRefresh(prev => !prev);
+            //     setUidSubmissionStatus("success");
+            //     return "success";
+            // }
+            console.error("Error submitting UIDs:", error);
+            setUidSubmissionStatus("error");
+            return "error";
+        }
+        finally {
+            setLoadingUidSubmission(false);
+        }
     }
 
     const get_variable_value = async (variable_name) => {
@@ -235,7 +271,7 @@ export function ModelProvider({ children }) {
 
     const update_variable_value = async (variable_name, new_value) => {
         try {
-            let payload = { "value": new_value }; 
+            let payload = { "value": new_value };
             const response = await axios.post(`/api/variable/${variable_name}`, payload);
             setUidRefresh(prev => !prev);
 
@@ -264,12 +300,13 @@ export function ModelProvider({ children }) {
         }
     }
 
-
     return (
         <ModelContext.Provider value={{
             manual_refresh, names, setNames, canRefresh, get_names, call_method,
             update_variable_value, get_variable_value, submit_uids, reportStatus, toggle, toggle_queue_add_position, buttonStates,
-            generate_report, generate_suggestion, suggestionStatus
+            generate_report, generate_suggestion, suggestionStatus,
+            loadingUidSubmission, uidSubmissionStatus
+
         }}>
             {children}
         </ModelContext.Provider>

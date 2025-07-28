@@ -54,7 +54,7 @@ export default function ClusterCentersOT({ clusterCenters, reportsCacheLength })
         y: center,
         type: 'scatter',
         mode: 'lines+markers',
-        name: `Cluster ${index + 1}`,
+        name: `Cluster ${index}`,
         line: { shape: 'linear' },
     }));
 

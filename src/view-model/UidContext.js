@@ -22,6 +22,10 @@ export const UidContext = createContext();
  */
 export function UidProvider({ children }) {
 
+    /**
+     * List of all avaialble uids and their metadata 
+     * @type {string[]}
+     */
     const [uidsInfo, setUidsInfo] = useState([]);
     const [uidRefresh, setUidRefresh] = useState(false);
 

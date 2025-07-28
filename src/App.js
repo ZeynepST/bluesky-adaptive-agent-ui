@@ -11,7 +11,7 @@ import DebuggingPage from './view/DebuggingPage';
 import UidPage from './view/UidPage';
 
 //Shared layout components 
-import NavBar from './components/NavigationBar';
+import NavBar from './view/NavigationBar';
 /**
  * '@blueskyproject/finch/style.css' stylesheet and FinchPage is
  *  from the Bluesky/Finch React component library.

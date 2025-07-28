@@ -1,6 +1,9 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useContext } from 'react';
+import { UidContext } from '../view-model/UidContext';
 import { ModelContext } from "../view-model/ModelContext";
+import { IngestViewModel } from '../view-model/IngestViewModel';
+
+// Stylesheets:
 import '../stylesheets/index.css';
 import '../stylesheets/SwitchBoardPage.css';
 
@@ -16,10 +19,38 @@ const AgentSwitchBoardPage = () => {
 
     const description = "Enter list of UIDs to tell the agent about. \n This can be in a comma separated list, or with one UID per line."
 
-    const { submit_uids, buttonStates, toggle, toggle_queue_add_position, generate_report, reportStatus, generate_suggestion, suggestionStatus } = useContext(ModelContext);
-
     const [uidContent, setUIDContent] = useState('');
     const [uidErrors, setUIDErrors] = useState('');
+
+    const { uidsInfo, uidRefresh } = useContext(UidContext);
+    const { submit_uids, buttonStates, toggle, toggle_queue_add_position,
+        generate_report, reportStatus, generate_suggestion, suggestionStatus,
+        loadingUidSubmission
+    } = useContext(ModelContext);
+
+
+
+    const [refreshKey, setRefreshKey] = useState(0);
+    const [cacheLen, setCacheLen] = useState(0);
+
+    const [showReportErrorMessage, setShowReportErrorMessage] = React.useState(false);
+    const [blinkingActive, setBlinkingActive] = useState(false);
+
+    const currentUid = uidsInfo.at(0);
+    const numberOfClusters = currentUid?.numberOfClusters ?? 0;
+    const ingestData = IngestViewModel(currentUid?.hasIngest ? currentUid.uidValue : null, refreshKey);
+
+    useEffect(() => {
+        setCacheLen(ingestData?.cache_len ?? 0);
+    }, [ingestData?.cache_len]);
+
+    useEffect(() => {
+        if (cacheLen >= numberOfClusters) {
+            setShowReportErrorMessage(false);
+            setBlinkingActive(false);
+        }
+    }, [cacheLen, numberOfClusters]);
+
 
     /**
      * submitUIDButton validates and sends UID input to the backend.
@@ -41,15 +72,35 @@ const AgentSwitchBoardPage = () => {
         }
         const reply = await submit_uids(uidContent);
         if (reply !== "success") {
-            errors.test = "Failure";
-        }
-        if (errors.test) {
+            errors.test = reply;
             setUIDErrors(errors);
             return;
         }
         setUIDContent("");
         setUIDErrors({ test: "" });
+
+        setRefreshKey(prev => prev + 1);
+
     }
+
+    const onReportClick = () => {
+        if (cacheLen < numberOfClusters) {
+            generate_report();
+            setShowReportErrorMessage(true); // trigger message display
+            setBlinkingActive(true);
+            // generate_report();
+
+            // Stop blinking after 30 seconds
+            setTimeout(() => {
+                setBlinkingActive(false);
+            }, 30000);
+
+        } else {
+            setShowReportErrorMessage(false); // clear message if previously shown
+            setBlinkingActive(false);
+            generate_report();
+        }
+    };
 
     return (
         <div className="agent-switchboard-wrapper">
@@ -92,13 +143,36 @@ const AgentSwitchBoardPage = () => {
                     </div>
                 </div>
                 <div className='generate-btns-container'>
-                    <button className={`suggestion-btn ${suggestionStatus === 'loading' ? "loading" : suggestionStatus === "error" ? "error" : "idle"}`} onClick={() => generate_suggestion()}>
-                        {suggestionStatus === 'error' ? 'ERROR' : 'Generate Suggestion'}
-                    </button>
+                    <div className="suggest-btn-container">
+                        <button className={`suggestion-btn ${suggestionStatus === 'loading' ? "loading" : suggestionStatus === "error" ? "error" : "idle"}`} onClick={() => generate_suggestion()}>
+                            {suggestionStatus === 'error' ? 'ERROR' : 'Generate Suggestion'}
+                        </button>
+                    </div>
+                    <div className="report-btn-container">
+                        {/*  className={`report-btn ${reportStatus === 'loading' ? "loading" : "idle"}`} */}
+                        <button className={`report-btn ${reportStatus === 'loading' ? "loading" : reportStatus === "error" ? "error" : "idle"}`} 
+                            onClick={onReportClick}
+                            disabled={reportStatus === 'loading'}
+                        >
+                            {reportStatus === 'loading' ?
+                                (
+                                    <span className="spinner" aria-label="Loading..." />
+                                )
+                                :
+                                reportStatus === 'error' ? 'ERROR' : 'Generate Report'}
+                        </button>
 
-                    <button className={`report-btn ${reportStatus === 'loading' ? "loading" : reportStatus === "error" ? "error" : "idle"}`} onClick={() => generate_report()}>
-                        {reportStatus === 'error' ? 'ERROR' : 'Generate Report'}
-                    </button>
+                        {showReportErrorMessage && (
+                            <div className="report-error-icon-container">
+                                <div className={`blinking-icon ${blinkingActive ? 'blinking' : ''}`}>!</div>
+                                <div className="tooltip">
+                                    Submit at least {numberOfClusters} UIDs to enable report generation.<br />
+                                    You currently have {cacheLen} UIDs ingested.
+                                </div>
+                            </div>
+                        )}
+
+                    </div>
                 </div>
                 <div className="tell-agent-container">
                     <label className="uid-text-area-title" htmlFor="tell-uid">Specify UIDs to Inform Agent</label>
@@ -107,7 +181,18 @@ const AgentSwitchBoardPage = () => {
                     </label>
                     <textarea className="tell-uid" value={uidContent} onChange={(e) => setUIDContent(e.target.value)} />
                     {uidErrors.test && <p className="error-text">{uidErrors.test}</p>}
-                    <button className="submit-uid-btn" onClick={submitUIDButton}>Submit</button>
+                    {/* <button className="submit-uid-btn" onClick={submitUIDButton}>Submit</button> */}
+                    <button
+                        className="submit-uid-btn"
+                        onClick={submitUIDButton}
+                        disabled={loadingUidSubmission}
+                    >
+                        {loadingUidSubmission ? (
+                            <span className="spinner" aria-label="Loading..." />
+                        ) : (
+                            'Submit'
+                        )}
+                    </button>
                 </div>
             </div>
         </div>

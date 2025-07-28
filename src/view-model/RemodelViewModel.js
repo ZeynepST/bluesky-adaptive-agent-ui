@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { IngestViewModel } from './IngestViewModel'
 import { ReportViewModel } from './ReportViewModel';
-import { remodelFromReportTS } from '../models/sklearn.tsx';
+import { remodelFromReportTS } from '../view-model/sklearn.tsx';
 
 const colorMap = [
     '#1f77b4', // blue

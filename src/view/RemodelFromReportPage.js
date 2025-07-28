@@ -58,7 +58,7 @@ const RemodelFromReportPage = () => {
 
     if (!chosenUidObject || !transformIndVarPlotData || transformIndVarPlotData.length === 0 || !transformIndVarPlotData[0].x || !clusterLabels ||
         clusterLabels.length === 0 || !independentVars || !distances || independentVars.length === 0) {
-        return <div>Loading...</div>;
+        return <span className="spinner" aria-label="Loading..." />;
     }
 
     // The global max and min for distances is used to lock the axis limits for the color-axis in the heatmap
@@ -68,7 +68,8 @@ const RemodelFromReportPage = () => {
 
     // indIdxClusterTraces holds the traces for the scatter plot of the independent variables 
     const indIdxClusterTraces = uniqueLabels.map((label, idx) => { //this loops through each unique cluster label
-        const color = tab10[idx % tab10.length]; //picks a color from tab10. %tab10.length ensures a loop around in event that there are more than 10 clusters
+       const color = tab10[label % tab10.length]; //picks a color from tab10. %tab10.length ensures a loop around in event that there are more than 10 clusters
+
         //the arrays below hold the x and y values for just one cluster at a time (so 0 or 1 or 2, etc)
         const x = [];
         const y = [];
@@ -190,7 +191,7 @@ const RemodelFromReportPage = () => {
                                                             y: sortedPairs.map(p => p.y),
                                                             type: 'scatter',
                                                             mode: 'lines+markers',
-                                                            name: `Distance to Cluster ${clusterIdx + 1}`,
+                                                            name: `Distance to Cluster ${clusterIdx}`,
                                                             marker: {
                                                                 size: 15,                                                      
                                                             },
@@ -272,7 +273,7 @@ const RemodelFromReportPage = () => {
                                                 </button>
                                                 <Select
                                                     options={Array.from({ length: numClusters }, (_, idx) => ({
-                                                        label: `Cluster ${idx + 1}`,
+                                                        label: `Cluster ${idx}`,
                                                         value: idx
                                                     }))}
                                                     onChange={(option) => setSelectedScatterClusterIdx(option.value)}
