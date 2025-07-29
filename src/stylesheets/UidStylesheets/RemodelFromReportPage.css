@@ -13,6 +13,40 @@
     flex-wrap: wrap;
 }
 
+
+.report-selector-container {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: white;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;/* Space between elements */
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.report-selector-container button {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.report-selector-container button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.report-selector-container>div:first-child {
+    font-weight: 600;
+    font-size: 16px;
+}
+
 .plots-1D>div,
 .plots-2D>div {
     margin-bottom: 3rem;
@@ -49,7 +83,7 @@
 }
 
 .cluster-distance-plot-selector-container,
-.waterfall-plot-scatter-selector-container{
+.waterfall-plot-scatter-selector-container {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -62,7 +96,7 @@
     margin-top: 5px;
 }
 
-.waterfall-plot-scatter-selector-container{
+.waterfall-plot-scatter-selector-container {
     margin-top: 40px;
 }
 
@@ -106,6 +140,7 @@
     border-color: #4dbfdb;
     box-shadow: 0 0 4px rgba(77, 191, 219, 0.4);
 }
+
 
 /* end of plot2-observable-sortedby-ind-coloredby-clusterlabel-1D */
 /* ##################################################################### */

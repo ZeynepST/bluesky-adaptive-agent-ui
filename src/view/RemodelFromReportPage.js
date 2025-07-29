@@ -20,7 +20,7 @@ const colorMap = [
     '#2ca02c', // green
     '#d62728', // red
     '#9467bd', // purple
-    '#8c564b', // brownf
+    '#8c564b', // brown
     '#e377c2', // pink
     '#7f7f7f', // gray
     '#bcbd22', // olive
@@ -50,7 +50,12 @@ const RemodelFromReportPage = () => {
 
     const { clusterCenters, recentClusterCenters } = ReportViewModel(uidValue);
 
-    const { distances, clusterLabels } = RemodelViewModel(uidValue, clusterCenters, recentClusterCenters, independentVars, observables, transformIndVarPlotData);
+    const [selectedClusterCenterIdx, setSelectedClusterCenterIdx] = useState(() => {
+        return clusterCenters?.length ? clusterCenters.length - 1 : 0;
+    });
+
+    const { distances, clusterLabels } = RemodelViewModel(uidValue, clusterCenters, recentClusterCenters, independentVars, observables, selectedClusterCenterIdx);
+
     const uniqueLabels = [...new Set(clusterLabels)];
 
     const [offSetWFScatter1D, setOffSetWFScatter] = useState("");
@@ -61,6 +66,7 @@ const RemodelFromReportPage = () => {
     const [selectedScatterClusterIdx, setSelectedScatterClusterIdx] = useState(0);
 
     const [selectedWaterFallClusterIdx, setSelectedWaterFallClusterIdx] = useState(0);
+
 
     const numClusters = distances[0]?.length || 0;
 
@@ -183,6 +189,16 @@ const RemodelFromReportPage = () => {
             setSelectedWaterFallClusterIdx(selectedWaterFallClusterIdx + 1);
         }
     };
+    const handleNextReport=()=>{
+        if(selectedClusterCenterIdx<clusterCenters.length-1){
+            setSelectedClusterCenterIdx(selectedClusterCenterIdx+1);
+        }
+    }
+    const handlePrevReport=()=>{
+        if(selectedClusterCenterIdx>0){
+            setSelectedClusterCenterIdx(selectedClusterCenterIdx-1);
+        }
+    }
     //End of Handler Functions 
 
     // Calculate grid bounds (the rectangular area the data covers).
@@ -204,157 +220,83 @@ const RemodelFromReportPage = () => {
                     <div className="remodel-from-report-container">
                         <div className="remodel-from-report-page-graphs">
                             {/******************************************************************************************/}
-                            {/* beginning of 1D ind plots */}
-                            <div className="plots-1D-container">
-                                {is1D && distances.length > 0 && distances[0] && ( // This check prevents: export default RemodelFromReportPage;Cannot read properties of undefined (reading 'map')                                   
-                                    <div className="plots-1D">
-                                        {/* Beginning Scatter plot of the cluster group each point belongs to */}
-                                        <div className="plot1-ind-idx-color-cluster-labels-1D">
-                                            <PlotlyScatter
-                                                data={indIdxClusterTraces}
-                                                title=""
-                                                xAxisTitle="Index"
-                                                yAxisTitle="Independent Variables [1D]"
-                                            />
-                                        </div>
-                                        {/* End of Scatter plot of the cluster group each point belongs to */}
-                                        <div className="distance-index-graph-1D">
-                                            <PlotlyScatter
-                                                data={
-                                                    //essentially iterating through the columns
-                                                    distances[0].map((_, clusterIdx) => {
-                                                        const xValues = transformIndVarPlotData[0].y;
-                                                        const yValues = distances.map(d => d[clusterIdx]); //this iterates through all the rows in distances
-                                                        const sortedPairs = xValues.map((x, i) => ({ x, y: yValues[i] }))
-                                                            .sort((a, b) => a.x - b.x);
-                                                        return {
-                                                            x: sortedPairs.map(p => p.x),
-                                                            y: sortedPairs.map(p => p.y),
-                                                            type: 'scatter',
-                                                            mode: 'lines+markers',
-                                                            name: `Distance to Cluster ${clusterIdx}`,
-                                                            marker: {
-                                                                size: 15,
-                                                            },
-
-                                                        };
-                                                    })
-                                                }
-                                                title=""
-                                                xAxisTitle="Independent Variable"
-                                                yAxisTitle="Distances"
-                                            />
-                                        </div>
-                                        {/* end */}
-                                        {/* beginning of distance-index scatter plot */}
-                                        <div className="distance-index-graph-1D">
-                                            <div className="distance-index-graph-1D">
-                                                <PlotlyScatter
-                                                    data={scatterDistanceIdxData()}
-                                                    title={`Distance to Cluster ${selectedScatterClusterIdx} - 1D View`}
-                                                    xAxisTitle="Index"
-                                                    yAxisTitle="Independent Variables [1D]"
-                                                    colorAxisRange={{ cmin: globalMinDistances, cmax: globalMaxDistances }}
-                                                />
-                                            </div>
-                                        </div>
-                                        {/* Cluster selector controls */}
-                                        <div className="cluster-distance-plot-selector-container">
-                                            <button
-                                                onClick={handlePrevScatter}
-                                                disabled={selectedScatterClusterIdx === 0}
-                                            >
-                                                &larr; Prev
-                                            </button>
-                                            <Select
-                                                options={Array.from({ length: numClusters }, (_, idx) => ({
-                                                    label: `Cluster ${idx}`,
-                                                    value: idx
-                                                }))}
-                                                onChange={(option) => setSelectedScatterClusterIdx(option.value)}
-                                                value={{ label: `Cluster ${selectedScatterClusterIdx}`, value: selectedScatterClusterIdx }}
-                                            />
-                                            <button
-                                                onClick={handleNextScatter}
-                                                disabled={selectedScatterClusterIdx === numClusters - 1}
-                                            >
-                                                Next &rarr;
-                                            </button>
-                                        </div>
-                                        {/* end of distance-index scatter plot */}
-                                        <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-1D-container">
-                                            {/* This is the waterfall plot */}
-                                            <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-1D-wrapper">
-                                                <PlotlyScatter
-                                                    data={
-                                                        prepareWaterFallScatter(observables, clusterLabels, independentVars, offSetWFScatter1D, is1D, distances, selectedWaterFallClusterIdx)
-                                                    }
-                                                    title={`Observables Sorted by Distances to Cluster ${selectedWaterFallClusterIdx} - 1D View`}
-                                                    xAxisTitle="Observables Index"
-                                                    yAxisTitle="Observables"
-                                                    yAxisLayout={{
-                                                        showticklabels: false,
-                                                        ticks: "",
-                                                        showgrid: false,
-                                                    }}
-                                                />
-                                                <div className="waterfall-plot-scatter1D-offset-input-box" >
-                                                    <input
-                                                        type="number"
-                                                        className="offSetWFScatter1D-input"
-                                                        placeholder="Enter Offset..."
-                                                        value={offSetWFScatter1D}
-                                                        onChange={(e) => setOffSetWFScatter(Number(e.target.value))}
-                                                    />
-                                                </div>
-                                                <div className="waterfall-plot-scatter-selector-container">
-                                                    <button onClick={handlePrevWaterFall} disabled={selectedWaterFallClusterIdx === 0}>
-                                                        &larr; Prev
-                                                    </button>
-                                                    <Select
-                                                        options={distances[0].map((_, idx) => ({
-                                                            label: `Cluster ${idx}`,
-                                                            value: idx
-                                                        }))}
-                                                        onChange={(option) => setSelectedWaterFallClusterIdx(option.value)}
-                                                        value={{ label: `Cluster ${selectedWaterFallClusterIdx}`, value: selectedWaterFallClusterIdx }}
-                                                    />
-                                                    <button onClick={handleNextWaterFall} disabled={selectedWaterFallClusterIdx === numClusters - 1}>
-                                                        Next &rarr;
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            {/* End of waterfall plot */}
-                                        </div>
-                                    </div>
-                                )}
+                            <div className="report-selector-container">
+                                <div>
+                                    Select Which Report to View
+                                </div>
+                                <button
+                                    onClick={handlePrevReport}
+                                    disabled={selectedClusterCenterIdx === 0}
+                                >
+                                    &larr; Prev
+                                </button>
+                                <Select
+                                    options={Array.from({ length: clusterCenters.length }, (_, idx) => ({
+                                        label: `Report ${idx}`,
+                                        value: idx
+                                    }))}
+                                    onChange={(option) => setSelectedClusterCenterIdx(option.value)}
+                                    value={{ label: `Report ${selectedClusterCenterIdx}`, value: selectedClusterCenterIdx }}
+                                />
+                                <button
+                                    onClick={handleNextReport}
+                                    disabled={selectedClusterCenterIdx === clusterCenters.length - 1}
+                                >
+                                    Next &rarr;
+                                </button>
                             </div>
-                            {/* end of 1D ind var plots */}
-                            {/****************************************************************************************************************************************************************************************************************/}
-                            {/* beginning of 2D independent plots */}
-                            <div className="plots-2D-container">
-                                {!is1D && distances.length > 0 && distances[0] &&
-                                    (
-                                        <div className="plots-2D">
+
+                            <div className="testing">
+                                {/* beginning of 1D ind plots */}
+                                <div className="plots-1D-container">
+                                    {is1D && distances.length > 0 && distances[0] && ( // This check prevents: export default RemodelFromReportPage;Cannot read properties of undefined (reading 'map')                                   
+                                        <div className="plots-1D">
                                             {/* Beginning Scatter plot of the cluster group each point belongs to */}
-                                            <div className="plot1-ind-idx-color-cluster-labels-2D">
+                                            <div className="plot1-ind-idx-color-cluster-labels-1D">
                                                 <PlotlyScatter
                                                     data={indIdxClusterTraces}
-                                                    title="Independent Variables [2D]"
-                                                    xAxisTitle="Index 0"
-                                                    yAxisTitle="Index 1"
+                                                    title=""
+                                                    xAxisTitle="Index"
+                                                    yAxisTitle="Independent Variables [1D]"
                                                 />
                                             </div>
-                                            {/*End of Scatter plot of the cluster group each point belongs to */}
-                                            {/* beginning of distance-index plot */}
-                                            <div className="distance-index-graph-2D">
-                                                {/* Scatter plot */}
-                                                <div className="distance-index-graph-2D">
+                                            {/* End of Scatter plot of the cluster group each point belongs to */}
+                                            <div className="distance-index-graph-1D">
+                                                <PlotlyScatter
+                                                    data={
+                                                        //essentially iterating through the columns
+                                                        distances[0].map((_, clusterIdx) => {
+                                                            const xValues = transformIndVarPlotData[0].y;
+                                                            const yValues = distances.map(d => d[clusterIdx]); //this iterates through all the rows in distances
+                                                            const sortedPairs = xValues.map((x, i) => ({ x, y: yValues[i] }))
+                                                                .sort((a, b) => a.x - b.x);
+                                                            return {
+                                                                x: sortedPairs.map(p => p.x),
+                                                                y: sortedPairs.map(p => p.y),
+                                                                type: 'scatter',
+                                                                mode: 'lines+markers',
+                                                                name: `Distance to Cluster ${clusterIdx}`,
+                                                                marker: {
+                                                                    size: 15,
+                                                                },
+
+                                                            };
+                                                        })
+                                                    }
+                                                    title=""
+                                                    xAxisTitle="Independent Variable"
+                                                    yAxisTitle="Distances"
+                                                />
+                                            </div>
+                                            {/* end */}
+                                            {/* beginning of distance-index scatter plot */}
+                                            <div className="distance-index-graph-1D">
+                                                <div className="distance-index-graph-1D">
                                                     <PlotlyScatter
                                                         data={scatterDistanceIdxData()}
-                                                        title={`Distance to Cluster ${selectedScatterClusterIdx} - 2D View`}
-                                                        xAxisTitle="Index 0"
-                                                        yAxisTitle="Index 1"
+                                                        title={`Distance to Cluster ${selectedScatterClusterIdx} - 1D View`}
+                                                        xAxisTitle="Index"
+                                                        yAxisTitle="Independent Variables [1D]"
                                                         colorAxisRange={{ cmin: globalMinDistances, cmax: globalMaxDistances }}
                                                     />
                                                 </div>
@@ -382,51 +324,15 @@ const RemodelFromReportPage = () => {
                                                     Next &rarr;
                                                 </button>
                                             </div>
-                                            {/* end of distance-index plot */}
-
-                                            {/* beginning heat map */}
-                                            <div className="distance-index-graph-2D-heatmap">
-                                                <PlotlyHeatmap
-                                                    array={heatMapData}
-                                                    title={`Distance to Cluster ${selectedHMClusterIdx} - 2D View`}
-                                                    xAxisTitle="Index 0"
-                                                    yAxisTitle="Index 1"
-                                                    colorScale="Viridis"
-                                                    tickStep={5}
-                                                    showTicks={true}
-                                                    dataPoints={independentVars}
-                                                    selectedCluster={selectedHMClusterIdx}
-                                                    distances={distances}
-                                                    gridBounds={gridBounds}
-                                                    zMin={globalMinDistances}
-                                                    zMax={globalMaxDistances}
-                                                />
-                                                <div className="cluster-distance-plot-selector-container">
-                                                    <button onClick={handlePrevHM} disabled={selectedHMClusterIdx === 0}>
-                                                        &larr; Prev
-                                                    </button>
-                                                    <Select
-                                                        options={distances[0].map((_, idx) => ({
-                                                            label: `Cluster ${idx}`,
-                                                            value: idx
-                                                        }))}
-                                                        onChange={(option) => setSelectedHMClusterIdx(option.value)}
-                                                        value={{ label: `Cluster ${selectedHMClusterIdx}`, value: selectedHMClusterIdx }}
-                                                    />
-                                                    <button onClick={handleNextHM} disabled={selectedHMClusterIdx === numClusters - 1}>
-                                                        Next &rarr;
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            {/* end of heat map */}
-                                            {/* beginning waterfall plot*/}
-                                            <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-2D-container">
-                                                <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-2D-wrapper">
+                                            {/* end of distance-index scatter plot */}
+                                            <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-1D-container">
+                                                {/* This is the waterfall plot */}
+                                                <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-1D-wrapper">
                                                     <PlotlyScatter
                                                         data={
                                                             prepareWaterFallScatter(observables, clusterLabels, independentVars, offSetWFScatter1D, is1D, distances, selectedWaterFallClusterIdx)
                                                         }
-                                                        title={`Observables Sorted by Distances to Cluster ${selectedWaterFallClusterIdx} - 2D View`}
+                                                        title={`Observables Sorted by Distances to Cluster ${selectedWaterFallClusterIdx} - 1D View`}
                                                         xAxisTitle="Observables Index"
                                                         yAxisTitle="Observables"
                                                         yAxisLayout={{
@@ -435,10 +341,10 @@ const RemodelFromReportPage = () => {
                                                             showgrid: false,
                                                         }}
                                                     />
-                                                    <div className="waterfall-plot-scatter2D-offset-input-box" >
+                                                    <div className="waterfall-plot-scatter1D-offset-input-box" >
                                                         <input
                                                             type="number"
-                                                            className="offSetWFScatter2D-input"
+                                                            className="offSetWFScatter1D-input"
                                                             placeholder="Enter Offset..."
                                                             value={offSetWFScatter1D}
                                                             onChange={(e) => setOffSetWFScatter(Number(e.target.value))}
@@ -464,10 +370,149 @@ const RemodelFromReportPage = () => {
                                                 {/* End of waterfall plot */}
                                             </div>
                                         </div>
-                                    )
-                                }
+                                    )}
+                                </div>
+                                {/* end of 1D ind var plots */}
+                                {/****************************************************************************************************************************************************************************************************************/}
+                                {/* beginning of 2D independent plots */}
+                                <div className="plots-2D-container">
+                                    {!is1D && distances.length > 0 && distances[0] &&
+                                        (
+                                            <div className="plots-2D">
+                                                {/* Beginning Scatter plot of the cluster group each point belongs to */}
+                                                <div className="plot1-ind-idx-color-cluster-labels-2D">
+                                                    <PlotlyScatter
+                                                        data={indIdxClusterTraces}
+                                                        title="Independent Variables [2D]"
+                                                        xAxisTitle="Index 0"
+                                                        yAxisTitle="Index 1"
+                                                    />
+                                                </div>
+                                                {/*End of Scatter plot of the cluster group each point belongs to */}
+                                                {/* beginning of distance-index plot */}
+                                                <div className="distance-index-graph-2D">
+                                                    {/* Scatter plot */}
+                                                    <div className="distance-index-graph-2D">
+                                                        <PlotlyScatter
+                                                            data={scatterDistanceIdxData()}
+                                                            title={`Distance to Cluster ${selectedScatterClusterIdx} - 2D View`}
+                                                            xAxisTitle="Index 0"
+                                                            yAxisTitle="Index 1"
+                                                            colorAxisRange={{ cmin: globalMinDistances, cmax: globalMaxDistances }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                {/* Cluster selector controls */}
+                                                <div className="cluster-distance-plot-selector-container">
+                                                    <button
+                                                        onClick={handlePrevScatter}
+                                                        disabled={selectedScatterClusterIdx === 0}
+                                                    >
+                                                        &larr; Prev
+                                                    </button>
+                                                    <Select
+                                                        options={Array.from({ length: numClusters }, (_, idx) => ({
+                                                            label: `Cluster ${idx}`,
+                                                            value: idx
+                                                        }))}
+                                                        onChange={(option) => setSelectedScatterClusterIdx(option.value)}
+                                                        value={{ label: `Cluster ${selectedScatterClusterIdx}`, value: selectedScatterClusterIdx }}
+                                                    />
+                                                    <button
+                                                        onClick={handleNextScatter}
+                                                        disabled={selectedScatterClusterIdx === numClusters - 1}
+                                                    >
+                                                        Next &rarr;
+                                                    </button>
+                                                </div>
+                                                {/* end of distance-index plot */}
+
+                                                {/* beginning heat map */}
+                                                <div className="distance-index-graph-2D-heatmap">
+                                                    <PlotlyHeatmap
+                                                        array={heatMapData}
+                                                        title={`Distance to Cluster ${selectedHMClusterIdx} - 2D View`}
+                                                        xAxisTitle="Index 0"
+                                                        yAxisTitle="Index 1"
+                                                        colorScale="Viridis"
+                                                        tickStep={5}
+                                                        showTicks={true}
+                                                        dataPoints={independentVars}
+                                                        selectedCluster={selectedHMClusterIdx}
+                                                        distances={distances}
+                                                        gridBounds={gridBounds}
+                                                        zMin={globalMinDistances}
+                                                        zMax={globalMaxDistances}
+                                                    />
+                                                    <div className="cluster-distance-plot-selector-container">
+                                                        <button onClick={handlePrevHM} disabled={selectedHMClusterIdx === 0}>
+                                                            &larr; Prev
+                                                        </button>
+                                                        <Select
+                                                            options={distances[0].map((_, idx) => ({
+                                                                label: `Cluster ${idx}`,
+                                                                value: idx
+                                                            }))}
+                                                            onChange={(option) => setSelectedHMClusterIdx(option.value)}
+                                                            value={{ label: `Cluster ${selectedHMClusterIdx}`, value: selectedHMClusterIdx }}
+                                                        />
+                                                        <button onClick={handleNextHM} disabled={selectedHMClusterIdx === numClusters - 1}>
+                                                            Next &rarr;
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                {/* end of heat map */}
+                                                {/* beginning waterfall plot*/}
+                                                <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-2D-container">
+                                                    <div className="plot2-observable-sortedby-ind-coloredby-clusterlabel-2D-wrapper">
+                                                        <PlotlyScatter
+                                                            data={
+                                                                prepareWaterFallScatter(observables, clusterLabels, independentVars, offSetWFScatter1D, is1D, distances, selectedWaterFallClusterIdx)
+                                                            }
+                                                            title={`Observables Sorted by Distances to Cluster ${selectedWaterFallClusterIdx} - 2D View`}
+                                                            xAxisTitle="Observables Index"
+                                                            yAxisTitle="Observables"
+                                                            yAxisLayout={{
+                                                                showticklabels: false,
+                                                                ticks: "",
+                                                                showgrid: false,
+                                                            }}
+                                                        />
+                                                        <div className="waterfall-plot-scatter2D-offset-input-box" >
+                                                            <input
+                                                                type="number"
+                                                                className="offSetWFScatter2D-input"
+                                                                placeholder="Enter Offset..."
+                                                                value={offSetWFScatter1D}
+                                                                onChange={(e) => setOffSetWFScatter(Number(e.target.value))}
+                                                            />
+                                                        </div>
+                                                        <div className="waterfall-plot-scatter-selector-container">
+                                                            <button onClick={handlePrevWaterFall} disabled={selectedWaterFallClusterIdx === 0}>
+                                                                &larr; Prev
+                                                            </button>
+                                                            <Select
+                                                                options={distances[0].map((_, idx) => ({
+                                                                    label: `Cluster ${idx}`,
+                                                                    value: idx
+                                                                }))}
+                                                                onChange={(option) => setSelectedWaterFallClusterIdx(option.value)}
+                                                                value={{ label: `Cluster ${selectedWaterFallClusterIdx}`, value: selectedWaterFallClusterIdx }}
+                                                            />
+                                                            <button onClick={handleNextWaterFall} disabled={selectedWaterFallClusterIdx === numClusters - 1}>
+                                                                Next &rarr;
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    {/* End of waterfall plot */}
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+                                </div>
+                                {/* end of 2D ind variable plots */}
+                                {/* ***** */}
                             </div>
-                            {/* end of 2D ind variable plots */}
                         </div>
                     </div>
                 )
