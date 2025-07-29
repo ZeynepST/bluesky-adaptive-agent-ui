@@ -49,7 +49,7 @@
 }
 
 .cluster-distance-plot-selector-container,
-.waterfall-plot-scatter2D-selector-container {
+.waterfall-plot-scatter-selector-container{
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -62,7 +62,7 @@
     margin-top: 5px;
 }
 
-.waterfall-plot-scatter2D-selector-container {
+.waterfall-plot-scatter-selector-container{
     margin-top: 40px;
 }
 
