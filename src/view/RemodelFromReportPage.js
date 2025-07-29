@@ -10,11 +10,11 @@ import { createHeatmapGrid } from '../view-model/RemodelViewModel.js';
 import { prepareWaterFallScatter } from '../view-model/RemodelViewModel.js';
 import PlotlyScatter from '../components/Plots/PlotlyScatter';
 import PlotlyHeatmap from '../components/Plots/PlotlyHeatmap';
-// import ClusterDistancePlot from '../components/Plots/ClusterDistancePlot';
 // Stylesheets: 
 import '../stylesheets/UidStylesheets/RemodelFromReportPage.css';
 
-const tab10 = [
+// color map used to assign consistent colors to cluster labels 
+const colorMap = [
     '#1f77b4', // blue
     '#ff7f0e', // orange
     '#2ca02c', // green
@@ -26,6 +26,19 @@ const tab10 = [
     '#bcbd22', // olive
     '#17becf'  // cyan
 ];
+
+/**
+ * This component renders multiple visualizations derived from report and ingest data. It shows distances
+ * 
+ * Features:
+ *  - Heatmap of distance distributions
+ *  - Cluster label scatter plots
+ *  - Observable waterfall plots sorted by cluster distances
+ *  - Distance to cluster scatter plot
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered component with visualizations
+ */
 
 const RemodelFromReportPage = () => {
 
@@ -51,11 +64,18 @@ const RemodelFromReportPage = () => {
 
     const numClusters = distances[0]?.length || 0;
 
+    /**
+     * Map of cluster label to color, creted using 'colorMap' and 'uniqueLabels'
+     * Ensures consistent coloring across plots
+     * @type {Object<number, string>}
+     */
     const clusterColorMap = {};
     uniqueLabels.forEach((label, idx) => {
-        clusterColorMap[label] = tab10[idx % tab10.length];
+        clusterColorMap[label] = colorMap[idx % colorMap.length];
     });
 
+
+    // If the following do not exist, display a spinner to inform user that the data is being loaded 
     if (!chosenUidObject || !transformIndVarPlotData || transformIndVarPlotData.length === 0 || !transformIndVarPlotData[0].x || !clusterLabels ||
         clusterLabels.length === 0 || !independentVars || !distances || independentVars.length === 0) {
         return <span className="spinner" aria-label="Loading..." />;
@@ -66,9 +86,14 @@ const RemodelFromReportPage = () => {
     const globalMinDistances = Math.min(...allDistances);
     const globalMaxDistances = Math.max(...allDistances);
 
-    // indIdxClusterTraces holds the traces for the scatter plot of the independent variables 
+    /**
+     * Data traces for independent variable scatter plots.
+     * Groups points by cluster label and assigns consistent colors
+     * Used in 1D and 2D scatter plots
+     * @type {Object[]}
+     */
     const indIdxClusterTraces = uniqueLabels.map((label, idx) => { //this loops through each unique cluster label
-       const color = tab10[label % tab10.length]; //picks a color from tab10. %tab10.length ensures a loop around in event that there are more than 10 clusters
+        const color = colorMap[label % colorMap.length]; //picks a color from tab10. %tab10.length ensures a loop around in event that there are more than 10 clusters
 
         //the arrays below hold the x and y values for just one cluster at a time (so 0 or 1 or 2, etc)
         const x = [];
@@ -95,9 +120,18 @@ const RemodelFromReportPage = () => {
 
     const heatmapData = createHeatmapGrid(independentVars, distances, selectedHMClusterIdx);
 
-    const scatterDistanceIdxData2D = () => {
+    /**
+     * Constructs Plotly Scatter plot data showing distances from each point to a selected cluster center
+     * 
+     * @function
+     * @returns {Object[]} Array of Plotly trace objects for 2D
+     */
+    const scatterDistanceIdxData = () => {
         const x = transformIndVarPlotData[0].x;
+        console.log("the x value is ", x);
+
         const y = transformIndVarPlotData[0].y;
+        console.log("the y value is ", y);
         const distanceValues = distances.map(d => d[selectedScatterClusterIdx]);
         const hoverTexts = clusterLabels.map((label, i) =>
             `Point ${i}<br>Cluster Label: ${label}<br>Distance to Cluster ${selectedScatterClusterIdx}: ${distanceValues[i].toFixed(2)}`
@@ -154,7 +188,7 @@ const RemodelFromReportPage = () => {
     };
     //End of Handler Functions 
 
-    // Calculate grid bounds (the rectangular area the data covers)
+    // Calculate grid bounds (the rectangular area the data covers). This is only for 2D
     const xValues = independentVars.map(point => point[0]);
     const yValues = independentVars.map(point => point[1]);
     const gridBounds = {
@@ -178,31 +212,39 @@ const RemodelFromReportPage = () => {
                                     <div classsName="plots-1D">
                                         {/* beginning of distance-index plot */}
                                         <div className="distance-index-graph-1D">
-                                            <PlotlyScatter
-                                                data={
-                                                    //essentially iterating through the columns
-                                                    distances[0].map((_, clusterIdx) => {
-                                                        const xValues = transformIndVarPlotData[0].y;
-                                                        const yValues = distances.map(d => d[clusterIdx]); //this iterates through all the rows in distances
-                                                        const sortedPairs = xValues.map((x, i) => ({ x, y: yValues[i] }))
-                                                            .sort((a, b) => a.x - b.x);
-                                                        return {
-                                                            x: sortedPairs.map(p => p.x),
-                                                            y: sortedPairs.map(p => p.y),
-                                                            type: 'scatter',
-                                                            mode: 'lines+markers',
-                                                            name: `Distance to Cluster ${clusterIdx}`,
-                                                            marker: {
-                                                                size: 15,                                                      
-                                                            },
-
-                                                        };
-                                                    })
-                                                }
-                                                title=""
-                                                xAxisTitle="Independent Variable"
-                                                yAxisTitle="Distances"
+                                            {/* Scatter plot */}
+                                            <div className="distance-index-graph-1D">
+                                                <PlotlyScatter
+                                                    data={scatterDistanceIdxData()}
+                                                    title={`Distance to Cluster ${selectedScatterClusterIdx} - 1D View`}
+                                                    xAxisTitle="Index"
+                                                    yAxisTitle="Independent Variables [1D]"
+                                                    colorAxisRange={{ cmin: globalMinDistances, cmax: globalMaxDistances }}
+                                                />
+                                            </div>
+                                        </div>
+                                        {/* Cluster selector controls */}
+                                        <div className="cluster-distance-plot-selector-container">
+                                            <button
+                                                onClick={handlePrevScatter}
+                                                disabled={selectedScatterClusterIdx === 0}
+                                            >
+                                                &larr; Prev
+                                            </button>
+                                            <Select
+                                                options={Array.from({ length: numClusters }, (_, idx) => ({
+                                                    label: `Cluster ${idx}`,
+                                                    value: idx
+                                                }))}
+                                                onChange={(option) => setSelectedScatterClusterIdx(option.value)}
+                                                value={{ label: `Cluster ${selectedScatterClusterIdx}`, value: selectedScatterClusterIdx }}
                                             />
+                                            <button
+                                                onClick={handleNextScatter}
+                                                disabled={selectedScatterClusterIdx === numClusters - 1}
+                                            >
+                                                Next &rarr;
+                                            </button>
                                         </div>
                                         {/* end of distance-index plot */}
                                         <div className="plot1-ind-idx-color-cluster-labels-1D">
@@ -244,7 +286,7 @@ const RemodelFromReportPage = () => {
                                 )}
                             </div>
                             {/* end of 1D ind var plots */}
-                            {/******************************************************************************************/}
+                            {/****************************************************************************************************************************************************************************************************************/}
                             {/* beginning of 2D independent plots */}
                             <div className="plots-2D-container">
                                 {!is1D && distances.length > 0 && distances[0] &&
@@ -255,7 +297,7 @@ const RemodelFromReportPage = () => {
                                                 {/* Scatter plot */}
                                                 <div className="distance-index-graph-2D">
                                                     <PlotlyScatter
-                                                        data={scatterDistanceIdxData2D()}
+                                                        data={scatterDistanceIdxData()}
                                                         title={`Distance to Cluster ${selectedScatterClusterIdx} - 2D View`}
                                                         xAxisTitle="Index 0"
                                                         yAxisTitle="Index 1"
