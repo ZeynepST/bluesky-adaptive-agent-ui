@@ -28,6 +28,26 @@ export const get_cluster_centers = async (uidValue) => {
 }
 
 /**
+ * Fetches the components for a given UID.
+ *
+ * @async
+ * @function get_components
+ * @param {string} uidValue - The UID associated with the report.
+ * @returns {Promise<Array|[]>} A nested array of components, or an empty array on failure.
+ */
+export const get_components = async (uidValue) => {
+    try {
+        const response = await axios.get(`/api/v1/array/full/${uidValue}/report/data/components?format=application/json`);
+        const nestedComponents = response.data;
+        return nestedComponents;
+    }
+    catch (error) {
+        console.error(error);
+        return [];
+    }
+}
+
+/**
  * Fetches the report cache length for a given UID.
  *
  * @async
