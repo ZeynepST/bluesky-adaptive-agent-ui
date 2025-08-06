@@ -63,9 +63,14 @@ const UidBanner = ({ uidObject, viewMode }) => {
                             <button className={`ingest-report-btns ${viewMode === "report" ? "selected" : ""}`}>Report &gt;</button>
                         </Link>
                     )}
-                    {uidObject.hasReport && uidObject.hasIngest && (
-                        <Link to={`/UidPage/${uidObject.uidValue}/remodel`}>
-                            <button className={`ingest-report-btns ${viewMode === "remodel" ? "selected" : ""}`}>Remodel &gt;</button>
+                    {uidObject.hasReport && uidObject.hasIngest && uidObject.agentType === "ClusterAgent" && (
+                        <Link to={`/UidPage/${uidObject.uidValue}/remodelCluster`}>
+                            <button className={`ingest-report-btns ${viewMode === "remodelCluster" ? "selected" : ""}`}>Remodel &gt;</button>
+                        </Link>
+                    )}
+                    {uidObject.hasReport && uidObject.hasIngest && uidObject.agentType === "DecompositionAgent" && (
+                        <Link to={`/UidPage/${uidObject.uidValue}/remodelCluster`}>
+                            <button className={`ingest-report-btns ${viewMode === "remodelCluster" ? "selected" : ""}`}>Remodel &gt;</button>
                         </Link>
                     )}
                 </div>
