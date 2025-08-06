@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import { useState } from 'react';
 import Select from 'react-select';
-import { UidContext } from '../view-model/UidContext';
+import { UidContext } from '../view-model/UidContext.js';
 import { useParams } from 'react-router-dom';
-import { RemodelViewModel } from '../view-model/RemodelViewModel';
-import { IngestViewModel } from '../view-model/IngestViewModel';
-import { ReportViewModel } from '../view-model/ReportViewModel';
+import { RemodelViewModel } from '../view-model/RemodelViewModel.js';
+import { IngestViewModel } from '../view-model/IngestViewModel.js';
+import { ReportViewModel } from '../view-model/ReportViewModel.js';
 import { createHeatmapGrid } from '../view-model/RemodelViewModel.js';
 import { prepareWaterFallScatter } from '../view-model/RemodelViewModel.js';
-import PlotlyScatter from '../components/Plots/PlotlyScatter';
-import PlotlyHeatmap from '../components/Plots/PlotlyHeatmap';
+import PlotlyScatter from '../components/Plots/PlotlyScatter.js';
+import PlotlyHeatmap from '../components/Plots/PlotlyHeatmap.js';
 // Stylesheets: 
 import '../stylesheets/UidStylesheets/RemodelFromReportPage.css';
 
@@ -48,7 +48,7 @@ const RemodelFromReportPage = () => {
 
     const { transformIndVarPlotData, independentVars, observables, is1D } = IngestViewModel(uidValue);
 
-    const { clusterCenters, recentClusterCenters } = ReportViewModel(uidValue);
+    const { clusterCenters, recentClusterCenters} = ReportViewModel(uidValue);
 
     const [selectedClusterCenterIdx, setSelectedClusterCenterIdx] = useState(() => {
         return clusterCenters?.length ? clusterCenters.length - 1 : 0;
