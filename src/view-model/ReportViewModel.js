@@ -2,6 +2,29 @@ import { useState, useEffect } from "react";
 import { get_cluster_centers, get_components, get_reports_cache_length } from "../models/fetchReportData";
 
 
+/**
+ * ReportViewModel.js
+ *
+ * This is a custom React hook that fetches and manages data related to report outputs 
+ * from different AI agents (ClusterAgent or DecompositionAgent). 
+ * It tracks both all reports and the most recent one, and transforms the data 
+ * for compatibility with Plotly plots.
+ * 
+ * 
+ * @param {string} uidValue - Unique identifier for the report (uid.uidValue).
+ * @param {"ClusterAgent" | "DecompositionAgent"} agentType 
+ * 
+ * @returns {{
+ *   clusterCenters: Array<Array<number>>,
+ *   recentClusterCenters: Array<Array<number>>,
+ *   components: Array<Array<number>>,
+ *   recentComponents: Array<Array<number>>,
+ *   transformRCC: Array<object>,
+ *   reportsCacheLength: Array<number>
+ * }}
+ *
+ */
+
 //uid is the object, not the uid number itself. To access the uid number you need to do uid.uidValue as defined in fetchUids.js
 export const ReportViewModel = (uidValue, agentType) => {
 
