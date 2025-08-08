@@ -1,17 +1,21 @@
+/**
+ * This is a placeholder for the RemodelDecompositionDataPage
+ */
+
 import React, { useContext } from 'react';
 import { useState } from 'react';
 import Select from 'react-select';
-import { UidContext } from '../view-model/UidContext.js';
+import { UidContext } from '../../view-model/UidContext.js';
 import { useParams } from 'react-router-dom';
-import { RemodelViewModel } from '../view-model/RemodelViewModel.js';
-import { IngestViewModel } from '../view-model/IngestViewModel.js';
-import { ReportViewModel } from '../view-model/ReportViewModel.js';
-import { createHeatmapGrid } from '../view-model/RemodelViewModel.js';
-import { prepareWaterFallScatter } from '../view-model/RemodelViewModel.js';
-import PlotlyScatter from '../components/Plots/PlotlyScatter.js';
-import PlotlyHeatmap from '../components/Plots/PlotlyHeatmap.js';
+import { RemodelViewModel } from '../../view-model/RemodelViewModel.js';
+import { IngestViewModel } from '../../view-model/IngestViewModel.js';
+import { ReportViewModel } from '../../view-model/ReportViewModel.js';
+import { createHeatmapGrid } from '../../view-model/RemodelViewModel.js';
+import { prepareWaterFallScatter } from '../../view-model/RemodelViewModel.js';
+import PlotlyScatter from '../../components/Plots/PlotlyScatter.js';
+import PlotlyHeatmap from '../../components/Plots/PlotlyHeatmap.js';
 // Stylesheets: 
-import '../stylesheets/UidStylesheets/RemodelFromReportPage.css';
+import '../../stylesheets/UidStylesheets/RemodelFromReportPage.css';
 
 // color map used to assign consistent colors to cluster labels 
 const colorMap = [
@@ -32,7 +36,6 @@ const colorMap = [
  * 
  * Features:
  *  - Heatmap of distance distributions
- *  - Cluster label scatter plots
  *  - Observable waterfall plots sorted by cluster distances
  *  - Distance to cluster scatter plot
  * 
@@ -40,7 +43,7 @@ const colorMap = [
  * @returns {JSX.Element} The rendered component with visualizations
  */
 
-const RemodelFromReportPage = () => {
+const RemodelDecompositionPage = () => {
 
     const { uidsInfo } = useContext(UidContext);
     const { uidValue } = useParams();
@@ -48,7 +51,7 @@ const RemodelFromReportPage = () => {
 
     const { transformIndVarPlotData, independentVars, observables, is1D } = IngestViewModel(uidValue);
 
-    const { clusterCenters, recentClusterCenters} = ReportViewModel(uidValue);
+    const { clusterCenters, recentClusterCenters} = ReportViewModel(uidValue, chosenUidObject.agentType);
 
     const [selectedClusterCenterIdx, setSelectedClusterCenterIdx] = useState(() => {
         return clusterCenters?.length ? clusterCenters.length - 1 : 0;
@@ -249,7 +252,7 @@ const RemodelFromReportPage = () => {
                             <div className="testing">
                                 {/* beginning of 1D ind plots */}
                                 <div className="plots-1D-container">
-                                    {is1D && distances.length > 0 && distances[0] && ( // This check prevents: export default RemodelFromReportPage;Cannot read properties of undefined (reading 'map')                                   
+                                    {is1D && distances.length > 0 && distances[0] && ( 
                                         <div className="plots-1D">
                                             {/* Beginning Scatter plot of the cluster group each point belongs to */}
                                             <div className="plot1-ind-idx-color-cluster-labels-1D">
@@ -521,4 +524,4 @@ const RemodelFromReportPage = () => {
         </div>
     );
 }
-export default RemodelFromReportPage;
+export default RemodelDecompositionPage;
