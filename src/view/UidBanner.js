@@ -69,8 +69,8 @@ const UidBanner = ({ uidObject, viewMode }) => {
                         </Link>
                     )}
                     {uidObject.hasReport && uidObject.hasIngest && uidObject.agentType === "DecompositionAgent" && (
-                        <Link to={`/UidPage/${uidObject.uidValue}/remodelCluster`}>
-                            <button className={`ingest-report-btns ${viewMode === "remodelCluster" ? "selected" : ""}`}>Remodel &gt;</button>
+                        <Link to={`/UidPage/${uidObject.uidValue}/remodelDecomposition`}>
+                            <button className={`ingest-report-btns ${viewMode === "remodelDecomposition" ? "selected" : ""}`}>Remodel &gt;</button>
                         </Link>
                     )}
                 </div>

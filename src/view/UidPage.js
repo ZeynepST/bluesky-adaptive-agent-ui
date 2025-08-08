@@ -5,9 +5,8 @@ import SideBar from '../view/SideBar';
 import UidBanner from '../view/UidBanner';
 import IngestDataPage from '../view/IngestDataPage';
 import ReportDataPage from '../view/ReportDataPage';
-import RemodelPage from './RemodelDataPage';
-// import RemodelClusterPage from './RemodelDataPage';
-// import RemodelComponentPage from './RemodelDataPage';
+import RemodelClusterPage from './RemodelPages/RemodelClusterDataPage';
+import RemodelDecompositionPage from './RemodelPages/RemodelDecompositionDataPage';
 
 //Stylesheets:
 import '../stylesheets/UidStylesheets/UidPage.css';
@@ -22,7 +21,7 @@ import '../stylesheets/UidStylesheets/UidPage.css';
  * - Conditionally renders subcomponents based on the selected `viewMode`:
  *      -`IngestDataPage` for ingest-related data
  *      - `ReportDataPage` for report-related data
- *      - `RemodelFromReportPage` for initiating a remodel based on a report
+ *      - `RemodelClusterDataPage` or `RemodelDecompositionDataPage` for initiating a remodel based on a report
  * 
  *   @component
  */
@@ -64,7 +63,8 @@ const UidPage = () => {
                                     {/* If a UID object is chosen, the render will depend on whether Report or Ingest was selected */}
                                     {viewMode === "ingest" && chosenUidObject.hasIngest && (<IngestDataPage />)}
                                     {viewMode === "report" && chosenUidObject.hasReport && (<ReportDataPage />)}
-                                    {viewMode === "remodelCluster" && chosenUidObject.hasReport && (<RemodelPage />)}
+                                    {viewMode === "remodelCluster" && chosenUidObject.hasReport && (<RemodelClusterPage />)}
+                                    {viewMode === "remodelDecomposition" && chosenUidObject.hasReport && (<RemodelDecompositionPage />)}
                                 </div>
                             </div>
                         </>
