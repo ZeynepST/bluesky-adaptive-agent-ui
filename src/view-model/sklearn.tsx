@@ -21,16 +21,16 @@ export async function remodelFromReportTS({
     observables,
     clusterCenters,
     recentClusterCenters,
-    idx  //needs further checking
+    clusterCenterIdx  
 }: {
     observables: number[][],
     clusterCenters: number[][][],
     recentClusterCenters: number[][],
-    idx?: number,
+    clusterCenterIdx: number,
 }) {
-
-    const selectedCenters = typeof idx === 'number' ? clusterCenters[idx] : recentClusterCenters;
     
+    const selectedCenters = typeof  clusterCenterIdx === 'number' ? clusterCenters[clusterCenterIdx] : recentClusterCenters;
+
     // convert data to tensors
     const X = tf.tensor2d(observables);
     const centers = tf.tensor2d(selectedCenters);

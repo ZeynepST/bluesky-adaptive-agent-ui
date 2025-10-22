@@ -25,7 +25,7 @@ const UidBanner = ({ uidObject, viewMode }) => {
 
     if (!uidObject) return null;
 
-    const  cacheLen = IngestViewModel(uidObject.hasIngest ? uidObject.uidValue : null)?.cache_len;
+    const cacheLen = IngestViewModel(uidObject.hasIngest ? uidObject.uidValue : null)?.cache_len;
 
     return (
         <aside className="uid-banner-container">
@@ -36,11 +36,19 @@ const UidBanner = ({ uidObject, viewMode }) => {
                     <div><span className="uid-banner-labels">Time Stamp:</span> {uidObject.datetime}</div>
                     <div><span className="uid-banner-labels">Agent Name:</span> {uidObject.agentName}</div>
                     <div><span className="uid-banner-labels">Model Type:</span> {uidObject.modelType}</div>
-                    <div><span className="uid-banner-labels">Algorithm:</span> {uidObject.modelAlgorithm}</div>
                     <div><span className="uid-banner-labels">Max Iterations:</span> {uidObject.maxIter}</div>
-                    <div><span className="uid-banner-labels">Number of Clusters:</span> {uidObject.numberOfClusters}</div>
                     <div><span className="uid-banner-labels">Random State:</span> {uidObject.randomState}</div>
                     <div><span className="uid-banner-labels">Cache Length:</span> {cacheLen ?? 0}</div>
+                    {uidObject.agentType === "ClusterAgent" && (
+                        <div className="cluster-agent-only-banner">
+                            <div><span className="uid-banner-labels">Number of Clusters:</span> {uidObject.numberOfClusters}</div>
+                            {/* Only Cluster Agent seems to have this Algorithm attribute */}
+                            <div><span className="uid-banner-labels">Algorithm:</span> {uidObject.modelAlgorithm}</div>
+                        </div>
+                    )}
+                    {uidObject.agentType === "DecompositionAgent" && (
+                        <div><span className="uid-banner-labels">Number of Components:</span> {uidObject.numberOfComponents}</div>
+                    )}
                 </li>
             </ul>
             <div className="ingest-report-btns-container">
@@ -55,9 +63,14 @@ const UidBanner = ({ uidObject, viewMode }) => {
                             <button className={`ingest-report-btns ${viewMode === "report" ? "selected" : ""}`}>Report &gt;</button>
                         </Link>
                     )}
-                    {uidObject.hasReport && uidObject.hasIngest && (
-                        <Link to={`/UidPage/${uidObject.uidValue}/remodel`}>
-                            <button className={`ingest-report-btns ${viewMode === "remodel" ? "selected" : ""}`}>Remodel &gt;</button>
+                    {uidObject.hasReport && uidObject.hasIngest && uidObject.agentType === "ClusterAgent" && (
+                        <Link to={`/UidPage/${uidObject.uidValue}/remodelCluster`}>
+                            <button className={`ingest-report-btns ${viewMode === "remodelCluster" ? "selected" : ""}`}>Remodel &gt;</button>
+                        </Link>
+                    )}
+                    {uidObject.hasReport && uidObject.hasIngest && uidObject.agentType === "DecompositionAgent" && (
+                        <Link to={`/UidPage/${uidObject.uidValue}/remodelDecomposition`}>
+                            <button className={`ingest-report-btns ${viewMode === "remodelDecomposition" ? "selected" : ""}`}>Remodel &gt;</button>
                         </Link>
                     )}
                 </div>

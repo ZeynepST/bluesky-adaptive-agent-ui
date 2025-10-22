@@ -35,8 +35,6 @@ export const IngestViewModel = (uidValue, refreshKey = 0) => {
     useEffect(() => {
 
         if (!uidValue) return;
-        console.log("type of uidValue is ", typeof(uidValue));
-
         const loadData = async () => {
             try {
                 setLoadingIngest(true);

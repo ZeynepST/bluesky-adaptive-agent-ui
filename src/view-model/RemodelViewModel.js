@@ -16,8 +16,7 @@ const colorMap = [
     '#17becf'  // cyan
 ];
 
-//not sure about the parameter 
-export const RemodelViewModel = (uidValue, clusterCenters, recentClusterCenters, independentVars, observables) => {
+export const RemodelViewModel = (uidValue, clusterCenters, recentClusterCenters, independentVars, observables, clusterCenterIdx) => {
 
     const [distances, setDistances] = useState([]);
     const [clusterLabels, setClusterLabels] = useState([]);
@@ -32,14 +31,14 @@ export const RemodelViewModel = (uidValue, clusterCenters, recentClusterCenters,
         if (!recentClusterCenters || !Array.isArray(recentClusterCenters) || recentClusterCenters.length === 0) {
             return;
         }
-
         const loadData = async () => {
             try {
                 const result = await remodelFromReportTS({
                     observables,
                     clusterCenters,
                     recentClusterCenters,
-                    model_type: "KMeans"
+                    clusterCenterIdx
+                    // model_type: "KMeans"
                 });
 
                 setDistances(result.distances);
@@ -51,7 +50,7 @@ export const RemodelViewModel = (uidValue, clusterCenters, recentClusterCenters,
         };
 
         loadData();
-    }, [uidValue, independentVars, observables, clusterCenters, recentClusterCenters]); //needs further testing
+    }, [uidValue, independentVars, observables, clusterCenters, recentClusterCenters, clusterCenterIdx]); //needs further testing
 
     return {
         distances, clusterLabels
