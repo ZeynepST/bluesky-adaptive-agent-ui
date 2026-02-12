@@ -21,10 +21,12 @@ const ReportDataPage = () => {
 
     const { uidsInfo } = useContext(UidContext);
     const { viewMode, uidValue } = useParams();
-    const { clusterCenters, recentClusterCenters, transformRCC, reportsCacheLength } = ReportViewModel(uidValue);
-
 
     const chosenUidObject = uidsInfo.find(uid => uid.uidValue === uidValue);
+    const agentType = chosenUidObject.agentType;
+
+    const { clusterCenters, recentClusterCenters, components, recentComponents, transformRCC, reportsCacheLength } = ReportViewModel(uidValue, agentType);
+
     if (!chosenUidObject || !clusterCenters || !transformRCC || !reportsCacheLength) {
         return <span className="spinner" aria-label="Loading..." />;
     }
@@ -36,24 +38,43 @@ const ReportDataPage = () => {
                 {chosenUidObject.uidValue === uidValue && chosenUidObject?.hasReport && (
                     <div className="report-data-pg-container">
                         <div className="report-data-graphs">
-                            <div className="latest-cluster-center-graph">
-                                <PlotlyScatter
-                                    data={transformRCC}
-                                    title="Latest Cluster Centers"
-                                    xAxisTitle="Feature Index"
-                                    yAxisTitle="Cluster Center Value" />
-                            </div>
-                            <div className="cluster-centers-graph">
-                                <ClusterCentersOT clusterCenters={clusterCenters} reportsCacheLength={reportsCacheLength} />
-                            </div>
+                            {chosenUidObject.agentType === "ClusterAgent" && (
+                                <>
+                                    <div className="latest-cluster-center-graph">
+                                        <PlotlyScatter
+                                            data={transformRCC}
+                                            title="Latest Cluster Centers"
+                                            xAxisTitle="Feature Index"
+                                            yAxisTitle="Cluster Center Value" />
+                                    </div>
+                                    <div className="cluster-centers-graph">
+                                        <ClusterCentersOT clusterCenters={clusterCenters} reportsCacheLength={reportsCacheLength} />
+                                    </div>
+                                </>
+                            )}
+                            {chosenUidObject.agentType === "DecompositionAgent" && (
+                                <>
+                                    <div className="report-data-graphs">
+                                        <div className="latest-components-center-graph">
+                                            <PlotlyScatter
+                                                data={transformRCC}
+                                                title="Latest Component"
+                                                xAxisTitle="Feature Index"
+                                                yAxisTitle="Component Value" />
+                                        </div>
+                                        <div className="components-graph">
+                                            <ClusterCentersOT clusterCenters={components} reportsCacheLength={reportsCacheLength} />
+                                        </div>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 )
                 }
             </React.Fragment>
-        </div>
+        </div >
     );
-
 }
 
 export default ReportDataPage;

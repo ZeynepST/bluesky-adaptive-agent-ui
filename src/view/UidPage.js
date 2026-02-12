@@ -1,11 +1,12 @@
-import { useContext, useMemo} from 'react';
+import { useContext, useMemo, useEffect } from 'react';
 import { UidContext } from '../view-model/UidContext';
 import { useParams } from 'react-router-dom';
 import SideBar from '../view/SideBar';
 import UidBanner from '../view/UidBanner';
 import IngestDataPage from '../view/IngestDataPage';
 import ReportDataPage from '../view/ReportDataPage';
-import RemodelFromReportPage from '../view/RemodelFromReportPage';
+import RemodelClusterPage from './RemodelPages/RemodelClusterDataPage';
+import RemodelDecompositionPage from './RemodelPages/RemodelDecompositionDataPage';
 
 //Stylesheets:
 import '../stylesheets/UidStylesheets/UidPage.css';
@@ -20,20 +21,30 @@ import '../stylesheets/UidStylesheets/UidPage.css';
  * - Conditionally renders subcomponents based on the selected `viewMode`:
  *      -`IngestDataPage` for ingest-related data
  *      - `ReportDataPage` for report-related data
- *      - `RemodelFromReportPage` for initiating a remodel based on a report
+ *      - `RemodelClusterDataPage` or `RemodelDecompositionDataPage` for initiating a remodel based on a report
  * 
  *   @component
  */
 const UidPage = () => {
 
-    const { uidsInfo } = useContext(UidContext);  // List of UIDs and related metadata.
+    const { uidsInfo, setUidRefresh } = useContext(UidContext);  // List of UIDs and related metadata.
     const { viewMode, uidValue } = useParams();
 
+    useEffect(() => {
+        if (uidValue) {
+            setUidRefresh(prev => !prev);
+        }
+    }, [uidValue, setUidRefresh]);
     // Find the UID object based on the uidValue param
     // useMemo ensures that chosenUidObject is recomputed any time uidsInfo or uidValue changes.
     const chosenUidObject = useMemo(() => {
         return uidValue ? uidsInfo.find(uid => uid.uidValue === uidValue) : null;
     }, [uidsInfo, uidValue]);
+
+    // This ensures the browser doesn't render unless everything is ready 
+    if (!uidsInfo || uidsInfo.length === 0) {
+        return <span className="spinner" aria-label="Loading..." />;
+    }
 
     return (
         <div className="uid-page-container">
@@ -52,7 +63,8 @@ const UidPage = () => {
                                     {/* If a UID object is chosen, the render will depend on whether Report or Ingest was selected */}
                                     {viewMode === "ingest" && chosenUidObject.hasIngest && (<IngestDataPage />)}
                                     {viewMode === "report" && chosenUidObject.hasReport && (<ReportDataPage />)}
-                                    {viewMode === "remodel" && chosenUidObject.hasReport && (<RemodelFromReportPage />)}
+                                    {viewMode === "remodelCluster" && chosenUidObject.hasReport && (<RemodelClusterPage />)}
+                                    {viewMode === "remodelDecomposition" && chosenUidObject.hasReport && (<RemodelDecompositionPage />)}
                                 </div>
                             </div>
                         </>

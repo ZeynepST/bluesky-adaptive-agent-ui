@@ -24,7 +24,7 @@ import '../stylesheets/UidStylesheets/SideBar.css';
 
 const SideBar = () => {
     const { uidsInfo } = useContext(UidContext);
-    const { viewMode, uidValue } = useParams();
+    const { uidValue } = useParams();
 
     return (
         <div className="side-bar-container">

@@ -45,7 +45,7 @@ export function UidProvider({ children }) {
     }, [uidRefresh]);
 
     return (
-        <UidContext.Provider value={{ uidRefresh, uidsInfo, get_uids, setUidRefresh }}>
+        <UidContext.Provider value={{ setUidRefresh, uidRefresh, uidsInfo, get_uids, setUidRefresh }}>
             {children}
         </UidContext.Provider>
     );
