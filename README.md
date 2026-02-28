@@ -13,6 +13,19 @@
   
 🚀 Getting Started
 
+### 1. Backend Setup (Required)
+
+This GUI communicates with a running **Bluesky Adaptive backend** provided by the Bluesky Pods repository:
+
+https://github.com/bluesky/bluesky-pods/tree/main/compose/bluesky-adaptive
+
+Follow the setup instructions in that repository to start the backend services using:
+
+```bash
+podman-compose -f compose.yaml up -d
+```
+### 2. Start the UI
+
 To run the application locally, follow these steps:
   1. **Clone the repository**
       ```bash
